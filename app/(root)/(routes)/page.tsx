@@ -13,12 +13,13 @@ const MainPage = () => {
     if (!isOpen) onOpen();
   }, [isOpen, onOpen]);
 
-  return (
-    <div className="p-4">
-      <ThemeSwitcher />
-      <UserButton afterSignOutUrl="/" />
-    </div>
-  );
+  // return (
+  //   <div className="p-4">
+  //     <ThemeSwitcher />
+  //     <UserButton afterSignOutUrl="/" />
+  //   </div>
+  // );
+  return null;
 };
 
 export default MainPage;
