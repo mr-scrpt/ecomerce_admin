@@ -1,9 +1,9 @@
-import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs";
-
+import { redirect } from "next/navigation";
 import { FC, HTMLAttributes } from "react";
+
 import prismaDB from "@/lib/prismadb";
-import { throws } from "assert";
+import { Navbar } from "@/components/Navbar/Navbar";
 
 interface DashboardLayoutProps extends HTMLAttributes<HTMLElement> {
   params: { storeSlug: string };
@@ -25,23 +25,26 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
     redirect("/sign-in");
   }
 
-  const store = await prismaDB.store.findFirst({
-    where: {
-      slug: storeSlug,
-      userId,
-    },
-  });
+  try {
+    const store = await prismaDB.store.findFirst({
+      where: {
+        slug: storeSlug,
+        userId,
+      },
+    });
 
-  if (!store) {
-    redirect("/");
+    if (!store) {
+      redirect("/");
+    }
+    return (
+      <>
+        <Navbar storeSlug={store.slug} />
+        {children}
+      </>
+    );
+  } catch (e) {
+    console.log("[DASHBOARD_LAYOUT]", e);
   }
-
-  return (
-    <>
-      <div>Navbar</div>
-      {children}
-    </>
-  );
 };
 
 export default DashboardLayout;

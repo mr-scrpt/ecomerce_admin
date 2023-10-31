@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ReactNode } from "react";
+import { FC, HTMLAttributes, ReactNode } from "react";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModalProvider } from "@/provider/modal-provider";
@@ -15,8 +15,9 @@ export const metadata: Metadata = {
   title: "Admin panel",
   description: "Dashboard admin panel1",
 };
+interface RootLayoutProps extends HTMLAttributes<HTMLElement> {}
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <ClerkProvider
       appearance={{
@@ -42,4 +43,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </html>
     </ClerkProvider>
   );
-}
+};
+
+export default RootLayout;

@@ -3,9 +3,9 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { FC, HTMLAttributes } from "react";
 
-interface RootLayoutProps extends HTMLAttributes<HTMLElement> {}
+interface StartupProps extends HTMLAttributes<HTMLElement> {}
 
-const RootLayout: FC<RootLayoutProps> = async (props) => {
+const StartupLayout: FC<StartupProps> = async (props) => {
   const { children } = props;
 
   const { userId } = auth();
@@ -23,4 +23,4 @@ const RootLayout: FC<RootLayoutProps> = async (props) => {
   return <>{children}</>;
 };
 
-export default RootLayout;
+export default StartupLayout;
