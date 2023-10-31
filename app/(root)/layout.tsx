@@ -18,7 +18,7 @@ const RootLayout: FC<RootLayoutProps> = async (props) => {
     },
   });
 
-  if (store) redirect(`/${store.id}`);
+  if (store) redirect(`/${store.slug}`);
 
   return <>{children}</>;
 };
