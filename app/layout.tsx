@@ -7,6 +7,7 @@ import { ModalProvider } from "@/provider/modal-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
+import { ToastProvider } from "@/provider/toast-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <head />
         <body className={inter.className}>
           <ModalProvider />
+          <ToastProvider />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

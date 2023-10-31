@@ -4,9 +4,10 @@ import { FC, HTMLAttributes, useState } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Modal } from "../ui/modal";
 import { useStoreModal } from "@/hook/use-store-modal";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-hot-toast";
+
 import {
   Form,
   FormControl,
@@ -17,6 +18,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { Modal } from "../ui/modal";
 
 interface StoreModalCreateProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -37,8 +39,20 @@ export const StoreModalCreate: FC<StoreModalCreateProps> = (props) => {
     },
   });
 
-  const onSubmite = (values: typeSchema) => {
-    console.log("on onSubmite", values);
+  const onSubmite = async (values: typeSchema) => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/store", values);
+      const { slug, name } = response.data;
+      toast.success(`Store has been created by name ${name}`);
+
+      window.location.assign(`/${slug}`);
+    } catch (e) {
+      const { response } = e as AxiosError;
+      toast.error((response?.data as string) || "Something whent wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
