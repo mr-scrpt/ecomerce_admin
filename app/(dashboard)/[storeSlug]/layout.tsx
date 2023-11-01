@@ -14,15 +14,14 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
   params,
 }) => {
   const { userId } = auth();
+  if (!userId) {
+    return null;
+  }
 
   const { storeSlug } = params;
 
   if (!storeSlug) {
     redirect("/");
-  }
-
-  if (!userId) {
-    redirect("/sign-in");
   }
 
   try {

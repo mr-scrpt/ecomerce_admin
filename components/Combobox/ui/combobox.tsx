@@ -1,11 +1,8 @@
 "use client";
-import { Dispatch, FC, HTMLAttributes, ReactNode, SetStateAction } from "react";
 import { ChevronsUpDownIcon } from "lucide-react";
+import { FC } from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ComboboxGroup, ComboboxGroupI } from "./combobox-group";
-import { ComboboxItemI } from "./combobox-item";
 import {
   Command,
   CommandEmpty,
@@ -17,16 +14,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-interface ComboboxProps extends HTMLAttributes<HTMLDivElement> {
-  isOpen: boolean;
-  onOpen: Dispatch<SetStateAction<boolean>>;
-  data: ComboboxGroupI[];
-  currentItem?: ComboboxItemI;
-  triggerIcon: ReactNode;
-  placeholderSearch: string;
-  placeholderEmpty: string;
-}
+import { cn } from "@/lib/utils";
+import { ComboboxGroup } from "./combobox-group";
+import { ComboboxProps } from "../type/props.type";
 
 export const Combobox: FC<ComboboxProps> = (props) => {
   const {
@@ -50,6 +40,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
           aria-expanded={isOpen}
           aria-label="Select a store"
           className={cn("w-[200px] gap-x-2 justify-between")}
+          onClick={onOpen}
         >
           {triggerIcon && (
             <div className="h-4 w-4 flex items-center">{triggerIcon}</div>

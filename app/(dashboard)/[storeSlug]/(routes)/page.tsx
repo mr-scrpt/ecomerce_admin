@@ -4,8 +4,15 @@
 // import { UserButton } from "@clerk/nextjs";
 // import { useEffect } from "react";
 
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 const DashboardPage = () => {
-  return <div>Dashboard</div>;
+  return <div className="p-4 items-center justify-start">test</div>;
 };
 
 export default DashboardPage;

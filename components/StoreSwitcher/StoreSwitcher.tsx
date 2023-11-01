@@ -72,7 +72,7 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = (props) => {
   return (
     <Combobox
       isOpen={open}
-      onOpen={() => setOpen(true)}
+      onOpen={() => setOpen(!open)}
       data={formattedData}
       currentItem={currentItem}
       triggerIcon={<StoreIcon />}

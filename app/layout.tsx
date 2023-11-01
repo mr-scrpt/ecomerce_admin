@@ -4,10 +4,11 @@ import { FC, HTMLAttributes, ReactNode } from "react";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModalProvider } from "@/provider/modal-provider";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, auth } from "@clerk/nextjs";
 
 import "./globals.css";
 import { ToastProvider } from "@/provider/toast-provider";
+import { redirect } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
