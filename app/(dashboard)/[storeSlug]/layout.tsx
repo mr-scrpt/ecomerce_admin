@@ -39,7 +39,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
 
     const storeList = await prismaDB.store.findMany({
       where: {
-        slug: storeSlug,
+        userId,
       },
     });
 

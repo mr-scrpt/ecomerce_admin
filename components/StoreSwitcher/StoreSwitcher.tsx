@@ -1,12 +1,16 @@
 "use client";
 import { Store } from "@prisma/client";
+import { MinusCircleIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-
 import { FC, HTMLAttributes, useState } from "react";
-import { Combobox } from "../ui/combobox";
-import { StoreIcon, PlusCircleIcon } from "lucide-react";
+
+import { ComboboxGroupI } from "@/components/Combobox/type/interface";
+import { Combobox } from "@/components/Combobox/ui/combobox";
 import { useStoreModal } from "@/hook/use-store-modal";
-import { CommandItem } from "../ui/command";
+import {
+  getCurrentItem,
+  getSerializedData,
+} from "../Combobox/lib/serializedData";
 
 interface StoreSwitcherProps extends HTMLAttributes<HTMLDivElement> {
   items?: Store[];
@@ -21,61 +25,59 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = (props) => {
 
   const storeCurrent = items.find((item) => item.slug === storeSlug);
 
-  const onStoreSelected = (store: Store) => {
+  const onStoreSelected = (slug: string) => {
     setOpen(true);
-    router.push(`/${store.slug}`);
+    router.push(`/${slug}`);
   };
 
-  const formattedItems = items.map((item) => ({
-    name: item.name,
-    value: item.slug,
-    icon: StoreIcon,
-    onSelectItem: onStoreSelected,
-  }));
+  const formattedItems = getSerializedData(
+    items,
+    <StoreIcon />,
+    onStoreSelected,
+  );
 
-  const formattedData = [
+  const currentItem = getCurrentItem(formattedItems, storeCurrent?.slug);
+
+  const formattedData: ComboboxGroupI[] = [
     {
       groupName: "Stores",
-      groupItem: [...formattedItems],
+      groupItemList: [...formattedItems],
     },
     {
       groupName: "Actions",
-      groupItem: [
+      groupItemList: [
         {
           name: "Create New Store",
-          icon: PlusCircleIcon,
+          icon: <PlusCircleIcon />,
+          isActive: false,
+          value: "",
+          onSelectItem: () => {
+            setOpen(false);
+            storeModal.onOpen();
+          },
+        },
+        {
+          name: "Remove Current Store",
+          icon: <MinusCircleIcon />,
+          isActive: false,
+          value: "",
+          onSelectItem: (elem) => {
+            console.log(elem);
+          },
         },
       ],
     },
   ];
 
-  const actionRow = (
-    <CommandItem
-      onSelect={() => {
-        setOpen(false);
-        storeModal.onOpen();
-      }}
-      className="flex gap-x-2 hover:cursor-pointer"
-    >
-      <PlusCircleIcon className="h-4 w-4" />
-      Create New Store
-    </CommandItem>
-  );
-
   return (
     <Combobox
       isOpen={open}
-      onOpen={setOpen}
-      onSelectItem={onStoreSelected}
+      onOpen={() => setOpen(true)}
+      data={formattedData}
+      currentItem={currentItem}
       triggerIcon={<StoreIcon />}
-      triggerName={storeCurrent?.name}
       placeholderSearch="Search store..."
       placeholderEmpty="No store found"
-      headerGroup="Stores"
-      list={formattedItems}
-      listItemIcon={<StoreIcon />}
-      listItemCurrentName={storeCurrent?.name}
-      actionRow={actionRow}
     />
   );
 };

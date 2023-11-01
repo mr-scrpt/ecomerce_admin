@@ -1,13 +1,8 @@
-import { FC, HTMLAttributes, ReactNode } from "react";
-import { CommandItem } from "./command";
+"use client";
 import { CheckIcon } from "lucide-react";
-
-export interface ComboboxItemI {
-  name: string;
-  icon: ReactNode;
-  isActive: boolean;
-  onSelectItem: () => void;
-}
+import { FC, HTMLAttributes } from "react";
+import { CommandItem } from "../../ui/command";
+import { ComboboxItemI } from "../type/interface";
 
 interface ComboboxItemProps extends HTMLAttributes<HTMLDivElement> {
   data: ComboboxItemI;
