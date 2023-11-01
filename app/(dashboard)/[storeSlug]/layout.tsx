@@ -26,19 +26,26 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
   }
 
   try {
-    const store = await prismaDB.store.findFirst({
+    const storeCurrent = await prismaDB.store.findFirst({
       where: {
         slug: storeSlug,
         userId,
       },
     });
 
-    if (!store) {
+    if (!storeCurrent) {
       redirect("/");
     }
+
+    const storeList = await prismaDB.store.findMany({
+      where: {
+        slug: storeSlug,
+      },
+    });
+
     return (
       <>
-        <Navbar storeSlug={store.slug} />
+        <Navbar storeSlug={storeCurrent.slug} storeList={storeList} />
         {children}
       </>
     );
