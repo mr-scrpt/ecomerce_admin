@@ -15,8 +15,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { ComboboxGroup } from "./combobox-group";
 import { ComboboxProps } from "../type/props.type";
+import { ComboboxGroup } from "./combobox-group";
 
 export const Combobox: FC<ComboboxProps> = (props) => {
   const {
@@ -29,6 +29,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     placeholderSearch,
     placeholderEmpty,
   } = props;
+  // const path = usePathname();
 
   return (
     <Popover open={isOpen} onOpenChange={onOpen}>
@@ -58,7 +59,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               <ComboboxGroup
                 key={item.groupName}
                 data={item}
-                currentItem={currentItem}
+                // currentItem={currentItem}
               />
             ))}
           </CommandList>

@@ -1,4 +1,3 @@
-// "use client";
 // import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 // import { useStoreModal } from "@/hook/use-store-modal";
 // import { UserButton } from "@clerk/nextjs";

@@ -6,13 +6,14 @@ export const getSerializedData = (
   items: Store[],
   icon: ReactNode,
   onSelectItem: (value: string) => void,
+  active: string,
 ): ComboboxItemI[] =>
   items.map((item) => ({
     name: item.name,
     value: item.slug,
     icon: icon,
     onSelectItem: () => onSelectItem(item.slug),
-    isActive: true,
+    isActive: active === item.slug,
   }));
 
 export const getCurrentItem = (

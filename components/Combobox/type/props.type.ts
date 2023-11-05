@@ -13,5 +13,5 @@ export interface ComboboxProps extends HTMLAttributes<HTMLDivElement> {
 
 export interface ComboboxGroupProps extends HTMLAttributes<HTMLDivElement> {
   data: ComboboxGroupI;
-  currentItem?: ComboboxItemI;
+  // currentItem?: ComboboxItemI;
 }

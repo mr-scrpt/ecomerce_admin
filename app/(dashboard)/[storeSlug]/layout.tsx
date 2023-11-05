@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { FC, HTMLAttributes } from "react";
 
 import prismaDB from "@/lib/prismadb";
-import { Navbar } from "@/components/Navbar/Navbar";
 
 interface DashboardLayoutProps extends HTMLAttributes<HTMLElement> {
   params: { storeSlug: string };
@@ -14,6 +13,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
   params,
 }) => {
   const { userId } = auth();
+
   if (!userId) {
     return null;
   }
@@ -42,12 +42,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
       },
     });
 
-    return (
-      <>
-        <Navbar storeSlug={storeCurrent.slug} storeList={storeList} />
-        {children}
-      </>
-    );
+    return <>{children}</>;
   } catch (e) {
     console.log("[DASHBOARD_LAYOUT]", e);
   }

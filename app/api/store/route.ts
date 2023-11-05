@@ -42,3 +42,23 @@ export const POST = async (req: Request) => {
     return new NextResponse("Internal Error", { status: 500 });
   }
 };
+
+export const GET = async () => {
+  const { userId } = auth();
+
+  if (!userId) {
+    return new NextResponse("Unauthorized", { status: 400 });
+  }
+  try {
+    const store = await prismaDB.store.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return NextResponse.json(store);
+  } catch (e) {
+    console.log("[STORE_GET]", e);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+};
