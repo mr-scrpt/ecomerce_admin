@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "fsd/shared/ui/Combobox/ui/.Combobox.tsx"  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,12 +1,12 @@
 import { Store } from "@prisma/client";
-import { IComboboxItem } from "../type/type";
+import { ComboboxItemI } from "../type/interface";
 import { ReactNode } from "react";
 
 export const getSerializedData = (
   items: Store[],
   icon: ReactNode,
   onSelectItem: (value: string) => void,
-): IComboboxItem[] =>
+): ComboboxItemI[] =>
   items.map((item) => ({
     name: item.name,
     value: item.slug,
@@ -16,6 +16,6 @@ export const getSerializedData = (
   }));
 
 export const getCurrentItem = (
-  items: IComboboxItem[],
+  items: ComboboxItemI[],
   currentSlug: string | undefined,
 ) => items.find((item) => item.value === currentSlug);

@@ -3,7 +3,7 @@ export interface ComboboxItemI {
   value: string;
   icon: any;
   isActive: boolean;
-  onSelectItem: (elem: string) => void;
+  handler: (elem: string) => void;
 }
 export interface ComboboxGroupI {
   groupName: string;

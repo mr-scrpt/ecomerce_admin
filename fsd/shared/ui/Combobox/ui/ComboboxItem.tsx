@@ -1,18 +1,22 @@
 "use client";
 import { CheckIcon } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
-import { CommandItem } from "../../ui/command";
-import { IComboboxItem } from "../type/type";
+import { ComboboxItemI } from "../type/interface";
+import { CommandItem } from "@/components/ui/command";
 
 interface ComboboxItemProps extends HTMLAttributes<HTMLDivElement> {
-  data: IComboboxItem;
+  data: ComboboxItemI;
 }
 
 export const ComboboxItem: FC<ComboboxItemProps> = (props) => {
-  const { name, onSelectItem, icon, isActive } = props.data;
+  const { name, handler, icon, isActive } = props.data;
+  // console.log(" =>>>", handler);
   return (
     <CommandItem
-      onSelect={onSelectItem}
+      onSelect={(str) => {
+        handler(str);
+        console.log(" =>>>", str);
+      }}
       className="gap-x-2 flex hover:cursor-pointer"
     >
       {icon && <div className="h-3 w-3 flex items-center">{icon}</div>}
