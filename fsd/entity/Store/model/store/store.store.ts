@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IStoreList } from "../../type/store.type";
-import { getStoreBySlug, getStoreListByUserId } from "../action/article.action";
+import { getStoreBySlug, getStoreListByUserId } from "../action/store.action";
 
 export const useStoreData = create<IStoreList>()(
   devtools(

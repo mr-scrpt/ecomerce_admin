@@ -2,7 +2,7 @@ import prismaDB from "@/fsd/shared/lib/prismadb";
 import { IStore } from "../../type/store.type";
 
 export const getStoreBySlugAndUserId = async (
-  slug: string,
+  slug?: string,
 ): Promise<IStore | null> => {
   return await prismaDB.store.findUnique({
     where: {
@@ -18,4 +18,3 @@ export const getStoreList = async (userId: string): Promise<IStore[]> => {
     },
   });
 };
-export const getStoreBySlug = async () => {};

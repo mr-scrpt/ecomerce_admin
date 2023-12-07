@@ -2,7 +2,7 @@
 import { IStore } from "../../type/store.type";
 import { repo } from "../repo";
 
-export const getStoreBySlug = async (slug: string): Promise<IStore | null> => {
+export const getStoreBySlug = async (slug?: string): Promise<IStore | null> => {
   try {
     return await repo.getStoreBySlugAndUserId(slug);
   } catch (e) {

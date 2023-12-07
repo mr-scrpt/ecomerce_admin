@@ -1,3 +1,4 @@
+import { getStoreBySlug } from "@/fsd/entity/Store/model/action/store.action";
 import { Navbar } from "@/fsd/widget/Navbar/ui/Navbar";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -14,15 +15,18 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
   const { storeSlug } = params;
   const { userId } = auth();
 
-  if (!storeSlug || !userId) {
+  const store = await getStoreBySlug(storeSlug);
+  if (!store || !userId) {
     redirect("/");
   }
 
   return (
-    <>
-      <Navbar storeSlug={storeSlug} />
-      {children}
-    </>
+    <div className="flex flex-col h-full w-full">
+      <div className="flex">
+        <Navbar storeSlug={storeSlug} className="w-full" />
+      </div>
+      <div className="container flex flex-col gap-3 py-3">{children}</div>
+    </div>
   );
 };
 

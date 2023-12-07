@@ -6,13 +6,14 @@ import { StoreSwitcher } from "@/fsd/feature/StoreSwitcher/ui/StoreSwitcher";
 import { UserButton } from "@clerk/nextjs";
 import { FC, HTMLAttributes, useEffect } from "react";
 import { MenuMain } from "@/fsd/entity/MenuMain/ui/MenuMain";
+import { cn } from "@/fsd/shared/lib/utils";
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
   storeSlug: string;
 }
 
 export const Navbar: FC<NavbarProps> = (props) => {
-  const { storeSlug } = props;
+  const { storeSlug, className } = props;
   const { fetchUserId: getUserId, userId } = useUserData();
   const {
     setStoreListByUser,
@@ -22,7 +23,6 @@ export const Navbar: FC<NavbarProps> = (props) => {
     error,
   } = useStoreData();
 
-  console.log(" =>>>", loading);
   useEffect(() => {
     getUserId();
   }, []);
@@ -37,8 +37,8 @@ export const Navbar: FC<NavbarProps> = (props) => {
   }, [userId, storeSlug]);
 
   return (
-    <div className="border-b px-4">
-      <div className="flex h-16 items-center gap-x-4">
+    <div className={cn("border-b", className)}>
+      <div className="flex h-16 items-center gap-x-4 container">
         <StoreSwitcher />
         {loading ? (
           <div>loading...</div>

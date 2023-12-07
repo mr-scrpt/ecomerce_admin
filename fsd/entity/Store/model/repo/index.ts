@@ -1,1 +1,1 @@
-export * as repo from "./article.repo";
+export * as repo from "./store.repo";
