@@ -1,10 +1,10 @@
 import { HTMLAttributes, ReactNode } from "react";
-import { ComboboxGroupI, ComboboxItemI } from "./interface";
+import { IComboboxGroup, IComboboxItem } from "./interface";
 
 export interface ComboboxProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onOpen: () => void;
-  data: ComboboxGroupI[];
+  data: IComboboxGroup[];
   // currentItem?: ComboboxItemI;
   currentItem?: string;
   triggerIcon: ReactNode;
@@ -13,6 +13,6 @@ export interface ComboboxProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export interface ComboboxGroupProps extends HTMLAttributes<HTMLDivElement> {
-  data: ComboboxGroupI;
+  data: IComboboxGroup;
   currentItem?: string;
 }

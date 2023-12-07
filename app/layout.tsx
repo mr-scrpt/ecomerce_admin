@@ -3,11 +3,11 @@ import { Inter } from "next/font/google";
 import { FC, HTMLAttributes } from "react";
 
 import { ThemeProvider } from "@/fsd/shared/ui/theme-provider";
-import { ModalProvider } from "@/provider/modal-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import { ToastProvider } from "@/provider/toast-provider";
 import "./globals.css";
+import { ModalProvider } from "@/fsd/app/provider/modal-provider";
+import { ToastProvider } from "@/fsd/app/provider/toast-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 

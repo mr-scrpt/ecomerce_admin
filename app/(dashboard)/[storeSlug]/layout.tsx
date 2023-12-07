@@ -20,7 +20,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
 
   return (
     <>
-      <Navbar />
+      <Navbar storeSlug={storeSlug} />
       {children}
     </>
   );

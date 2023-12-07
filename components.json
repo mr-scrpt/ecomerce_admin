@@ -11,6 +11,6 @@
   },
   "aliases": {
     "components": "@/fsd/shared",
-    "utils": "@/lib/utils"
+    "utils": "@/fsd/shared/lib/utils"
   }
 }

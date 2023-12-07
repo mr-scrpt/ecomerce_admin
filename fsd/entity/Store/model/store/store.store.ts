@@ -8,11 +8,11 @@ export const useStoreData = create<IStoreList>()(
     (set) => ({
       storeList: [],
       storeCurrent: null,
-      setStoreBySlug: async (slug) => {
+      setStoreCurrentBySlug: async (slug) => {
         const storeCurrent = await getStoreBySlug(slug);
         set({ storeCurrent }, false, "setStoreBySlug");
       },
-      fetchStoreListByUser: async (userId) => {
+      setStoreListByUser: async (userId) => {
         const storeList = await getStoreListByUserId(userId);
         set({ storeList }, false, "fetchStoreListByUser");
       },

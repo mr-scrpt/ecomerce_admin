@@ -1,11 +1,13 @@
-export interface ComboboxItemI {
+import { ReactNode } from "react";
+
+export interface IComboboxItem {
   name: string;
   value: string;
-  icon: any;
+  icon: ReactNode;
   isActive: boolean;
   handler: (elem: string) => void;
 }
-export interface ComboboxGroupI {
+export interface IComboboxGroup {
   groupName: string;
-  groupItemList: ComboboxItemI[];
+  groupItemList: IComboboxItem[];
 }

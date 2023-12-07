@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/fsd/shared/ui/popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/fsd/shared/lib/utils";
 import { ComboboxGroup } from "./ComboboxGroup";
 import { ComboboxProps } from "../type/props.type";
 

@@ -1,5 +1,5 @@
 "use client";
-import { StoreModalCreate } from "@/components/modal/store-modal-create";
+import { StoreModalCreate } from "@/fsd/entity/ModalStore/store-modal-create";
 import { useEffect, useState } from "react";
 
 export const ModalProvider = () => {

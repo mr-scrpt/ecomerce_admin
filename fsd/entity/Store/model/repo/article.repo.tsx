@@ -1,4 +1,4 @@
-import prismaDB from "@/lib/prismadb";
+import prismaDB from "@/fsd/shared/lib/prismadb";
 import { IStore } from "../../type/store.type";
 
 export const getStoreBySlugAndUserId = async (

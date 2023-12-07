@@ -11,10 +11,12 @@ import { StoreSwitcherIconEnum } from "../type/icon.enum";
 import { StoreSwitcherProps } from "../type/props.type";
 import { IHandlerCollection, IIconCollection } from "../type/type";
 import { useRouter } from "next/navigation";
+import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
 
 export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   const { storeSlug } = useParams();
   const [isOpen, setIsOpen] = useState(false);
+  const { onOpen } = useStoreModal();
   const router = useRouter();
   console.log(" =>>> render StoreSwitcher");
 
@@ -39,7 +41,7 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   };
   const handlerCollection: IHandlerCollection = {
     [StoreSwitcherHandlerEnum.SELECT]: onStoreSelected,
-    [StoreSwitcherHandlerEnum.CREATE]: console.log,
+    [StoreSwitcherHandlerEnum.CREATE]: onOpen,
     [StoreSwitcherHandlerEnum.REMOVE]: console.log,
   };
 

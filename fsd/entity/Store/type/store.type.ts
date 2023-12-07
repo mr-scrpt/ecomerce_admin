@@ -6,6 +6,6 @@ export interface IStoreList {
   storeList: IStore[];
   storeCurrent: IStore | null;
 
-  setStoreBySlug: (slug: string) => void;
-  fetchStoreListByUser: (userId: string) => void;
+  setStoreCurrentBySlug: (slug: string) => void;
+  setStoreListByUser: (userId: string) => void;
 }

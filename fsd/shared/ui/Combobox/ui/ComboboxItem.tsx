@@ -1,11 +1,11 @@
 "use client";
 import { CheckIcon } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
-import { ComboboxItemI } from "../type/interface";
+import { IComboboxItem } from "../type/interface";
 import { CommandItem } from "@/fsd/shared/ui/command";
 
 interface ComboboxItemProps extends HTMLAttributes<HTMLDivElement> {
-  data: ComboboxItemI;
+  data: IComboboxItem;
 }
 
 export const ComboboxItem: FC<ComboboxItemProps> = (props) => {
