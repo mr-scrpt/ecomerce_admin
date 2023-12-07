@@ -1,5 +1,5 @@
 "use client";
-import { CommandGroup } from "@/components/ui/command";
+import { CommandGroup } from "@/fsd/shared/ui/command";
 import { FC } from "react";
 import { ComboboxGroupProps } from "../type/props.type";
 import { ComboboxItem } from "./ComboboxItem";

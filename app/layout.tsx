@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { FC, HTMLAttributes } from "react";
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/fsd/shared/ui/theme-provider";
 import { ModalProvider } from "@/provider/modal-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 

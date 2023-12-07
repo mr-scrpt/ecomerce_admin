@@ -10,7 +10,7 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "@/fsd/shared/",
+    "components": "@/fsd/shared",
     "utils": "@/lib/utils"
   }
 }

@@ -15,10 +15,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Modal } from "../ui/modal";
+} from "@/fsd/shared/ui/form";
+import { Input } from "@/fsd/shared/ui/input";
+import { Button } from "@/fsd/shared/ui/button";
+import { Modal } from "@/fsd/shared/ui/modal";
 
 interface StoreModalCreateProps extends HTMLAttributes<HTMLDivElement> {}
 

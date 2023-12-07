@@ -2,18 +2,18 @@
 import { ChevronsUpDownIcon } from "lucide-react";
 import { FC } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/fsd/shared/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandInput,
   CommandList,
-} from "@/components/ui/command";
+} from "@/fsd/shared/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/fsd/shared/ui/popover";
 import { cn } from "@/lib/utils";
 import { ComboboxGroup } from "./ComboboxGroup";
 import { ComboboxProps } from "../type/props.type";

@@ -4,17 +4,12 @@
 // import { UserButton } from "@clerk/nextjs";
 // import { useEffect } from "react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button } from "@/fsd/shared/ui/button";
 
 const DashboardPage = () => {
   return (
     <div className="p-4 items-center justify-start">
-      <Button variant="destructive">test</Button>
+      <Button variant="destructive">Test</Button>
     </div>
   );
 };

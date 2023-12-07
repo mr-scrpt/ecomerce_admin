@@ -1,5 +1,5 @@
 "use client";
-import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { ThemeSwitcher } from "@/fsd/shared/ui/theme-switcher";
 import { useStoreData } from "@/fsd/entity/Store/model/store/store.store";
 import { useUserData } from "@/fsd/entity/User/model/store/user.store";
 import { StoreSwitcher } from "@/fsd/feature/StoreSwitcher/ui/StoreSwitcher";
