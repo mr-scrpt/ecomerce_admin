@@ -6,6 +6,7 @@ import { ComboboxItem } from "./ComboboxItem";
 
 export const ComboboxGroup: FC<ComboboxGroupProps> = (props) => {
   const { data, currentItem } = props;
+  console.log(" =>>>data", data);
   return (
     <CommandGroup heading={data.groupName}>
       {data.groupItemList &&
@@ -16,6 +17,7 @@ export const ComboboxGroup: FC<ComboboxGroupProps> = (props) => {
               name: row.name,
               value: row.value,
               isActive: currentItem === row.name,
+              slug: row.slug,
               icon: row.icon,
               handler: row.handler,
             }}

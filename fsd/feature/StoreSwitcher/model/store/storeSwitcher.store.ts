@@ -13,6 +13,7 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
       fetchStoreByUserIdAndCreateList: async (userId, storeSlug) => {
         const storeList = await articleAction.getStoreListByUserId(userId);
         const storeData = mapStoreSwitcherListData(storeList, storeSlug);
+        console.log(" =>>>", storeData);
 
         const storeActive = storeData.groupItemList.find(
           (item) => item.slug === storeSlug,

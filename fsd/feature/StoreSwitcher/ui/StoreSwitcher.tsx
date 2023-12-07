@@ -3,7 +3,7 @@ import { useUserData } from "@/fsd/entity/User/model/store/user.store";
 import { Combobox } from "@/fsd/shared/ui/Combobox";
 import { MinusIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { useParams } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { buildStoreSwitcherUI } from "../lib/util";
 import { useStoreSwitcherData } from "../model/store/storeSwitcher.store";
 import { StoreSwitcherHandlerEnum } from "../type/handler.enum";
@@ -18,7 +18,6 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { onOpen } = useStoreModal();
   const router = useRouter();
-  console.log(" =>>> render StoreSwitcher");
 
   const { fetchStoreByUserIdAndCreateList, list, current } =
     useStoreSwitcherData();
@@ -45,13 +44,17 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
     [StoreSwitcherHandlerEnum.REMOVE]: console.log,
   };
 
-  const data = buildStoreSwitcherUI(list, iconCollection, handlerCollection);
+  const listItem = buildStoreSwitcherUI(
+    list,
+    iconCollection,
+    handlerCollection,
+  );
 
   return (
     <Combobox
       isOpen={isOpen}
       onOpen={() => setIsOpen(!isOpen)}
-      data={data}
+      data={listItem}
       currentItem={current?.name}
       triggerIcon={<StoreIcon />}
       placeholderSearch="Search store..."

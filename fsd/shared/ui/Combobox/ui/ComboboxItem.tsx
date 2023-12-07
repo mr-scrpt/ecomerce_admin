@@ -9,13 +9,12 @@ interface ComboboxItemProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ComboboxItem: FC<ComboboxItemProps> = (props) => {
-  const { name, handler, icon, isActive } = props.data;
-  // console.log(" =>>>", handler);
+  const { name, handler, icon, isActive, slug } = props.data;
+  console.log(" =>>>", slug);
   return (
     <CommandItem
-      onSelect={(str) => {
-        handler(str);
-        console.log(" =>>>", str);
+      onSelect={() => {
+        handler(slug);
       }}
       className="gap-x-2 flex hover:cursor-pointer"
     >

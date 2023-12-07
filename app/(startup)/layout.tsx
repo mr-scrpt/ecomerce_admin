@@ -1,4 +1,4 @@
-import prismaDB from "@/lib/prismadb";
+import prismaDB from "@/fsd/shared/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { FC, HTMLAttributes } from "react";

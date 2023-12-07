@@ -8,7 +8,7 @@ export interface IStoreSwitcherGroupUI
 }
 
 export interface IStoreSwitcherItemUI
-  extends Omit<IStoreSwitcherItem, "slug" | "icon" | "handler"> {
+  extends Omit<IStoreSwitcherItem, "icon" | "handler"> {
   // icon: string;
   // icon: LucideIcon;
   icon: ReactNode;

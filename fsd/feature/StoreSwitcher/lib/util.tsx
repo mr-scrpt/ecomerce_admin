@@ -1,7 +1,10 @@
 import { IStore } from "@/fsd/entity/Store";
 import { IStoreSwitcherGroup } from "../type/store.type";
 import { StoreSwitcherGropEnum } from "../type/group.enum";
-import { IStoreSwitcherGroupUI } from "../type/group.type";
+import {
+  IStoreSwitcherGroupUI,
+  IStoreSwitcherItemUI,
+} from "../type/group.type";
 import { MinusIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { StoreSwitcherIconEnum } from "../type/icon.enum";
 import { StoreSwitcherHandlerEnum } from "../type/handler.enum";
@@ -27,20 +30,17 @@ export const buildStoreSwitcherUI = (
   iconCollection: IIconCollection,
   handlerCollection: IHandlerCollection,
 ): IStoreSwitcherGroupUI[] => {
-  console.log(" =>>>");
   return [
     ...data.map((group) => {
       return {
         groupName: group.groupName,
-        groupItemList: group.groupItemList.map(
-          ({ slug, icon, handler, ...rest }) => {
-            return {
-              ...rest,
-              icon: iconCollection[icon],
-              handler: handlerCollection[handler],
-            };
-          },
-        ),
+        groupItemList: group.groupItemList.map(({ icon, handler, ...rest }) => {
+          return {
+            ...rest,
+            icon: iconCollection[icon],
+            handler: handlerCollection[handler],
+          };
+        }),
       };
     }),
   ];

@@ -7,6 +7,7 @@ export interface ComboboxProps extends HTMLAttributes<HTMLDivElement> {
   data: IComboboxGroup[];
   // currentItem?: ComboboxItemI;
   currentItem?: string;
+  // currentItem?: IComboboxItem;
   triggerIcon: ReactNode;
   placeholderSearch: string;
   placeholderEmpty: string;

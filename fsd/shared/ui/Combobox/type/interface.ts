@@ -5,6 +5,7 @@ export interface IComboboxItem {
   value: string;
   icon: ReactNode;
   isActive: boolean;
+  slug: string;
   handler: (elem: string) => void;
 }
 export interface IComboboxGroup {
