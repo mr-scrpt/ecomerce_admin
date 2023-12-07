@@ -53,7 +53,7 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   return (
     <div className="flex">
       {loading && <div>loading..</div>}
-      {!loading && list.length && (
+      {!loading && !!list.length && (
         <Combobox
           isOpen={isOpen}
           onOpen={() => setIsOpen(!isOpen)}

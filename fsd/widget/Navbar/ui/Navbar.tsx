@@ -14,9 +14,15 @@ interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
 export const Navbar: FC<NavbarProps> = (props) => {
   const { storeSlug } = props;
   const { fetchUserId: getUserId, userId } = useUserData();
-  const { setStoreListByUser, setStoreCurrentBySlug, storeCurrent } =
-    useStoreData();
+  const {
+    setStoreListByUser,
+    setStoreCurrentBySlug,
+    storeCurrent,
+    loading,
+    error,
+  } = useStoreData();
 
+  console.log(" =>>>", loading);
   useEffect(() => {
     getUserId();
   }, []);
@@ -34,7 +40,11 @@ export const Navbar: FC<NavbarProps> = (props) => {
     <div className="border-b px-4">
       <div className="flex h-16 items-center gap-x-4">
         <StoreSwitcher />
-        {storeCurrent && <MenuMain slug={storeCurrent?.slug} />}
+        {loading ? (
+          <div>loading...</div>
+        ) : (
+          storeCurrent && <MenuMain slug={storeCurrent?.slug} />
+        )}
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitcher />
           <UserButton afterSignOutUrl="/" />

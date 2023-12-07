@@ -8,13 +8,29 @@ export const useStoreData = create<IStoreList>()(
     (set) => ({
       storeList: [],
       storeCurrent: null,
+      loading: false,
+      error: null,
       setStoreCurrentBySlug: async (slug) => {
-        const storeCurrent = await getStoreBySlug(slug);
-        set({ storeCurrent }, false, "setStoreBySlug");
+        try {
+          set({ loading: true });
+          const storeCurrent = await getStoreBySlug(slug);
+          set({ storeCurrent }, false, "setStoreBySlug");
+        } catch (e) {
+          set({ error: e as string });
+        } finally {
+          set({ loading: false });
+        }
       },
       setStoreListByUser: async (userId) => {
-        const storeList = await getStoreListByUserId(userId);
-        set({ storeList }, false, "fetchStoreListByUser");
+        try {
+          set({ loading: true });
+          const storeList = await getStoreListByUserId(userId);
+          set({ storeList }, false, "fetchStoreListByUser");
+        } catch (e) {
+          set({ error: e as string });
+        } finally {
+          set({ loading: false });
+        }
       },
     }),
     { name: "useStoreData" },

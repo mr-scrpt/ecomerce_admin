@@ -14,6 +14,7 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
       error: null,
       fetchStoreByUserIdAndCreateList: async (userId, storeSlug) => {
         try {
+          console.log(" =>>> start");
           set({ loading: true });
           const storeList = await articleAction.getStoreListByUserId(userId);
           const storeData = mapStoreSwitcherListData(storeList, storeSlug);
@@ -33,6 +34,7 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
         } catch (e) {
           set({ error: e as string });
         } finally {
+          console.log(" =>>> finally");
           set({ loading: false });
         }
       },
