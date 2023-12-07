@@ -12,7 +12,11 @@ import {
 } from "@/components/ui/popover";
 
 const DashboardPage = () => {
-  return <div className="p-4 items-center justify-start">test</div>;
+  return (
+    <div className="p-4 items-center justify-start">
+      <Button variant="destructive">test</Button>
+    </div>
+  );
 };
 
 export default DashboardPage;
