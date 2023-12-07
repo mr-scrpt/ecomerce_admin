@@ -16,7 +16,7 @@ export const storeSwitcherActionData: IStoreSwitcherGroup = {
     },
     {
       name: "Remove Current Store",
-      icon: StoreSwitcherIconEnum.CREATE,
+      icon: StoreSwitcherIconEnum.REMOVE,
       isActive: false,
       value: "remove",
       handler: StoreSwitcherHandlerEnum.CREATE,
