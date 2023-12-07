@@ -19,7 +19,7 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   const { onOpen } = useStoreModal();
   const router = useRouter();
 
-  const { fetchStoreByUserIdAndCreateList, list, current } =
+  const { fetchStoreByUserIdAndCreateList, list, current, loading, error } =
     useStoreSwitcherData();
   const { userId } = useUserData();
   useEffect(() => {
@@ -51,14 +51,19 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   );
 
   return (
-    <Combobox
-      isOpen={isOpen}
-      onOpen={() => setIsOpen(!isOpen)}
-      data={listItem}
-      currentItem={current?.name}
-      triggerIcon={<StoreIcon />}
-      placeholderSearch="Search store..."
-      placeholderEmpty="No store found"
-    />
+    <div className="flex">
+      {loading && <div>loading..</div>}
+      {!loading && list.length && (
+        <Combobox
+          isOpen={isOpen}
+          onOpen={() => setIsOpen(!isOpen)}
+          data={listItem}
+          currentItem={current?.name}
+          triggerIcon={<StoreIcon />}
+          placeholderSearch="Search store..."
+          placeholderEmpty="No store found"
+        />
+      )}
+    </div>
   );
 };

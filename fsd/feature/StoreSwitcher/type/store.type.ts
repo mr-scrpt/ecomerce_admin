@@ -18,5 +18,7 @@ export interface IStoreSwitcherGroup {
 export interface IStoreSwitcher {
   list: IStoreSwitcherGroup[];
   current: IStoreSwitcherItem | null;
+  loading: boolean;
+  error: string | null;
   fetchStoreByUserIdAndCreateList: (userId: string, storeSlug: string) => void;
 }
