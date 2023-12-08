@@ -1,6 +1,5 @@
 "use client";
 import { useUserData } from "@/fsd/entity/User/model/store/user.store";
-import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
 import { Combobox } from "@/fsd/shared/ui/Combobox";
 import { MinusIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -11,6 +10,7 @@ import { StoreSwitcherHandlerEnum } from "../type/handler.enum";
 import { StoreSwitcherIconEnum } from "../type/icon.enum";
 import { StoreSwitcherProps } from "../type/props.type";
 import { IHandlerCollection, IIconCollection } from "../type/type";
+import { useStoreModal } from "@/fsd/feature/ModalManager";
 
 export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   const { storeSlug } = useParams();

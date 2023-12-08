@@ -1,6 +1,6 @@
 "use client";
+import { useStoreModal } from "@/fsd/feature/ModalManager";
 import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
-import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
 import { Modal } from "@/fsd/shared/ui/modal";
 import { useEffect, useState } from "react";
 
