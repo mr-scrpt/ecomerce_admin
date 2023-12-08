@@ -14,10 +14,17 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
       error: null,
       fetchStoreByUserIdAndCreateList: async (userId, storeSlug) => {
         try {
-          console.log(" =>>> start");
           set({ loading: true });
-          const storeList = await articleAction.getStoreListByUserId(userId);
-          const storeData = mapStoreSwitcherListData(storeList, storeSlug);
+          const { data, error } =
+            await articleAction.getStoreListByUserId(userId);
+          if (error) {
+            set({ error });
+          }
+          if (!data) {
+            set({ list: [] });
+            return;
+          }
+          const storeData = mapStoreSwitcherListData(data, storeSlug);
 
           const storeActive = storeData.groupItemList.find(
             (item) => item.slug === storeSlug,

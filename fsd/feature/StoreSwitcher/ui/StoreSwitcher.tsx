@@ -11,6 +11,7 @@ import { StoreSwitcherIconEnum } from "../type/icon.enum";
 import { StoreSwitcherProps } from "../type/props.type";
 import { IHandlerCollection, IIconCollection } from "../type/type";
 import { useStoreModal } from "@/fsd/feature/ModalManager";
+import toast from "react-hot-toast";
 
 export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   const { storeSlug } = useParams();
@@ -27,6 +28,11 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
       fetchStoreByUserIdAndCreateList(userId, storeSlug as string);
     }
   }, [userId, storeSlug]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const iconCollection: IIconCollection = {
     [StoreSwitcherIconEnum.STORE]: <StoreIcon />,
@@ -52,6 +58,7 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
 
   return (
     <div className="flex">
+      {/* {error && <div>{error}</div>} */}
       {loading && <div>loading..</div>}
       {!loading && !!list.length && (
         <Combobox

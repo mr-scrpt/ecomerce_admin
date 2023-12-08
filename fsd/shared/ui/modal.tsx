@@ -11,8 +11,8 @@ import {
 } from "./dialog";
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   isOpen: boolean;
   onClose?: () => void;
   footer?: ReactNode;

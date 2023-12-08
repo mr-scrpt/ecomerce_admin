@@ -1,12 +1,11 @@
 "use client";
-import { FC, HTMLAttributes, useState } from "react";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
-import axios, { AxiosError } from "axios";
+import { FC, HTMLAttributes, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
+import { createStore } from "@/fsd/entity/Store/model/action/store.action";
+import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
   FormControl,
@@ -16,42 +15,37 @@ import {
   FormMessage,
 } from "@/fsd/shared/ui/form";
 import { Input } from "@/fsd/shared/ui/input";
-import { Button } from "@/fsd/shared/ui/button";
-import { Modal } from "@/fsd/shared/ui/modal";
-
-const formSchema = z.object({
-  name: z.string().min(3),
-});
-
-type typeSchema = z.infer<typeof formSchema>;
+import { storeCreateValidate } from "../model/action/validation.action";
+import { StoreCreateTypeSchema, storeCreateSchema } from "../type/schema.type";
 
 interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const StoreCreate: FC<StoreCreateProps> = (props) => {
-  // const { isOpen, onClose } = useStoreModal();
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<typeSchema>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<StoreCreateTypeSchema>({
+    resolver: zodResolver(storeCreateSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  const onSubmite = async (values: typeSchema) => {
-    try {
-      setLoading(true);
-      const response = await axios.post("/api/store", values);
-      const { slug, name } = response.data;
+  const onSubmite = async (form: StoreCreateTypeSchema) => {
+    setLoading(true);
+    const validation = storeCreateValidate(form);
+    if (validation?.errors) {
+      return toast.error("Incorrect data from the form");
+    }
+    const { data, error } = await createStore(form.name);
+    if (error) {
+      toast.error(error);
+    }
+    if (data) {
       toast.success(`Store has been created by name ${name}`);
 
-      window.location.assign(`/${slug}`);
-    } catch (e) {
-      const { response } = e as AxiosError;
-      toast.error((response?.data as string) || "Something whent wrong");
-    } finally {
-      setLoading(false);
+      window.location.assign(`/${data.slug}`);
     }
+    setLoading(false);
   };
 
   return (
