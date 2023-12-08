@@ -4,7 +4,6 @@ import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
 import { useEffect } from "react";
 
 const StartupPage = () => {
-  console.log(" =>>> StartupPage");
   const { onOpen, isOpen } = useStoreModal();
   useUserData();
   // const isOpen = useStoreModal((s) => s.isOpen);

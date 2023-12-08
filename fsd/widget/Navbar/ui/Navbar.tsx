@@ -40,11 +40,9 @@ export const Navbar: FC<NavbarProps> = (props) => {
     <div className={cn("border-b", className)}>
       <div className="flex h-16 items-center gap-x-4 container">
         <StoreSwitcher />
-        {loading ? (
-          <div>loading...</div>
-        ) : (
-          storeCurrent && <MenuMain slug={storeCurrent?.slug} />
-        )}
+        {error && <div>Error</div>}
+        {loading && <div>loading...</div>}
+        {storeCurrent && <MenuMain slug={storeCurrent?.slug} />}
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitcher />
           <UserButton afterSignOutUrl="/" />

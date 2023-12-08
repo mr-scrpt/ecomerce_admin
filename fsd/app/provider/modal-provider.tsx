@@ -1,15 +1,23 @@
 "use client";
-import { StoreModalCreate } from "@/fsd/entity/ModalStore/store-modal-create";
+import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
+import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
+import { Modal } from "@/fsd/shared/ui/modal";
 import { useEffect, useState } from "react";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMoundted] = useState(false);
 
-  useEffect(() => {
-    setIsMoundted(true);
-  }, []);
+  const { isOpen, onOpen, onClose } = useStoreModal();
 
-  if (!isMounted) return null;
+  // useEffect(() => {
+  //   setIsMoundted(true);
+  // }, []);
+  //
+  // if (!isMounted) return null;
 
-  return <StoreModalCreate />;
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <StoreCreate />
+    </Modal>
+  );
 };
