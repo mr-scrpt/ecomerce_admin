@@ -1,6 +1,6 @@
 "use client";
 import { useUserData } from "@/fsd/entity/User/model/store/user.store";
-import { useStoreModal } from "@/fsd/shared/hook/use-store-modal";
+import { useStoreModal } from "@/fsd/feature/ModalManager";
 import { useEffect } from "react";
 
 const StartupPage = () => {
