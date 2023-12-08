@@ -14,7 +14,8 @@ interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Navbar: FC<NavbarProps> = (props) => {
   const { storeSlug, className } = props;
-  const { fetchUserId: getUserId, userId } = useUserData();
+  const { user } = useUserData();
+  console.log(" =>>>user from store", user?.id);
   const {
     setStoreListByUser,
     setStoreCurrentBySlug,
@@ -23,18 +24,19 @@ export const Navbar: FC<NavbarProps> = (props) => {
     error,
   } = useStoreData();
 
-  useEffect(() => {
-    getUserId();
-  }, []);
+  // useEffect(() => {
+  //   getUserId();
+  // }, []);
 
   useEffect(() => {
-    if (userId) {
-      setStoreListByUser(userId);
+    // console.log(" =>>> curren user ", userId);
+    if (user?.id) {
+      setStoreListByUser(user.id);
     }
     if (storeSlug) {
       setStoreCurrentBySlug(storeSlug);
     }
-  }, [userId, storeSlug]);
+  }, [user, storeSlug]);
 
   return (
     <div className={cn("border-b", className)}>

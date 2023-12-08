@@ -8,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ModalProvider } from "@/fsd/app/provider/modal-provider";
 import { ToastProvider } from "@/fsd/app/provider/toast-provider";
+import { UserProvider } from "@/fsd/app/provider/userProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
         <body className={inter.className}>
           <ModalProvider />
           <ToastProvider />
+          <UserProvider />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

@@ -1,8 +1,8 @@
+import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IStoreList } from "../../type/store.type";
 import { getStoreBySlug, getStoreListByUserId } from "../action/store.action";
-import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 
 export const useStoreData = create<IStoreList>()(
   devtools(

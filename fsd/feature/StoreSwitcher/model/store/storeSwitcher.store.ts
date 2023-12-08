@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IStoreSwitcher } from "../../type/store.type";
-import { articleAction } from "@/fsd/entity/Store";
+import { storeAction } from "@/fsd/entity/Store";
 import { mapStoreSwitcherListData } from "../../lib/util";
 import { storeSwitcherActionData } from "../../data/action.data";
+import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 
 export const useStoreSwitcherData = create<IStoreSwitcher>()(
   devtools(
@@ -16,14 +17,17 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
         try {
           set({ loading: true });
           const { data, error } =
-            await articleAction.getStoreListByUserId(userId);
-          if (error) {
+            await storeAction.getStoreListByUserId(userId);
+          if (error || !data) {
             set({ error });
-          }
-          if (!data) {
             set({ list: [] });
+            set({ current: null });
             return;
           }
+          // if (!data) {
+          //   set({ list: [] });
+          //   return;
+          // }
           const storeData = mapStoreSwitcherListData(data, storeSlug);
 
           const storeActive = storeData.groupItemList.find(
@@ -39,9 +43,10 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
             "fetchStoreByUserIdAndCreateList",
           );
         } catch (e) {
-          set({ error: e as string });
+          set({ error: HTTPErrorMessage.SERVER_ERROR });
+          set({ list: [] });
+          set({ current: null });
         } finally {
-          console.log(" =>>> finally");
           set({ loading: false });
         }
       },

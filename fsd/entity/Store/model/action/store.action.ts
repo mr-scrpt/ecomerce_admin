@@ -1,19 +1,19 @@
 "use server";
-import { auth } from "@clerk/nextjs";
-import { IStore } from "../../type/store.type";
-import { repo } from "../repo";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import type { userClerk } from "@/fsd/shared/type/clerkUser.type";
+import { getUser } from "@/fsd/shared/modle/action/auth.action";
+import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
+import { IStore } from "../../type/store.type";
+import { repo } from "../repo";
 
 export const createStore = async (
   storeName: string,
 ): Promise<ResponseDataAction<IStore>> => {
   try {
-    const userResponse = getUser();
+    const userResponse = await getUser();
+    console.log(" =>>> userResponse", userResponse);
     if (userResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = userResponse;
       return {
@@ -36,7 +36,7 @@ export const createStore = async (
     const store = await repo.createStore({
       name: storeName,
       slug,
-      userId: userResponse.data?.userId as string,
+      userId: userResponse.data?.id as string,
     });
     if (!store) {
       return {
@@ -59,7 +59,7 @@ export const getStoreBySlug = async (
   slug?: string,
 ): Promise<ResponseDataAction<IStore | null>> => {
   try {
-    const userResponse = getUser();
+    const userResponse = await getUser();
     if (userResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = userResponse;
       return {
@@ -77,7 +77,7 @@ export const getStoreBySlug = async (
     }
     const store = await repo.getStoreBySlugAndUserId({
       slug,
-      userId: userResponse.data?.userId as string,
+      userId: userResponse.data?.id as string,
     });
     if (!store) {
       return {
@@ -118,21 +118,21 @@ export const getStoreListByUserId = async (
   }
 };
 
-const getUser = (): ResponseDataAction<userClerk> => {
-  const user = auth();
-  if (!user) {
-    return {
-      data: null,
-      error: StoreResponseErrorEnum.USER_NOT_FOUND,
-      status: HTTPStatusEnum.NOT_FOUND,
-    };
-  }
-  return {
-    data: user,
-    error: null,
-    status: HTTPStatusEnum.OK,
-  };
-};
+// const getUser = (): ResponseDataAction<userClerk> => {
+//   const user = auth();
+//   if (!user) {
+//     return {
+//       data: null,
+//       error: StoreResponseErrorEnum.USER_NOT_FOUND,
+//       status: HTTPStatusEnum.NOT_FOUND,
+//     };
+//   }
+//   return {
+//     data: user,
+//     error: null,
+//     status: HTTPStatusEnum.OK,
+//   };
+// };
 
 const isUnique = async (
   storeName: string,

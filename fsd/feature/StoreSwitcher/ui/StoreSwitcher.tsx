@@ -22,12 +22,16 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
 
   const { fetchStoreByUserIdAndCreateList, list, current, loading, error } =
     useStoreSwitcherData();
-  const { userId } = useUserData();
+
+  // console.log(" =>>> list", list);
+  const { user } = useUserData();
+
   useEffect(() => {
-    if (userId && storeSlug) {
-      fetchStoreByUserIdAndCreateList(userId, storeSlug as string);
+    if (user && user.id && storeSlug) {
+      fetchStoreByUserIdAndCreateList(user.id, storeSlug as string);
     }
-  }, [userId, storeSlug]);
+  }, [user, storeSlug]);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
