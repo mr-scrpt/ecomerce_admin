@@ -30,7 +30,7 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
     },
   });
 
-  const onSubmite = async (form: StoreCreateTypeSchema) => {
+  const onSubmit = async (form: StoreCreateTypeSchema) => {
     setLoading(true);
     const validation = storeCreateValidate(form);
     if (validation?.errors) {
@@ -51,7 +51,7 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
   return (
     <div className="space-x-4 pt-2 pb-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmite)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="name"

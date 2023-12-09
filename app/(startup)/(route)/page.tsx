@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 const StartupPage = () => {
   const { onOpen, isOpen } = useStoreModal();
+  console.log(" =>>> start up");
   // useUserData();
   // const isOpen = useStoreModal((s) => s.isOpen);
   // const onOpen = useStoreModal((s) => s.onOpen);

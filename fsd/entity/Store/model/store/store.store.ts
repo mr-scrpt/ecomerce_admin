@@ -13,39 +13,52 @@ export const useStoreData = create<IStoreList>()(
       error: null,
       setStoreCurrentBySlug: async (slug) => {
         try {
+          // console.log(" =>>> fetch store current");
           set({ loading: true });
           const { data, error } = await getStoreBySlug(slug);
           if (error) {
-            set({ error });
-            set({ storeList: [] });
-            set({ storeCurrent: null });
+            set({ error, storeCurrent: null, loading: false });
+            // set({ storeList: [] });
+            // set({ storeCurrent: null });
             return;
           }
           if (data) {
-            set({ storeCurrent: data }, false, "setStoreBySlug");
+            set(
+              { storeCurrent: data, loading: false, error: null },
+              false,
+              "setStoreBySlug",
+            );
           }
         } catch (e) {
-          set({ error: HTTPErrorMessage.SERVER_ERROR });
-          set({ storeList: [] });
-          set({ storeCurrent: null });
-        } finally {
-          set({ loading: false });
+          set({
+            error: HTTPErrorMessage.SERVER_ERROR,
+            storeCurrent: null,
+            loading: false,
+          });
+          // set({ storeList: [] });
+          // set({ storeCurrent: null });
         }
+        // finally {
+        //   set({ loading: false });
+        // }
       },
       setStoreListByUser: async (userId) => {
         set({ loading: true });
         const { data, error } = await getStoreListByUserId(userId);
         if (error) {
-          set({ error });
-          set({ storeList: [] });
-          set({ storeCurrent: null });
-          set({ loading: false });
+          set({ error, storeList: [], loading: false });
+          // set({ storeList: [] });
+          // set({ loading: false });
           return;
         }
         if (data) {
-          set({ storeList: data }, false, "fetchStoreListByUser");
+          set(
+            { storeList: data, loading: false, error: null },
+            false,
+            "fetchStoreListByUser",
+          );
         }
-        set({ loading: false });
+        // set({ loading: false });
       },
     }),
     { name: "useStoreData" },

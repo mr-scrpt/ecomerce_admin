@@ -29,9 +29,23 @@ export const createStore = async (data: ICreateStore): Promise<IStore> => {
   const { name, userId, slug } = data;
   const store = await prismaDB.store.create({
     data: {
-      name: "bbb",
+      name,
       userId,
       slug,
+    },
+  });
+  return store;
+};
+
+export const renameStore = async (data: ICreateStore): Promise<IStore> => {
+  const { name, userId, slug } = data;
+  const store = await prismaDB.store.update({
+    where: {
+      name,
+      userId,
+    },
+    data: {
+      name,
     },
   });
   return store;

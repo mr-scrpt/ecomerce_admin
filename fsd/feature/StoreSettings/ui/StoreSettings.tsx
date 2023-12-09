@@ -1,107 +1,118 @@
+"use client";
+import { useStoreData } from "@/fsd/entity/Store/model/store/store.store";
+import { Button } from "@/fsd/shared/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/fsd/shared/ui/form";
+import { Input } from "@/fsd/shared/ui/input";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, memo, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import {
+  StoreSettingTypeSchema,
+  storeSettingSchema,
+} from "../type/schema.type";
+import { useShallow } from "zustand/react/shallow";
 
 interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {}
 
-export const StoreSettings: FC<StoreSettingsProps> = (props) => {
+export const StoreSettings = memo((props: StoreSettingsProps) => {
+  const { storeCurrent, loading, error } = useStoreData(
+    useShallow((state) => ({
+      storeCurrent: state.storeCurrent,
+      loading: state.loading,
+      error: state.error,
+    })),
+  );
   const params = useParams();
   const router = useRouter();
-  const origin = useOrigin();
+  // const origin = useOrigin();
 
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [open, setOpen] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  console.log(" =>>>::::::: setting", storeCurrent?.name);
+  // if (!storeCurrent) {
+  //   return null;
+  // }
 
-  const form = useForm<SettingsFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+  const form = useForm<StoreSettingTypeSchema>({
+    resolver: zodResolver(storeSettingSchema),
+    defaultValues: {
+      name: "",
+    },
   });
-
-  const onSubmit = async (data: SettingsFormValues) => {
-    try {
-      setLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
-      router.refresh();
-      toast.success("Store updated.");
-    } catch (error: any) {
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (storeCurrent) {
+      form.reset({ name: storeCurrent.name });
     }
+  }, [storeCurrent]);
+
+  const onSubmit = async (data: any) => {
+    // try {
+    //   setLoading(true);
+    //   await axios.patch(`/api/stores/${params.storeId}`, data);
+    //   router.refresh();
+    //   toast.success("Store updated.");
+    // } catch (error: any) {
+    //   toast.error("Something went wrong.");
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
-      router.refresh();
-      router.push("/");
-      toast.success("Store deleted.");
-    } catch (error: any) {
-      toast.error("Make sure you removed all products and categories first.");
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
-  };
+  // const onDelete = async () => {
+  //   try {
+  //     setLoading(true);
+  //     await axios.delete(`/api/stores/${params.storeId}`);
+  //     router.refresh();
+  //     router.push("/");
+  //     toast.success("Store deleted.");
+  //   } catch (error: any) {
+  //     toast.error("Make sure you removed all products and categories first.");
+  //   } finally {
+  //     setLoading(false);
+  //     setOpen(false);
+  //   }
+  // };
 
   return (
-    <>
-      {/* <AlertModal  */}
-      {/*   isOpen={open}  */}
-      {/*   onClose={() => setOpen(false)} */}
-      {/*   onConfirm={onDelete} */}
-      {/*   loading={loading} */}
-      {/* /> */}
-      <div className="flex items-center justify-between">
-        <Heading
-          title="Store settings"
-          description="Manage store preferences"
-        />
-        <Button
-          disabled={loading}
-          variant="destructive"
-          size="sm"
-          onClick={() => setOpen(true)}
-        >
-          <Trash className="h-4 w-4" />
-        </Button>
-      </div>
-      {/* <Separator /> */}
+    <div className="space-x-4 pt-2 pb-4">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
-        >
-          <div className="grid grid-cols-3 gap-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Store name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Store name</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={loading}
+                    placeholder="Enter new name..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="pt-6 space-x-2 flex items-center justify-end w-full">
+            <Button disabled={loading} variant="destructive" onClick={() => {}}>
+              Cancel
+            </Button>
+            <Button disabled={loading} type="submit">
+              Create
+            </Button>
           </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
-            Save changes
-          </Button>
         </form>
       </Form>
-      {/* <Separator /> */}
-      {/* <ApiAlert  */}
-      {/*   title="NEXT_PUBLIC_API_URL"  */}
-      {/*   variant="public"  */}
-      {/*   description={`${origin}/api/${params.storeId}`} */}
-      {/* /> */}
-    </>
+    </div>
   );
-};
+});

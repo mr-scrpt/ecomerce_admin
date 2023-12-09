@@ -13,7 +13,6 @@ export const createStore = async (
 ): Promise<ResponseDataAction<IStore>> => {
   try {
     const userResponse = await getUser();
-    console.log(" =>>> userResponse", userResponse);
     if (userResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = userResponse;
       return {
@@ -118,6 +117,50 @@ export const getStoreListByUserId = async (
   }
 };
 
+export const renameStore = async (storeName: string) => {
+  try {
+    const userResponse = await getUser();
+    if (userResponse.status !== HTTPStatusEnum.OK) {
+      const { error, status } = userResponse;
+      return {
+        data: null,
+        error,
+        status,
+      };
+    }
+
+    const isExistResponse = await isExist(storeName);
+    if (isExistResponse.status !== HTTPStatusEnum.OK) {
+      const { error, status } = isExistResponse;
+      return {
+        data: null,
+        error,
+        status,
+      };
+    }
+    const slug = slugGenerator(storeName);
+    const store = await repo.renameStore({
+      name: storeName,
+      slug,
+      userId: userResponse.data?.id as string,
+    });
+    if (!store) {
+      return {
+        data: null,
+        error: StoreResponseErrorEnum.STORE_NOT_UPDATED,
+        status: HTTPStatusEnum.BAD_REQUEST,
+      };
+    }
+    return { data: store, error: null, status: HTTPStatusEnum.OK };
+  } catch (e) {
+    return {
+      data: null,
+      error: HTTPErrorMessage.SERVER_ERROR,
+      status: HTTPStatusEnum.INTERNAL_SERVER_ERROR,
+    };
+  }
+};
+
 // const getUser = (): ResponseDataAction<userClerk> => {
 //   const user = auth();
 //   if (!user) {
@@ -140,6 +183,19 @@ const isUnique = async (
   const store = await repo.getStoreByName(storeName);
   const response = { data: true, error: "", status: 200 };
   if (store) {
+    response.data = false;
+    response.error = StoreResponseErrorEnum.STORE_EXIST;
+    response.status = 400;
+  }
+  return response;
+};
+
+const isExist = async (
+  storeName: string,
+): Promise<ResponseDataAction<boolean>> => {
+  const store = await repo.getStoreByName(storeName);
+  const response = { data: true, error: "", status: 200 };
+  if (!store) {
     response.data = false;
     response.error = StoreResponseErrorEnum.STORE_EXIST;
     response.status = 400;

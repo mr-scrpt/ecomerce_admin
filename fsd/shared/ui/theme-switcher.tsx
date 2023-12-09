@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -11,9 +10,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/fsd/shared/ui/dropdown-menu";
+import { memo } from "react";
 
-export function ThemeSwitcher() {
+export const ThemeSwitcher = memo(() => {
   const { setTheme } = useTheme();
+  console.log(" =>>> in theme component IIIIIIIIII");
 
   return (
     <DropdownMenu>
@@ -37,4 +38,4 @@ export function ThemeSwitcher() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});

@@ -1,3 +1,4 @@
+import { StoreSettings } from "@/fsd/feature/StoreSettings/ui/StoreSettings";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { Button } from "@/fsd/shared/ui/button";
 import { Trash } from "lucide-react";
@@ -13,6 +14,7 @@ const SettingsPage: FC<SettingsPageProps> = (props) => {
         <Button variant="destructive" size="icon">
           <Trash className="w-4 h-4" />
         </Button>
+        <StoreSettings />
       </div>
     </main>
   );

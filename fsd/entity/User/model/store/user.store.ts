@@ -1,3 +1,4 @@
+"use client";
 import { getUser } from "@/fsd/shared/modle/action/auth.action";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -11,22 +12,33 @@ export const useUserData = create<IUser>()(
       error: null,
       loading: false,
       fetchUserId: async () => {
+        console.log(" =>>>client fetch user:");
+
         try {
-          set({ loading: true });
+          set({ loading: true }, false, "set_user_loading");
           const { data, error } = await getUser();
           if (error) {
-            set({ error });
-            set({ user: null });
+            set({ error, user: null, loading: false }, false, "set_user_error");
+            // set({ user: null }, false, "reset_user_data");
             return;
           }
           if (data) {
-            set({ user: data }, false, "setStoreBySlug");
+            set(
+              { user: data, loading: false, error: null },
+              false,
+              "set_user_data",
+            );
           }
         } catch (e) {
-          set({ error: HTTPErrorMessage.SERVER_ERROR });
-        } finally {
-          set({ loading: false });
+          set(
+            { error: HTTPErrorMessage.SERVER_ERROR, loading: false },
+            false,
+            "set_user_error",
+          );
         }
+        // finally {
+        //   set({ loading: false }, false, "reset_user_loading");
+        // }
       },
     }),
     { name: "userData" },

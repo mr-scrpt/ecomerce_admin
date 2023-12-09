@@ -1,19 +1,19 @@
 "use client";
 import { useUserData } from "@/fsd/entity/User/model/store/user.store";
+import { useStoreModal } from "@/fsd/feature/ModalManager";
 import { Combobox } from "@/fsd/shared/ui/Combobox";
 import { MinusIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { buildStoreSwitcherUI } from "../lib/util";
 import { useStoreSwitcherData } from "../model/store/storeSwitcher.store";
 import { StoreSwitcherHandlerEnum } from "../type/handler.enum";
 import { StoreSwitcherIconEnum } from "../type/icon.enum";
 import { StoreSwitcherProps } from "../type/props.type";
 import { IHandlerCollection, IIconCollection } from "../type/type";
-import { useStoreModal } from "@/fsd/feature/ModalManager";
-import toast from "react-hot-toast";
 
-export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
+export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
   const { storeSlug } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   // TODO: one fsd layer
@@ -23,7 +23,6 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
   const { fetchStoreByUserIdAndCreateList, list, current, loading, error } =
     useStoreSwitcherData();
 
-  // console.log(" =>>> list", list);
   const { user } = useUserData();
 
   useEffect(() => {
@@ -77,4 +76,4 @@ export const StoreSwitcher: FC<StoreSwitcherProps> = () => {
       )}
     </div>
   );
-};
+});

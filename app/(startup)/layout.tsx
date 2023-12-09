@@ -6,6 +6,7 @@ import { FC, HTMLAttributes } from "react";
 interface StartupProps extends HTMLAttributes<HTMLElement> {}
 
 const StartupLayout: FC<StartupProps> = async (props) => {
+  console.log(" =>>> start up layout");
   const { children } = props;
 
   const { userId } = auth();

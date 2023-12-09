@@ -8,7 +8,6 @@ import { IUserClerk } from "../../type/clerkUser.type";
 export const getUser = async (): Promise<ResponseDataAction<IUserClerk>> => {
   const user = await currentUser();
   if (!user) {
-    console.log(" =>>> error");
     return {
       data: null,
       error: AuthResponseErrorEnum.USER_NOT_FOUND,
@@ -22,7 +21,6 @@ export const getUser = async (): Promise<ResponseDataAction<IUserClerk>> => {
     createdAt: user.createdAt,
     emailAddresses: user.emailAddresses.map((item) => item.emailAddress),
   };
-  console.log(" =>>> more user data", data);
 
   return {
     data,

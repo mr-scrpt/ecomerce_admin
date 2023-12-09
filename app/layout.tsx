@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 interface RootLayoutProps extends HTMLAttributes<HTMLElement> {}
 
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {
+  console.log(" =>>> load root layout");
   return (
     <ClerkProvider
       appearance={{
