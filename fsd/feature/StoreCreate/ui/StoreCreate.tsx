@@ -4,7 +4,7 @@ import { FC, HTMLAttributes, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-import { createStore } from "@/fsd/entity/Store/model/action/store.action";
+import { storeAction } from "@/fsd/entity/Store";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
@@ -36,7 +36,7 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
     if (validation?.errors) {
       return toast.error("Incorrect data from the form");
     }
-    const { data, error } = await createStore(form.name);
+    const { data, error } = await storeAction.createStore(form.name);
     if (error) {
       toast.error(error);
     }
