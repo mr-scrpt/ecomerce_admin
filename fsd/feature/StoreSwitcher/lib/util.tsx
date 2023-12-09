@@ -30,6 +30,7 @@ export const buildStoreSwitcherUI = (
   iconCollection: IIconCollection,
   handlerCollection: IHandlerCollection,
 ): IStoreSwitcherGroupUI[] => {
+  console.log(" =>>> invoke");
   return [
     ...data.map((group) => {
       return {

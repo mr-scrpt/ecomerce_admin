@@ -4,7 +4,7 @@ import { useStoreModal } from "@/fsd/feature/ModalManager";
 import { Combobox } from "@/fsd/shared/ui/Combobox";
 import { MinusIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { buildStoreSwitcherUI } from "../lib/util";
 import { useStoreSwitcherData } from "../model/store/storeSwitcher.store";
@@ -23,6 +23,7 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
   const { fetchStoreByUserIdAndCreateList, list, current, loading, error } =
     useStoreSwitcherData();
 
+  // console.log(" =>>> list", list);
   const { user } = useUserData();
 
   useEffect(() => {
@@ -37,27 +38,33 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
     }
   }, [error]);
 
-  const iconCollection: IIconCollection = {
-    [StoreSwitcherIconEnum.STORE]: <StoreIcon />,
-    [StoreSwitcherIconEnum.CREATE]: <PlusCircleIcon />,
-    [StoreSwitcherIconEnum.REMOVE]: <MinusIcon />,
-  };
-
-  const onStoreSelected = (slug: string) => {
-    setIsOpen(false);
-    router.push(`/${slug}`);
-  };
-  const handlerCollection: IHandlerCollection = {
-    [StoreSwitcherHandlerEnum.SELECT]: onStoreSelected,
-    [StoreSwitcherHandlerEnum.CREATE]: onOpen,
-    [StoreSwitcherHandlerEnum.REMOVE]: console.log,
-  };
-
-  const listItem = buildStoreSwitcherUI(
-    list,
-    iconCollection,
-    handlerCollection,
+  const onStoreSelected = useCallback(
+    () => (slug: string) => {
+      setIsOpen(false);
+      router.push(`/${slug}`);
+    },
+    [],
   );
+  const iconCollection: IIconCollection = useMemo(
+    () => ({
+      [StoreSwitcherIconEnum.STORE]: <StoreIcon />,
+      [StoreSwitcherIconEnum.CREATE]: <PlusCircleIcon />,
+      [StoreSwitcherIconEnum.REMOVE]: <MinusIcon />,
+    }),
+    [],
+  );
+
+  const handlerCollection: IHandlerCollection = useMemo(
+    () => ({
+      [StoreSwitcherHandlerEnum.SELECT]: onStoreSelected,
+      [StoreSwitcherHandlerEnum.CREATE]: onOpen,
+      [StoreSwitcherHandlerEnum.REMOVE]: console.log,
+    }),
+    [],
+  );
+  const listItem = useMemo(() => {
+    return buildStoreSwitcherUI(list, iconCollection, handlerCollection);
+  }, [list, handlerCollection, iconCollection]);
 
   return (
     <div className="flex">

@@ -37,7 +37,6 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
 
   // const [open, setOpen] = useState(false);
   // const [loading, setLoading] = useState(false);
-  console.log(" =>>>::::::: setting", storeCurrent?.name);
   // if (!storeCurrent) {
   //   return null;
   // }

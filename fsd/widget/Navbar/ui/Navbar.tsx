@@ -34,8 +34,6 @@ export const Navbar: FC<NavbarProps> = memo((props) => {
   //   fetchUserId();
   // }, []);
 
-  console.log(" =>>> useUserData", user, uLoading, uError);
-
   const {
     setStoreListByUser,
     setStoreCurrentBySlug,
