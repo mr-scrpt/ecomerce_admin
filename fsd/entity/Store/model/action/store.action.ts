@@ -133,7 +133,6 @@ export const renameStore = async (
         status,
       };
     }
-    console.log(" =>>>user", userResponse);
 
     const isExistResponse = await isExist(currentStoreName);
     if (isExistResponse.status !== HTTPStatusEnum.OK) {
@@ -144,15 +143,25 @@ export const renameStore = async (
         status,
       };
     }
+
+    const isUniqueResponse = await isUnique(newStoreName);
+    if (isUniqueResponse.status !== HTTPStatusEnum.OK) {
+      const { error, status } = isUniqueResponse;
+      return {
+        data: null,
+        error,
+        status,
+      };
+    }
+
     const newSlug = slugGenerator(newStoreName);
-    console.log(" =>>> _slug", newSlug);
     const store = await repo.renameStore({
       currentStoreName,
       newStoreName: newStoreName.trim(),
       newSlug,
       userId: userResponse.data?.id as string,
     });
-    console.log(" =>>> _store", store);
+
     if (!store) {
       return {
         data: null,
@@ -160,6 +169,7 @@ export const renameStore = async (
         status: HTTPStatusEnum.BAD_REQUEST,
       };
     }
+
     return { data: store, error: null, status: HTTPStatusEnum.OK };
   } catch (e) {
     return {

@@ -15,7 +15,7 @@ import { storeAction } from "@/fsd/entity/Store";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { HTMLAttributes, memo, useEffect } from "react";
+import { HTMLAttributes, memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
@@ -23,26 +23,23 @@ import {
   StoreSettingTypeSchema,
   storeSettingSchema,
 } from "../type/schema.type";
+import { storeSettingsValidate } from "../action/validation.action";
 
 interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const StoreSettings = memo((props: StoreSettingsProps) => {
-  const { storeCurrent, loading, error } = useStoreData(
+  const { storeCurrent, loading } = useStoreData(
     useShallow((state) => ({
       storeCurrent: state.storeCurrent,
       loading: state.loading,
       error: state.error,
     })),
   );
-  const params = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
   const router = useRouter();
-  // const origin = useOrigin();
-
-  // const [open, setOpen] = useState(false);
-  // const [loading, setLoading] = useState(false);
-  // if (!storeCurrent) {
-  //   return null;
-  // }
 
   const form = useForm<StoreSettingTypeSchema>({
     resolver: zodResolver(storeSettingSchema),
@@ -50,6 +47,7 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
       name: "",
     },
   });
+
   useEffect(() => {
     if (storeCurrent) {
       form.reset({ name: storeCurrent.name });
@@ -59,8 +57,12 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
   const onSubmit = async (form: StoreSettingTypeSchema) => {
     if (storeCurrent) {
       try {
-        // setLoading(true);
-        const { data, error, status } = await storeAction.renameStore({
+        setIsLoading(true);
+        const validation = storeSettingsValidate(form);
+        if (validation?.errors) {
+          return toast.error("Incorrect data from the form");
+        }
+        const { data, error } = await storeAction.renameStore({
           currentStoreName: storeCurrent?.name,
           newStoreName: form.name,
         });
@@ -75,7 +77,7 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
       } catch (error: any) {
         toast.error("Something went wrong.");
       } finally {
-        // setLoading(false);
+        setIsLoading(false);
       }
     }
   };
@@ -99,28 +101,34 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
     <div className="space-x-4 pt-2 pb-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Store name</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={loading}
-                    placeholder="Enter new name..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Store name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Enter new name..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-            <Button disabled={loading} variant="destructive" onClick={() => {}}>
+            <Button
+              disabled={isLoading}
+              variant="destructive"
+              onClick={() => {}}
+            >
               Cancel
             </Button>
-            <Button disabled={loading} type="submit">
+            <Button disabled={isLoading} type="submit">
               Update
             </Button>
           </div>
