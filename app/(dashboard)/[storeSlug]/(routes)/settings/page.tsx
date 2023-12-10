@@ -14,8 +14,8 @@ const SettingsPage: FC<SettingsPageProps> = (props) => {
         <Button variant="destructive" size="icon">
           <Trash className="w-4 h-4" />
         </Button>
-        <StoreSettings />
       </div>
+      <StoreSettings />
     </main>
   );
 };

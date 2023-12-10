@@ -38,13 +38,10 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
     }
   }, [error]);
 
-  const onStoreSelected = useCallback(
-    () => (slug: string) => {
-      setIsOpen(false);
-      router.push(`/${slug}`);
-    },
-    [],
-  );
+  const onStoreSelected = useCallback((slug: string) => {
+    setIsOpen(false);
+    router.push(`/${slug}`);
+  }, []);
   const iconCollection: IIconCollection = useMemo(
     () => ({
       [StoreSwitcherIconEnum.STORE]: <StoreIcon />,
@@ -60,7 +57,7 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
       [StoreSwitcherHandlerEnum.CREATE]: onOpen,
       [StoreSwitcherHandlerEnum.REMOVE]: console.log,
     }),
-    [],
+    [onOpen, onStoreSelected],
   );
   const listItem = useMemo(() => {
     return buildStoreSwitcherUI(list, iconCollection, handlerCollection);

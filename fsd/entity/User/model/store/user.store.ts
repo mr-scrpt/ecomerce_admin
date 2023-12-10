@@ -12,33 +12,25 @@ export const useUserData = create<IUser>()(
       error: null,
       loading: false,
       fetchUserId: async () => {
-        console.log(" =>>>client fetch user:");
-
         try {
           set({ loading: true }, false, "set_user_loading");
           const { data, error } = await getUser();
           if (error) {
-            set({ error, user: null, loading: false }, false, "set_user_error");
-            // set({ user: null }, false, "reset_user_data");
+            set({ error, user: null }, false, "set_user_error");
             return;
           }
           if (data) {
-            set(
-              { user: data, loading: false, error: null },
-              false,
-              "set_user_data",
-            );
+            set({ user: data, error: null }, false, "set_user_data");
           }
         } catch (e) {
           set(
-            { error: HTTPErrorMessage.SERVER_ERROR, loading: false },
+            { error: HTTPErrorMessage.SERVER_ERROR },
             false,
             "set_user_error",
           );
+        } finally {
+          set({ loading: false }, false, "reset_user_loading");
         }
-        // finally {
-        //   set({ loading: false }, false, "reset_user_loading");
-        // }
       },
     }),
     { name: "userData" },

@@ -1,9 +1,10 @@
 import prismaDB from "@/fsd/shared/lib/prismadb";
-import { ICreateStore, IGetStore } from "../../type/action.type";
+import { ICreateStoreAction, IGetStoreAction } from "../../type/action.type";
 import { IStore } from "../../type/store.type";
+import { IRenameStoreRepo } from "../../type/repo.type";
 
 export const getStoreBySlugAndUserId = async (
-  data: IGetStore,
+  data: IGetStoreAction,
 ): Promise<IStore | null> => {
   const { slug, userId } = data;
   return await prismaDB.store.findUnique({
@@ -25,7 +26,9 @@ export const getStoreList = async (userId: string): Promise<IStore[]> => {
 export const getStoreByName = async (name: string): Promise<IStore | null> =>
   await prismaDB.store.findUnique({ where: { name } });
 
-export const createStore = async (data: ICreateStore): Promise<IStore> => {
+export const createStore = async (
+  data: ICreateStoreAction,
+): Promise<IStore> => {
   const { name, userId, slug } = data;
   const store = await prismaDB.store.create({
     data: {
@@ -37,15 +40,16 @@ export const createStore = async (data: ICreateStore): Promise<IStore> => {
   return store;
 };
 
-export const renameStore = async (data: ICreateStore): Promise<IStore> => {
-  const { name, userId, slug } = data;
+export const renameStore = async (data: IRenameStoreRepo): Promise<IStore> => {
+  const { currentStoreName, newStoreName, newSlug, userId } = data;
   const store = await prismaDB.store.update({
     where: {
-      name,
+      name: currentStoreName,
       userId,
     },
     data: {
-      name,
+      name: newStoreName,
+      slug: newSlug,
     },
   });
   return store;

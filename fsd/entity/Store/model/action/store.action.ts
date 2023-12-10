@@ -7,6 +7,7 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { IStore } from "../../type/store.type";
 import { repo } from "../repo";
+import { IRenameStoreAction } from "../../type/action.type";
 
 export const createStore = async (
   storeName: string,
@@ -117,8 +118,12 @@ export const getStoreListByUserId = async (
   }
 };
 
-export const renameStore = async (storeName: string) => {
+export const renameStore = async (
+  data: IRenameStoreAction,
+): Promise<ResponseDataAction<IStore>> => {
+  const { currentStoreName, newStoreName } = data;
   try {
+    // console.log(" =>>>renameStore", storeName);
     const userResponse = await getUser();
     if (userResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = userResponse;
@@ -128,8 +133,9 @@ export const renameStore = async (storeName: string) => {
         status,
       };
     }
+    console.log(" =>>>user", userResponse);
 
-    const isExistResponse = await isExist(storeName);
+    const isExistResponse = await isExist(currentStoreName);
     if (isExistResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = isExistResponse;
       return {
@@ -138,12 +144,15 @@ export const renameStore = async (storeName: string) => {
         status,
       };
     }
-    const slug = slugGenerator(storeName);
+    const newSlug = slugGenerator(newStoreName);
+    console.log(" =>>> _slug", newSlug);
     const store = await repo.renameStore({
-      name: storeName,
-      slug,
+      currentStoreName,
+      newStoreName: newStoreName.trim(),
+      newSlug,
       userId: userResponse.data?.id as string,
     });
+    console.log(" =>>> _store", store);
     if (!store) {
       return {
         data: null,

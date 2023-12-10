@@ -11,15 +11,18 @@ import {
 } from "@/fsd/shared/ui/form";
 import { Input } from "@/fsd/shared/ui/input";
 
+import { storeAction } from "@/fsd/entity/Store";
+import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { FC, HTMLAttributes, memo, useEffect } from "react";
+import { HTMLAttributes, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useShallow } from "zustand/react/shallow";
 import {
   StoreSettingTypeSchema,
   storeSettingSchema,
 } from "../type/schema.type";
-import { useShallow } from "zustand/react/shallow";
 
 interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -51,19 +54,30 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
     if (storeCurrent) {
       form.reset({ name: storeCurrent.name });
     }
-  }, [storeCurrent]);
+  }, [form, storeCurrent]);
 
-  const onSubmit = async (data: any) => {
-    // try {
-    //   setLoading(true);
-    //   await axios.patch(`/api/stores/${params.storeId}`, data);
-    //   router.refresh();
-    //   toast.success("Store updated.");
-    // } catch (error: any) {
-    //   toast.error("Something went wrong.");
-    // } finally {
-    //   setLoading(false);
-    // }
+  const onSubmit = async (form: StoreSettingTypeSchema) => {
+    if (storeCurrent) {
+      try {
+        // setLoading(true);
+        const { data, error, status } = await storeAction.renameStore({
+          currentStoreName: storeCurrent?.name,
+          newStoreName: form.name,
+        });
+
+        if (!data && error) {
+          toast.error(error);
+        }
+        if (data) {
+          router.replace(`/${data.slug}${RoutePathEnum.SETTINGS}`);
+          toast.success("Store updated.");
+        }
+      } catch (error: any) {
+        toast.error("Something went wrong.");
+      } finally {
+        // setLoading(false);
+      }
+    }
   };
 
   // const onDelete = async () => {
@@ -107,7 +121,7 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
               Cancel
             </Button>
             <Button disabled={loading} type="submit">
-              Create
+              Update
             </Button>
           </div>
         </form>

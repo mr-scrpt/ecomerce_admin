@@ -1,10 +1,15 @@
-export interface IGetStore {
+export interface IGetStoreAction {
   slug: string;
   userId: string;
 }
 
-export interface ICreateStore {
+export interface ICreateStoreAction {
   name: string;
   slug: string;
   userId: string;
+}
+
+export interface IRenameStoreAction {
+  currentStoreName: string;
+  newStoreName: string;
 }
