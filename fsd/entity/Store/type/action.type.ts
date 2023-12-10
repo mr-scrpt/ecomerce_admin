@@ -13,3 +13,7 @@ export interface IRenameStoreAction {
   currentStoreName: string;
   newStoreName: string;
 }
+export interface IIsOwnerAction {
+  storeId: string;
+  userId: string;
+}

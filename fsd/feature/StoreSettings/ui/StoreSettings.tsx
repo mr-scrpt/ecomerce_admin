@@ -14,16 +14,16 @@ import { Input } from "@/fsd/shared/ui/input";
 import { storeAction } from "@/fsd/entity/Store";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { HTMLAttributes, memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
+import { storeSettingsValidate } from "../action/validation.action";
 import {
   StoreSettingTypeSchema,
   storeSettingSchema,
 } from "../type/schema.type";
-import { storeSettingsValidate } from "../action/validation.action";
 
 interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -74,7 +74,7 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
           router.replace(`/${data.slug}${RoutePathEnum.SETTINGS}`);
           toast.success("Store updated.");
         }
-      } catch (error: any) {
+      } catch (error) {
         toast.error("Something went wrong.");
       } finally {
         setIsLoading(false);
@@ -120,14 +120,7 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
               )}
             />
           </div>
-          <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-            <Button
-              disabled={isLoading}
-              variant="destructive"
-              onClick={() => {}}
-            >
-              Cancel
-            </Button>
+          <div className="pt-6 space-x-2 flex items-center w-full">
             <Button disabled={isLoading} type="submit">
               Update
             </Button>

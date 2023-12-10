@@ -7,7 +7,7 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { IStore } from "../../type/store.type";
 import { repo } from "../repo";
-import { IRenameStoreAction } from "../../type/action.type";
+import { IIsOwnerAction, IRenameStoreAction } from "../../type/action.type";
 
 export const createStore = async (
   storeName: string,
@@ -123,7 +123,6 @@ export const renameStore = async (
 ): Promise<ResponseDataAction<IStore>> => {
   const { currentStoreName, newStoreName } = data;
   try {
-    // console.log(" =>>>renameStore", storeName);
     const userResponse = await getUser();
     if (userResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = userResponse;
@@ -134,6 +133,7 @@ export const renameStore = async (
       };
     }
 
+    // Exist old store
     const isExistResponse = await isExist(currentStoreName);
     if (isExistResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = isExistResponse;
@@ -144,6 +144,7 @@ export const renameStore = async (
       };
     }
 
+    // Unique new store
     const isUniqueResponse = await isUnique(newStoreName);
     if (isUniqueResponse.status !== HTTPStatusEnum.OK) {
       const { error, status } = isUniqueResponse;
@@ -180,6 +181,52 @@ export const renameStore = async (
   }
 };
 
+export const removeStoreById = async (
+  storeId: string,
+): Promise<ResponseDataAction<IStore>> => {
+  try {
+    const userResponse = await getUser();
+    if (!userResponse.data || userResponse.status !== HTTPStatusEnum.OK) {
+      const { error, status } = userResponse;
+      return {
+        data: null,
+        error,
+        status,
+      };
+    }
+
+    const userId = userResponse.data.id;
+    const isOwnerResponse = await isOwner({
+      storeId,
+      userId: userResponse.data.id,
+    });
+    if (isOwnerResponse.status !== HTTPStatusEnum.OK) {
+      const { error, status } = isOwnerResponse;
+      return {
+        data: null,
+        error,
+        status,
+      };
+    }
+
+    const store = await repo.removeStoreBy({ storeId, userId });
+
+    if (!store) {
+      return {
+        data: null,
+        error: StoreResponseErrorEnum.STORE_NOT_UPDATED,
+        status: HTTPStatusEnum.BAD_REQUEST,
+      };
+    }
+    return { data: store, error: null, status: HTTPStatusEnum.OK };
+  } catch (e) {
+    return {
+      data: null,
+      error: HTTPErrorMessage.SERVER_ERROR,
+      status: HTTPStatusEnum.INTERNAL_SERVER_ERROR,
+    };
+  }
+};
 // const getUser = (): ResponseDataAction<userClerk> => {
 //   const user = auth();
 //   if (!user) {
@@ -209,10 +256,49 @@ const isUnique = async (
   return response;
 };
 
+const isUniqueById = async (
+  storeId: string,
+): Promise<ResponseDataAction<boolean>> => {
+  const store = await repo.getStoreById(storeId);
+  const response = { data: true, error: "", status: 200 };
+  if (store) {
+    response.data = false;
+    response.error = StoreResponseErrorEnum.STORE_EXIST;
+    response.status = 400;
+  }
+  return response;
+};
+
 const isExist = async (
   storeName: string,
 ): Promise<ResponseDataAction<boolean>> => {
   const store = await repo.getStoreByName(storeName);
+  const response = { data: true, error: "", status: 200 };
+  if (!store) {
+    response.data = false;
+    response.error = StoreResponseErrorEnum.STORE_EXIST;
+    response.status = 400;
+  }
+  return response;
+};
+
+const isExistById = async (
+  storeId: string,
+): Promise<ResponseDataAction<boolean>> => {
+  const store = await repo.getStoreById(storeId);
+  const response = { data: true, error: "", status: 200 };
+  if (!store) {
+    response.data = false;
+    response.error = StoreResponseErrorEnum.STORE_EXIST;
+    response.status = 400;
+  }
+  return response;
+};
+
+const isOwner = async (
+  data: IIsOwnerAction,
+): Promise<ResponseDataAction<boolean>> => {
+  const store = await repo.getStoreIsOwner(data);
   const response = { data: true, error: "", status: 200 };
   if (!store) {
     response.data = false;

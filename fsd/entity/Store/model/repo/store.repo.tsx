@@ -1,7 +1,11 @@
 import prismaDB from "@/fsd/shared/lib/prismadb";
 import { ICreateStoreAction, IGetStoreAction } from "../../type/action.type";
 import { IStore } from "../../type/store.type";
-import { IRenameStoreRepo } from "../../type/repo.type";
+import {
+  IIsOwnerRepo,
+  IRemoveStoreRepo,
+  IRenameStoreRepo,
+} from "../../type/repo.type";
 
 export const getStoreBySlugAndUserId = async (
   data: IGetStoreAction,
@@ -26,6 +30,15 @@ export const getStoreList = async (userId: string): Promise<IStore[]> => {
 export const getStoreByName = async (name: string): Promise<IStore | null> =>
   await prismaDB.store.findUnique({ where: { name } });
 
+export const getStoreById = async (id: string): Promise<IStore | null> =>
+  await prismaDB.store.findUnique({ where: { id } });
+
+export const getStoreIsOwner = async (
+  data: IIsOwnerRepo,
+): Promise<IStore | null> => {
+  const { storeId, userId } = data;
+  return await prismaDB.store.findUnique({ where: { id: storeId, userId } });
+};
 export const createStore = async (
   data: ICreateStoreAction,
 ): Promise<IStore> => {
@@ -53,4 +66,16 @@ export const renameStore = async (data: IRenameStoreRepo): Promise<IStore> => {
     },
   });
   return store;
+};
+
+export const removeStoreBy = async (
+  data: IRemoveStoreRepo,
+): Promise<IStore> => {
+  const { storeId, userId } = data;
+  return await prismaDB.store.delete({
+    where: {
+      id: storeId,
+      userId,
+    },
+  });
 };
