@@ -30,6 +30,9 @@ export const getStoreList = async (userId: string): Promise<IStore[]> => {
 export const getStoreByName = async (name: string): Promise<IStore | null> =>
   await prismaDB.store.findUnique({ where: { name } });
 
+export const getStoreFirst = async (userId: string): Promise<IStore | null> =>
+  await prismaDB.store.findFirst({ where: { userId } });
+
 export const getStoreById = async (id: string): Promise<IStore | null> =>
   await prismaDB.store.findUnique({ where: { id } });
 

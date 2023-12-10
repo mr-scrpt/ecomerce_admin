@@ -96,6 +96,39 @@ export const getStoreBySlug = async (
   }
 };
 
+export const getStoreStoreFirst = async (): Promise<
+  ResponseDataAction<IStore>
+> => {
+  try {
+    const userResponse = await getUser();
+    if (!userResponse.data || userResponse.status !== HTTPStatusEnum.OK) {
+      const { error, status } = userResponse;
+      return {
+        data: null,
+        error,
+        status,
+      };
+    }
+
+    const userId = userResponse.data.id;
+    const store = await repo.getStoreFirst(userId);
+    if (!store) {
+      return {
+        data: null,
+        error: StoreResponseErrorEnum.STORE_LIST_NOT_FOUND,
+        status: HTTPStatusEnum.BAD_REQUEST,
+      };
+    }
+    return { data: store, error: null, status: HTTPStatusEnum.OK };
+  } catch (e) {
+    return {
+      data: null,
+      error: HTTPErrorMessage.SERVER_ERROR,
+      status: HTTPStatusEnum.INTERNAL_SERVER_ERROR,
+    };
+  }
+};
+
 export const getStoreListByUserId = async (
   userId: string,
 ): Promise<ResponseDataAction<IStore[]>> => {
