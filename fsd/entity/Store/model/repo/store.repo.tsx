@@ -1,38 +1,59 @@
 import prismaDB from "@/fsd/shared/lib/driverDB";
+import { cache } from "react";
 import { ICreateStoreAction, IGetStoreAction } from "../../type/action.type";
-import { IStore } from "../../type/store.type";
 import {
   IIsOwnerRepo,
   IRemoveStoreRepo,
   IRenameStoreRepo,
 } from "../../type/repo.type";
+import { IStore } from "../../type/store.type";
 
 class StoreRepo {
-  async getStoreList(userId: string): Promise<IStore[]> {
+  getStoreBySlugAndUserId = cache(
+    async (data: IGetStoreAction): Promise<IStore | null> => {
+      const { slug, userId } = data;
+      return await prismaDB.store.findUnique({
+        where: {
+          slug,
+          userId,
+        },
+      });
+    },
+  );
+
+  getStoreList = cache(async (userId: string): Promise<IStore[]> => {
     return await prismaDB.store.findMany({
       where: {
         userId,
       },
     });
-  }
+  });
 
-  async getStoreByName(name: string): Promise<IStore | null> {
-    return await prismaDB.store.findUnique({ where: { name } });
-  }
+  getStoreByName = cache(
+    async (name: string): Promise<IStore | null> =>
+      await prismaDB.store.findUnique({ where: { name } }),
+  );
 
-  async getStoreFirst(userId: string): Promise<IStore | null> {
-    return await prismaDB.store.findFirst({ where: { userId } });
-  }
+  getStoreFirst = cache(
+    async (userId: string): Promise<IStore | null> =>
+      await prismaDB.store.findFirst({ where: { userId } }),
+  );
 
-  async getStoreById(id: string): Promise<IStore | null> {
-    return await prismaDB.store.findUnique({ where: { id } });
-  }
+  getStoreById = cache(
+    async (id: string): Promise<IStore | null> =>
+      await prismaDB.store.findUnique({ where: { id } }),
+  );
 
-  async getStoreIsOwner(data: IIsOwnerRepo): Promise<IStore | null> {
-    const { storeId, userId } = data;
-    return await prismaDB.store.findUnique({ where: { id: storeId, userId } });
-  }
-  async createStore(data: ICreateStoreAction): Promise<IStore> {
+  getStoreIsOwner = cache(
+    async (data: IIsOwnerRepo): Promise<IStore | null> => {
+      const { storeId, userId } = data;
+      return await prismaDB.store.findUnique({
+        where: { id: storeId, userId },
+      });
+    },
+  );
+
+  createStore = cache(async (data: ICreateStoreAction): Promise<IStore> => {
     const { name, userId, slug } = data;
     const store = await prismaDB.store.create({
       data: {
@@ -42,9 +63,9 @@ class StoreRepo {
       },
     });
     return store;
-  }
+  });
 
-  async renameStore(data: IRenameStoreRepo): Promise<IStore> {
+  renameStore = cache(async (data: IRenameStoreRepo): Promise<IStore> => {
     const { currentStoreName, newStoreName, newSlug, userId } = data;
     const store = await prismaDB.store.update({
       where: {
@@ -57,9 +78,9 @@ class StoreRepo {
       },
     });
     return store;
-  }
+  });
 
-  async removeStoreBy(data: IRemoveStoreRepo): Promise<IStore> {
+  removeStoreBy = cache(async (data: IRemoveStoreRepo): Promise<IStore> => {
     const { storeId, userId } = data;
     return await prismaDB.store.delete({
       where: {
@@ -67,7 +88,7 @@ class StoreRepo {
         userId,
       },
     });
-  }
+  });
 }
 
 export const storeRepo = new StoreRepo();
