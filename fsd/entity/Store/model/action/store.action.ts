@@ -6,7 +6,7 @@ import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { IStore } from "../../type/store.type";
-import { repo } from "../repo";
+import { storeRepo } from "../repo";
 import { IIsOwnerAction, IRenameStoreAction } from "../../type/action.type";
 
 export const createStore = async (
@@ -33,7 +33,7 @@ export const createStore = async (
       };
     }
     const slug = slugGenerator(storeName);
-    const store = await repo.createStore({
+    const store = await storeRepo.createStore({
       name: storeName,
       slug,
       userId: userResponse.data?.id as string,
@@ -75,7 +75,7 @@ export const getStoreBySlug = async (
         status: HTTPStatusEnum.BAD_REQUEST,
       };
     }
-    const store = await repo.getStoreBySlugAndUserId({
+    const store = await storeRepo.getStoreBySlugAndUserId({
       slug,
       userId: userResponse.data?.id as string,
     });
@@ -111,7 +111,7 @@ export const getStoreStoreFirst = async (): Promise<
     }
 
     const userId = userResponse.data.id;
-    const store = await repo.getStoreFirst(userId);
+    const store = await storeRepo.getStoreFirst(userId);
     if (!store) {
       return {
         data: null,
@@ -133,7 +133,7 @@ export const getStoreListByUserId = async (
   userId: string,
 ): Promise<ResponseDataAction<IStore[]>> => {
   try {
-    const storeList = await repo.getStoreList(userId);
+    const storeList = await storeRepo.getStoreList(userId);
     if (!storeList) {
       return {
         data: null,
@@ -189,7 +189,7 @@ export const renameStore = async (
     }
 
     const newSlug = slugGenerator(newStoreName);
-    const store = await repo.renameStore({
+    const store = await storeRepo.renameStore({
       currentStoreName,
       newStoreName: newStoreName.trim(),
       newSlug,
@@ -242,7 +242,7 @@ export const removeStoreById = async (
       };
     }
 
-    const store = await repo.removeStoreBy({ storeId, userId });
+    const store = await storeRepo.removeStoreBy({ storeId, userId });
 
     if (!store) {
       return {
@@ -279,7 +279,7 @@ export const removeStoreById = async (
 const isUnique = async (
   storeName: string,
 ): Promise<ResponseDataAction<boolean>> => {
-  const store = await repo.getStoreByName(storeName);
+  const store = await storeRepo.getStoreByName(storeName);
   const response = { data: true, error: "", status: 200 };
   if (store) {
     response.data = false;
@@ -292,7 +292,7 @@ const isUnique = async (
 const isUniqueById = async (
   storeId: string,
 ): Promise<ResponseDataAction<boolean>> => {
-  const store = await repo.getStoreById(storeId);
+  const store = await storeRepo.getStoreById(storeId);
   const response = { data: true, error: "", status: 200 };
   if (store) {
     response.data = false;
@@ -305,7 +305,7 @@ const isUniqueById = async (
 const isExist = async (
   storeName: string,
 ): Promise<ResponseDataAction<boolean>> => {
-  const store = await repo.getStoreByName(storeName);
+  const store = await storeRepo.getStoreByName(storeName);
   const response = { data: true, error: "", status: 200 };
   if (!store) {
     response.data = false;
@@ -318,7 +318,7 @@ const isExist = async (
 const isExistById = async (
   storeId: string,
 ): Promise<ResponseDataAction<boolean>> => {
-  const store = await repo.getStoreById(storeId);
+  const store = await storeRepo.getStoreById(storeId);
   const response = { data: true, error: "", status: 200 };
   if (!store) {
     response.data = false;
@@ -331,7 +331,7 @@ const isExistById = async (
 const isOwner = async (
   data: IIsOwnerAction,
 ): Promise<ResponseDataAction<boolean>> => {
-  const store = await repo.getStoreIsOwner(data);
+  const store = await storeRepo.getStoreIsOwner(data);
   const response = { data: true, error: "", status: 200 };
   if (!store) {
     response.data = false;

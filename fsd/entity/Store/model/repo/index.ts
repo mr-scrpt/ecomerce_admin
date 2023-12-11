@@ -1,1 +1,1 @@
-export * as repo from "./store.repo";
+export { storeRepo } from "./store.repo";
