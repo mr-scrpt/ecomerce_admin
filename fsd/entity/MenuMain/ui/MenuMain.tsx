@@ -16,12 +16,6 @@ export const MenuMain: FC<MenuMainProps> = (props) => {
 
   const routes = useMemo(() => routeData(slug), [slug]);
 
-  // const routes = [
-  //   {
-  //     href: `/${slug}/settings`,
-  //     label: "Settings",
-  //   },
-  // ];
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6", className)}>
       {routes.map((item) => (

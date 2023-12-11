@@ -1,4 +1,4 @@
-import prismaDB from "@/fsd/shared/lib/prismadb";
+import prismaDB from "@/fsd/shared/lib/driverDB";
 import { ICreateStoreAction, IGetStoreAction } from "../../type/action.type";
 import { IStore } from "../../type/store.type";
 import {
