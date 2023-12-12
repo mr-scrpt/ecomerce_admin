@@ -14,6 +14,7 @@ export const useUserData = create<IUser>()(
       fetchUserId: async () => {
         try {
           set({ loading: true }, false, "set_user_loading");
+          console.log(" =>>> get user $$$");
           const { data, error } = await getUser();
           if (error) {
             set({ error, user: null }, false, "set_user_error");

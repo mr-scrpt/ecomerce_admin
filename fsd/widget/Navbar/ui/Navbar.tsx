@@ -15,24 +15,11 @@ interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Navbar: FC<NavbarProps> = memo((props) => {
   const { storeSlug, className } = props;
-  const {
-    user,
-    fetchUserId,
-    loading: uLoading,
-    error: uError,
-  } = useUserData(
+  const { user } = useUserData(
     useShallow((state) => ({
       user: state.user,
-      loading: state.loading,
-      error: state.error,
-      fetchUserId: state.fetchUserId,
     })),
   );
-
-  // useEffect(() => {
-  //   console.log(" fetch user navbar !");
-  //   fetchUserId();
-  // }, []);
 
   const {
     setStoreListByUser,
@@ -49,24 +36,8 @@ export const Navbar: FC<NavbarProps> = memo((props) => {
       error: state.error,
     })),
   );
-  // console.log(" =>>>> useStoreData", storeCurrent, loading, error);
-
-  // useEffect(() => {
-  //   getUserId();
-  // }, []);
-
-  // useEffect(() => {
-  //   // console.log(" =>>> curren user ", userId);
-  //   if (user?.id) {
-  //     setStoreListByUser(user.id);
-  //   }
-  //   if (storeSlug) {
-  //     setStoreCurrentBySlug(storeSlug);
-  //   }
-  // }, [user, storeSlug]);
 
   useEffect(() => {
-    // console.log(" =>>> curren user ", userId);
     if (storeSlug) {
       setStoreCurrentBySlug(storeSlug);
     }

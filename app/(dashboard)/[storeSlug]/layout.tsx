@@ -12,9 +12,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
   children,
   params,
 }) => {
-  console.log(" =>>> layout dashboard");
   const { storeSlug } = params;
   const { userId } = auth();
+  console.log(" =>>> layout dashboard::::", storeSlug);
 
   const store = await getStoreBySlug(storeSlug);
   if (!store || !userId) {

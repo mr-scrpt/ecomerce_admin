@@ -8,6 +8,8 @@ import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { IStore } from "../../type/store.type";
 import { storeRepo } from "../repo";
 import { IIsOwnerAction, IRenameStoreAction } from "../../type/action.type";
+import { cache } from "react";
+import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 
 export const createStore = async (
   storeName: string,
@@ -55,46 +57,59 @@ export const createStore = async (
   }
 };
 
-export const getStoreBySlug = async (
-  slug?: string,
-): Promise<ResponseDataAction<IStore | null>> => {
-  try {
-    const userResponse = await getUser();
-    if (userResponse.status !== HTTPStatusEnum.OK) {
-      const { error, status } = userResponse;
+export const getStoreBySlug = cache(
+  async (slug?: string): Promise<ResponseDataAction<IStore | null>> => {
+    console.log(" =>>>get Store by slug");
+    try {
+      const userResponse = await getUser();
+      if (userResponse.status !== HTTPStatusEnum.OK) {
+        const { error, status } = userResponse;
+        const resp = buildResponse(null, error, status);
+        return {
+          data: null,
+          error,
+          status,
+        };
+      }
+      if (!slug) {
+        const resp = buildResponse(
+          null,
+          StoreResponseErrorEnum.STORE_SLUG_EMPTY,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+        return {
+          data: null,
+          error: StoreResponseErrorEnum.STORE_SLUG_EMPTY,
+          status: HTTPStatusEnum.BAD_REQUEST,
+        };
+      }
+      const store = await storeRepo.getStoreBySlugAndUserId({
+        slug,
+        userId: userResponse.data?.id as string,
+      });
+      if (!store) {
+        const resp = buildResponse(
+          null,
+          StoreResponseErrorEnum.STORE_NOT_FOUND,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+        return {
+          data: null,
+          error: StoreResponseErrorEnum.STORE_NOT_FOUND,
+          status: HTTPStatusEnum.BAD_REQUEST,
+        };
+      }
+      const resp = buildResponse(store, null, HTTPStatusEnum.OK);
+      return { data: store, error: null, status: HTTPStatusEnum.OK };
+    } catch (e) {
       return {
         data: null,
-        error,
-        status,
+        error: HTTPErrorMessage.SERVER_ERROR,
+        status: HTTPStatusEnum.INTERNAL_SERVER_ERROR,
       };
     }
-    if (!slug) {
-      return {
-        data: null,
-        error: StoreResponseErrorEnum.STORE_SLUG_EMPTY,
-        status: HTTPStatusEnum.BAD_REQUEST,
-      };
-    }
-    const store = await storeRepo.getStoreBySlugAndUserId({
-      slug,
-      userId: userResponse.data?.id as string,
-    });
-    if (!store) {
-      return {
-        data: null,
-        error: StoreResponseErrorEnum.STORE_NOT_FOUND,
-        status: HTTPStatusEnum.BAD_REQUEST,
-      };
-    }
-    return { data: store, error: null, status: HTTPStatusEnum.OK };
-  } catch (e) {
-    return {
-      data: null,
-      error: HTTPErrorMessage.SERVER_ERROR,
-      status: HTTPStatusEnum.INTERNAL_SERVER_ERROR,
-    };
-  }
-};
+  },
+);
 
 export const getStoreStoreFirst = async (): Promise<
   ResponseDataAction<IStore>

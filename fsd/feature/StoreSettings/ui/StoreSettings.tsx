@@ -1,5 +1,5 @@
 "use client";
-import { useStoreData } from "@/fsd/entity/Store/model/store/store.store";
+import { useStoreData } from "@/fsd/entity/Store";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
@@ -15,7 +15,7 @@ import { storeAction } from "@/fsd/entity/Store";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { HTMLAttributes, memo, useEffect, useState } from "react";
+import { FC, HTMLAttributes, memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
@@ -27,7 +27,7 @@ import {
 
 interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {}
 
-export const StoreSettings = memo((props: StoreSettingsProps) => {
+export const StoreSettings: FC<StoreSettingsProps> = memo(() => {
   const { storeCurrent, loading } = useStoreData(
     useShallow((state) => ({
       storeCurrent: state.storeCurrent,
@@ -39,6 +39,7 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
   useEffect(() => {
     setIsLoading(loading);
   }, [loading]);
+
   const router = useRouter();
 
   const form = useForm<StoreSettingTypeSchema>({
@@ -81,21 +82,6 @@ export const StoreSettings = memo((props: StoreSettingsProps) => {
       }
     }
   };
-
-  // const onDelete = async () => {
-  //   try {
-  //     setLoading(true);
-  //     await axios.delete(`/api/stores/${params.storeId}`);
-  //     router.refresh();
-  //     router.push("/");
-  //     toast.success("Store deleted.");
-  //   } catch (error: any) {
-  //     toast.error("Make sure you removed all products and categories first.");
-  //   } finally {
-  //     setLoading(false);
-  //     setOpen(false);
-  //   }
-  // };
 
   return (
     <div className="space-x-4 pt-2 pb-4">

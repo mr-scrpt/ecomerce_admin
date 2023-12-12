@@ -13,9 +13,7 @@ export const ComboboxItem: FC<ComboboxItemProps> = (props) => {
   console.log(" =>>>", slug);
   return (
     <CommandItem
-      onSelect={() => {
-        handler(slug);
-      }}
+      onSelect={handler.bind(null, slug)}
       className="gap-x-2 flex hover:cursor-pointer"
     >
       {icon && <div className="h-3 w-3 flex items-center">{icon}</div>}

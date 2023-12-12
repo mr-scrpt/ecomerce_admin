@@ -11,6 +11,7 @@ import { IStore } from "../../type/store.type";
 class StoreRepo {
   getStoreBySlugAndUserId = cache(
     async (data: IGetStoreAction): Promise<IStore | null> => {
+      console.log(" =>>> getStoreBySlugAndUserId");
       const { slug, userId } = data;
       return await prismaDB.store.findUnique({
         where: {

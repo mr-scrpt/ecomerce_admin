@@ -10,8 +10,9 @@ export const getSerializedData = (
   items.map((item) => ({
     name: item.name,
     value: item.slug,
+    slug: item.slug,
     icon: icon,
-    handler: () => onSelectItem(item.slug),
+    handler: onSelectItem.bind(false, item.slug),
     isActive: true,
   }));
 

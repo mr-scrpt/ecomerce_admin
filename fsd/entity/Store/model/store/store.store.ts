@@ -14,6 +14,7 @@ export const useStoreData = create<IStoreList>()(
       setStoreCurrentBySlug: async (slug) => {
         try {
           set({ loading: true }, false, "set_store_loading");
+          console.log("slug in state =>>>", slug);
           const { data, error } = await getStoreBySlug(slug);
           if (error) {
             set({ error, storeCurrent: null }, false, "set_store_error");

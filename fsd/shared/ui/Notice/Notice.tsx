@@ -42,7 +42,11 @@ export const Notice = memo((props: NoticeProps) => {
         <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
           {description}
         </code>
-        <Button variant="outline" size="sm" onClick={() => onCopy(description)}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onCopy.bind(false, description)}
+        >
           <Copy className="h-4 w-4" />
         </Button>
       </AlertDescription>

@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, ReactNode } from "react";
+import { FC, HTMLAttributes, ReactNode, memo, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,23 +16,14 @@ interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   footer?: ReactNode;
 }
 
-export const Modal: FC<ModalProps> = (props) => {
-  // const { onClose, isOpen, title, description, children } = props;
-  // if (isOpen) return null;
-  // return (
-  //   <Modal
-  //     title={title}
-  //     description={description}
-  //     isOpen={isOpen}
-  //     onClose={onClose}
-  //   >
-  //     {children}
-  //   </Modal>
-  // );
+export const Modal: FC<ModalProps> = memo((props) => {
   const { title, description, isOpen, onClose, children, footer } = props;
-  const onOpenChange = (isOpen: boolean) => {
-    if (!isOpen) onClose?.();
-  };
+  const onOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (!isOpen) onClose?.();
+    },
+    [onClose],
+  );
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
       <DialogContent>
@@ -45,4 +36,4 @@ export const Modal: FC<ModalProps> = (props) => {
       </DialogContent>
     </Dialog>
   );
-};
+});
