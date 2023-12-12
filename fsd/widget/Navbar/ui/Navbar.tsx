@@ -1,6 +1,6 @@
 "use client";
 import { ThemeSwitcher } from "@/fsd/shared/ui/theme-switcher";
-import { useStoreData } from "@/fsd/entity/Store/model/store/store.store";
+import { useStoreData, useStoreListData } from "@/fsd/entity/Store";
 import { useUserData } from "@/fsd/entity/User/model/store/user.store";
 import { StoreSwitcher } from "@/fsd/feature/StoreSwitcher/ui/StoreSwitcher";
 import { UserButton } from "@clerk/nextjs";
@@ -22,18 +22,24 @@ export const Navbar: FC<NavbarProps> = memo((props) => {
   );
 
   const {
-    setStoreListByUser,
-    setStoreCurrentBySlug,
-    storeCurrent,
+    setStoreBySlug: setStoreCurrentBySlug,
     loading,
     error,
+    storeCurrent,
   } = useStoreData(
     useShallow((state) => ({
-      setStoreListByUser: state.setStoreListByUser,
-      setStoreCurrentBySlug: state.setStoreCurrentBySlug,
       storeCurrent: state.storeCurrent,
+      setStoreBySlug: state.setStoreBySlug,
       loading: state.loading,
       error: state.error,
+    })),
+  );
+
+  const { setStoreListByUser } = useStoreListData(
+    useShallow((state) => ({
+      loading: state.loading,
+      error: state.error,
+      setStoreListByUser: state.setStoreListByUser,
     })),
   );
 

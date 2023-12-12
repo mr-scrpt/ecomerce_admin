@@ -10,6 +10,7 @@ import { storeRepo } from "../repo";
 import { IIsOwnerAction, IRenameStoreAction } from "../../type/action.type";
 import { cache } from "react";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import { getErrorMessage } from "@/fsd/shared/lib/getErrorMessage";
 
 export const createStore = async (
   storeName: string,
@@ -77,6 +78,7 @@ export const getStoreBySlug = cache(
       }
       return buildResponse(store);
     } catch (e) {
+      console.log(" =>>>", getErrorMessage(e));
       return buildResponse(
         null,
         HTTPErrorMessage.SERVER_ERROR,
