@@ -1,6 +1,6 @@
-import { IIsOwnerAction, IRenameStoreAction } from "./action.type";
+import { IIsOwnerPayload, IRenameStorePayload } from "./action.type";
 
-export interface IRenameStoreRepo extends IRenameStoreAction {
+export interface IRenameStoreRepo extends IRenameStorePayload {
   newSlug: string;
   userId: string;
 }
@@ -10,4 +10,4 @@ export interface IRemoveStoreRepo {
   userId: string;
 }
 
-export interface IIsOwnerRepo extends IIsOwnerAction {}
+export interface IIsOwnerRepo extends IIsOwnerPayload {}

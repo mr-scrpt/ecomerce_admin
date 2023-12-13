@@ -1,6 +1,4 @@
-import { Store } from "@prisma/client";
-
-export interface IStore extends Store {}
+import { IStore } from "./entity.type";
 
 export interface IStoreListStore {
   storeList: IStore[];

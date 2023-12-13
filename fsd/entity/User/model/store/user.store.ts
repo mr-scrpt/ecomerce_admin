@@ -1,9 +1,9 @@
 "use client";
-import { getAuthUser } from "@/fsd/shared/modle/action/auth.action";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IUser } from "../type/store.type";
 import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
+import { authAction } from "@/fsd/shared/modle/action";
 
 export const useUserData = create<IUser>()(
   devtools(
@@ -14,7 +14,7 @@ export const useUserData = create<IUser>()(
       fetchUserId: async () => {
         try {
           set({ loading: true }, false, "set_user_loading");
-          const { data, error } = await getAuthUser();
+          const { data, error } = await authAction.getAuthUser();
 
           if (error) {
             set({ error, user: null }, false, "set_user_error");

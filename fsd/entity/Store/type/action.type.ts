@@ -1,19 +1,19 @@
-export interface IGetStoreAction {
+export interface IGetStorePayload {
   slug: string;
   userId: string;
 }
 
-export interface ICreateStoreAction {
+export interface ICreateStorePayload {
   name: string;
   slug: string;
   userId: string;
 }
 
-export interface IRenameStoreAction {
+export interface IRenameStorePayload {
   currentStoreName: string;
   newStoreName: string;
 }
-export interface IIsOwnerAction {
+export interface IIsOwnerPayload {
   storeId: string;
   userId: string;
 }
