@@ -16,7 +16,6 @@ export const useUserData = create<IUser>()(
           set({ loading: true }, false, "set_user_loading");
           const { data, error } = await getAuthUser();
 
-          // throw new Error("my custom error");
           if (error) {
             set({ error, user: null }, false, "set_user_error");
             return;

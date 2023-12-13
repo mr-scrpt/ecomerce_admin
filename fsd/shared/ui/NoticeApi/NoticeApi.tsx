@@ -5,7 +5,7 @@ import { useOrigin } from "../../hook/useOrigin";
 
 interface NoticeApiProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
-  variant: string;
+  variant: "public" | "admin";
   apiPath: string;
 }
 

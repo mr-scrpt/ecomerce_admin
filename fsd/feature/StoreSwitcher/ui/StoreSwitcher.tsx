@@ -26,7 +26,6 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
   // console.log(" =>>> list", list);
   const { user } = useUserData();
 
-  console.log(" =>>> in storeSwitcher");
   useEffect(() => {
     console.log(" =>>> user", user, user?.id);
     if (user && user.id && storeSlug) {
