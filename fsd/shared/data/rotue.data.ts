@@ -1,12 +1,16 @@
-import { RoutePathEnum } from "./route.enum";
+import { RouteNameEnum, RoutePathEnum } from "./route.enum";
 
 export const routeData = (currentStore: string) => [
   {
     href: `/${currentStore}${RoutePathEnum.HOME}`,
-    label: "Overview",
+    label: RouteNameEnum.HOME,
+  },
+  {
+    href: `/${currentStore}${RoutePathEnum.BILBOARDS}`,
+    label: RouteNameEnum.BILBOARDS,
   },
   {
     href: `/${currentStore}${RoutePathEnum.SETTINGS}`,
-    label: "Settings",
+    label: RouteNameEnum.SETTINGS,
   },
 ];
