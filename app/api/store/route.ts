@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 
-import prismaDB from "@/fsd/shared/lib/prismadb";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
+import prismaDB from "@/fsd/shared/lib/driverDB";
 
 export const POST = async (req: Request) => {
   try {

@@ -10,11 +10,11 @@ const DashboardPage = (props: DashboardPageProps) => {
 
   return (
     <div className="p-4 items-center justify-start">
-      <NoticeApi
-        title="NEXT_PUBLIC_API_URL"
-        variant="public"
-        apiPath={storeSlug}
-      />
+      {/* <NoticeApi */}
+      {/*   title="NEXT_PUBLIC_API_URL" */}
+      {/*   variant="public" */}
+      {/*   apiPath={storeSlug} */}
+      {/* /> */}
     </div>
   );
 };
