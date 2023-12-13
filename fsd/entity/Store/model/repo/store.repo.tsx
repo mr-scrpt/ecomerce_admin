@@ -7,11 +7,13 @@ import {
   IRenameStoreRepo,
 } from "../../type/repo.type";
 import { IStore } from "../../type/store.type";
+import { StoreResponseErrorEnum } from "../../type/responseError.enum";
+import { getErrorMessage } from "@/fsd/shared/lib/getErrorMessage";
 
 class StoreRepo {
   getStoreBySlugAndUserId = cache(
     async (data: IGetStoreAction): Promise<IStore | null> => {
-      console.log(" =>>> getStoreBySlugAndUserId");
+      // try {
       const { slug, userId } = data;
       return await prismaDB.store.findUnique({
         where: {
@@ -19,6 +21,10 @@ class StoreRepo {
           userId,
         },
       });
+      // if (!res) throw new Error(StoreResponseErrorEnum.STORE_NOT_FOUND);
+      // } catch (e) {
+      //   throw new Error(getErrorMessage(e));
+      // }
     },
   );
 

@@ -18,9 +18,12 @@ import { Input } from "@/fsd/shared/ui/input";
 import { storeCreateValidate } from "../model/action/validation.action";
 import { StoreCreateTypeSchema, storeCreateSchema } from "../type/schema.type";
 
-interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {}
+interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
+  onClose: () => void;
+}
 
-export const StoreCreate: FC<StoreCreateProps> = () => {
+export const StoreCreate: FC<StoreCreateProps> = (props) => {
+  const { onClose } = props;
   const [loading, setLoading] = useState(false);
   // const [isLoadingSubmit, startSubmitTransition] = useTransition();
 
@@ -71,7 +74,12 @@ export const StoreCreate: FC<StoreCreateProps> = () => {
             )}
           />
           <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-            <Button disabled={loading} variant="destructive" onClick={() => {}}>
+            <Button
+              disabled={loading}
+              type="button"
+              variant="destructive"
+              onClick={onClose}
+            >
               Cancel
             </Button>
             <Button disabled={loading} type="submit">

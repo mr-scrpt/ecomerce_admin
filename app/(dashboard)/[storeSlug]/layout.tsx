@@ -14,15 +14,11 @@ const DashboardLayout: FC<DashboardLayoutProps> = async ({
 }) => {
   const { storeSlug } = params;
   const { userId } = auth();
-  console.log(" =>>> layout dashboard::::", storeSlug);
+  console.log(" =>>> dashboard");
 
-  try {
-    const store = await getStoreBySlug(storeSlug);
-    if (!store || !userId) {
-      redirect("/");
-    }
-  } catch (e) {
-    console.log(" =>>> error top");
+  const store = await getStoreBySlug(storeSlug);
+  if (!store.data || !userId) {
+    redirect("/");
   }
 
   return (

@@ -5,17 +5,23 @@ import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
 import { StoreRemove } from "@/fsd/feature/StoreRemove";
 import { Modal } from "@/fsd/shared/ui/modal";
 import { useEffect, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 export const ModalProvider = () => {
   // const [isMounted, setIsMoundted] = useState(false);
 
-  const { isOpen, onClose } = useStoreModal(({ isOpen, onClose }) => ({
-    isOpen,
-    onClose,
-  }));
+  const { isOpenCreate, onCloseCreate } = useStoreModal(
+    useShallow((state) => ({
+      isOpenCreate: state.isOpen,
+      onCloseCreate: state.onClose,
+    })),
+  );
 
-  const { isOpen: isOpenRemove, onClose: onCloseRemove } = useStoreRemoveModal(
-    ({ isOpen, onClose }) => ({ isOpen, onClose }),
+  const { isOpenRemove, onCloseRemove } = useStoreRemoveModal(
+    useShallow((state) => ({
+      isOpenRemove: state.isOpen,
+      onCloseRemove: state.onClose,
+    })),
   );
 
   // useEffect(() => {
@@ -27,12 +33,12 @@ export const ModalProvider = () => {
   return (
     <>
       <Modal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isOpenCreate}
+        onClose={onCloseCreate}
         title="Create new store"
         description="This action has bean created new store"
       >
-        <StoreCreate />
+        <StoreCreate onClose={onCloseCreate} />
       </Modal>
       <Modal
         isOpen={isOpenRemove}
