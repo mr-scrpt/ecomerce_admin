@@ -2,6 +2,7 @@
 import { storeAction } from "@/fsd/entity/Store";
 import { useStoreData } from "@/fsd/entity/Store/model/store/store.store";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
+import { useOrigin } from "@/fsd/shared/hook/useOrigin";
 import { Button } from "@/fsd/shared/ui/button";
 import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, useState } from "react";
@@ -13,6 +14,7 @@ interface StoreRemoveProps extends HTMLAttributes<HTMLDivElement> {
 
 export const StoreRemove: FC<StoreRemoveProps> = (props) => {
   const { onClose } = props;
+  const originUrl = useOrigin();
   const [isLoading, setIsLoading] = useState(false);
   const { storeCurrent } = useStoreData(({ storeCurrent }) => ({
     storeCurrent,
@@ -31,7 +33,7 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
 
         if (data) {
           onClose();
-          router.replace(RoutePathEnum.HOME);
+          router.replace(origin);
           toast.success(`Store ${data.name} has bean deleted.`);
         }
       } catch (error) {

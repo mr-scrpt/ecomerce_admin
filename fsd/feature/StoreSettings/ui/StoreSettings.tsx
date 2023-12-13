@@ -68,7 +68,7 @@ export const StoreSettings: FC<StoreSettingsProps> = memo(() => {
           newStoreName: form.name,
         });
 
-        if (!data && error) {
+        if (error) {
           toast.error(error);
         }
         if (data) {

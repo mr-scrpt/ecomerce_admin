@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, HTMLAttributes, useState, useTransition } from "react";
+import { FC, HTMLAttributes, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
@@ -25,7 +25,6 @@ interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
 export const StoreCreate: FC<StoreCreateProps> = (props) => {
   const { onClose } = props;
   const [loading, setLoading] = useState(false);
-  // const [isLoadingSubmit, startSubmitTransition] = useTransition();
 
   const form = useForm<StoreCreateTypeSchema>({
     resolver: zodResolver(storeCreateSchema),
