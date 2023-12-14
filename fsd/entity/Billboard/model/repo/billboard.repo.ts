@@ -21,20 +21,17 @@ class BillboardRepo {
   //   },
   // );
   //
-  // getStoreList = cache(async (userId: string): Promise<IStore[]> => {
-  //   return await prismaDB.store.findMany({
-  //     where: {
-  //       userId,
-  //     },
-  //   });
-  // });
+  getBillboardList = cache(async (storeId: string): Promise<IBillboard[]> => {
+    return await prismaDB.billboard.findMany({
+      where: {
+        storeId: storeId,
+      },
+    });
+  });
 
-  getBillboardByName = async (
-    data: IGetBillboardByNameRepo,
-  ): Promise<IBillboard | null> => {
-    const { storeId, name } = data;
+  getBillboard = async (billboardId: string): Promise<IBillboard | null> => {
     return await prismaDB.billboard.findUnique({
-      where: { storeId_name: { storeId, name } },
+      where: { id: billboardId },
     });
   };
 
@@ -43,7 +40,9 @@ class BillboardRepo {
   //     await prismaDB.store.findFirst({ where: { userId } }),
   // );
 
-  getBillboard = async (data: IGetBillboardRepo): Promise<IBillboard | null> =>
+  getBillboardByName = async (
+    data: IGetBillboardRepo,
+  ): Promise<IBillboard | null> =>
     await prismaDB.billboard.findUnique({ where: { storeId_name: data } });
   //
   // getStoreIsOwner = cache(

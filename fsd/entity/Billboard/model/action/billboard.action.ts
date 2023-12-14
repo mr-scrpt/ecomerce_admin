@@ -61,6 +61,41 @@ export const createBillboard = cache(
   },
 );
 
+export const getBillboard = cache(
+  async (
+    billboardId: string,
+  ): Promise<ResponseDataAction<IBillboard | null>> => {
+    try {
+      const userResponse = await authAction.getAuthUser();
+      if (userResponse.error) {
+        throw new Error(userResponse.error);
+      }
+      const billboard = await billboardRepo.getBillboard(billboardId);
+      if (!billboard) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+      return buildResponse(billboard);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+export const getBillboardListByStoreId = cache(
+  async (storeId: string): Promise<ResponseDataAction<IBillboard[] | null>> => {
+    try {
+      const billboardList = await billboardRepo.getBillboardList(storeId);
+      return buildResponse(billboardList);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
 export const updateBillboard = cache(
   async (
     data: IUpdateBillboardPayload,
@@ -110,5 +145,5 @@ const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
 
 const isExist = cache(
   async (data: IGetBillboardPayload): Promise<boolean> =>
-    !!(await billboardRepo.getBillboard(data)),
+    !!(await billboardRepo.getBillboardByName(data)),
 );
