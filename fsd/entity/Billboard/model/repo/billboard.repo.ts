@@ -4,6 +4,7 @@ import { ICreateBillboardPayload } from "../../type/action.type";
 import { IBillboard } from "../../type/entity.type";
 import {
   IGetBillboardByNameRepo,
+  IGetBillboardRepo,
   IUpdateBillboardRepo,
 } from "../../type/repo.type";
 
@@ -42,8 +43,8 @@ class BillboardRepo {
   //     await prismaDB.store.findFirst({ where: { userId } }),
   // );
 
-  getStore = async (id: string): Promise<IBillboard | null> =>
-    await prismaDB.billboard.findUnique({ where: { id } });
+  getBillboard = async (data: IGetBillboardRepo): Promise<IBillboard | null> =>
+    await prismaDB.billboard.findUnique({ where: { storeId_name: data } });
   //
   // getStoreIsOwner = cache(
   //   async (data: IIsOwnerRepo): Promise<IStore | null> => {

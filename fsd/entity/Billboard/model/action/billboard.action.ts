@@ -3,6 +3,7 @@ import { IBillboard } from "../../type/entity.type";
 import { authAction } from "@/fsd/shared/modle/action";
 import {
   ICreateBillboardPayload,
+  IGetBillboardPayload,
   IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "../../type/action.type";
@@ -77,7 +78,7 @@ export const updateBillboard = cache(
         throw new Error(storeResponse.error);
       }
 
-      const isExistResponse = await isExist(billboardId);
+      const isExistResponse = await isExist({ name, storeId });
       if (!isExistResponse) {
         throw new HttpException(
           BillboardResponseErrorEnum.BILLBOARD_NOT_EXIST,
@@ -108,6 +109,6 @@ const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
   !(await billboardRepo.getBillboardByName(data));
 
 const isExist = cache(
-  async (storeId: string): Promise<boolean> =>
-    !!(await billboardRepo.getStore(storeId)),
+  async (data: IGetBillboardPayload): Promise<boolean> =>
+    !!(await billboardRepo.getBillboard(data)),
 );
