@@ -12,6 +12,6 @@ export interface IUpdateBillboardPayload {
 }
 
 export interface IIsUniqueBillboardPayload {
-  billboardName: string;
+  name: string;
   storeId: string;
 }

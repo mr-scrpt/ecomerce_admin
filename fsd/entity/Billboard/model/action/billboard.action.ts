@@ -25,7 +25,19 @@ export const createBillboard = cache(
         throw new Error(userResponse.error);
       }
 
-      const { storeId } = data;
+      const { storeId, name } = data;
+
+      const isUniqueResponse = await isUnique({
+        name,
+        storeId: userResponse.data!.id,
+      });
+
+      if (!isUniqueResponse) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NOT_UNIQUE,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
@@ -92,10 +104,10 @@ export const updateBillboard = cache(
   },
 );
 
+const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
+  !(await billboardRepo.getBillboardByName(data));
+
 const isExist = cache(
   async (storeId: string): Promise<boolean> =>
     !!(await billboardRepo.getStore(storeId)),
 );
-
-const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
-  !!(await billboardRepo.getBillboardByName(data));
