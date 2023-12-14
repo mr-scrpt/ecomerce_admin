@@ -7,7 +7,11 @@ import { authAction } from "@/fsd/shared/modle/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
-import { IIsOwnerPayload, IRenameStorePayload } from "../../type/action.type";
+import {
+  IIsOwnerPayload,
+  IIsUniqueStorePayload,
+  IRenameStorePayload,
+} from "../../type/action.type";
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { storeRepo } from "../repo";
 import { IStore } from "../../type/entity.type";
@@ -20,7 +24,10 @@ export const createStore = cache(
         throw new Error(userResponse.error);
       }
 
-      const isUniqueResponse = await isUnique(storeName);
+      const isUniqueResponse = await isUnique({
+        storeName,
+        userId: userResponse.data!.id,
+      });
       if (isUniqueResponse) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NOT_UNIQUE,
@@ -41,6 +48,7 @@ export const createStore = cache(
       }
       return buildResponse(store);
     } catch (e) {
+      console.log(" =>>>err", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -83,7 +91,7 @@ export const getStoreBySlug = cache(
         throw new Error(userResponse.error);
       }
 
-      const store = await storeRepo.getStoreBySlugAndUserId({
+      const store = await storeRepo.getStoreBySlug({
         slug,
         userId: userResponse.data?.id as string,
       });
@@ -227,8 +235,8 @@ export const removeStoreById = cache(
 );
 
 const isUnique = cache(
-  async (storeName: string): Promise<boolean> =>
-    !!(await storeRepo.getStoreByName(storeName)),
+  async (data: IIsUniqueStorePayload): Promise<boolean> =>
+    !!(await storeRepo.getStoreByName(data)),
 );
 
 const isExist = cache(

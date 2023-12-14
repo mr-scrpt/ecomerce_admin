@@ -2,6 +2,7 @@ import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
 import { ICreateStorePayload, IGetStorePayload } from "../../type/action.type";
 import {
+  IGetStoreByNameRepo,
   IIsOwnerRepo,
   IRemoveStoreRepo,
   IRenameStoreRepo,
@@ -9,13 +10,15 @@ import {
 import { IStore } from "../../type/entity.type";
 
 class StoreRepo {
-  getStoreBySlugAndUserId = cache(
+  getStoreBySlug = cache(
     async (data: IGetStorePayload): Promise<IStore | null> => {
       const { slug, userId } = data;
       return await prismaDB.store.findUnique({
         where: {
-          slug,
-          userId,
+          userId_slug: {
+            slug,
+            userId,
+          },
         },
       });
     },
@@ -30,8 +33,12 @@ class StoreRepo {
   });
 
   getStoreByName = cache(
-    async (name: string): Promise<IStore | null> =>
-      await prismaDB.store.findUnique({ where: { name } }),
+    async (data: IGetStoreByNameRepo): Promise<IStore | null> => {
+      const { storeName, userId } = data;
+      return await prismaDB.store.findUnique({
+        where: { userId_name: { name: storeName, userId } },
+      });
+    },
   );
 
   getStoreFirst = cache(
@@ -68,8 +75,10 @@ class StoreRepo {
     const { currentStoreName, newStoreName, newSlug, userId } = data;
     return await prismaDB.store.update({
       where: {
-        name: currentStoreName,
-        userId,
+        userId_name: {
+          name: currentStoreName,
+          userId,
+        },
       },
       data: {
         name: newStoreName,

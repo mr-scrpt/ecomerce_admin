@@ -1,11 +1,11 @@
 import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
-import {
-  ICreateBillboardPayload,
-  IIsUniqueBilboard,
-} from "../../type/action.type";
+import { ICreateBillboardPayload } from "../../type/action.type";
 import { IBillboard } from "../../type/entity.type";
-import { IUpdateBillboardRepo } from "../../type/repo.type";
+import {
+  IGetBillboardByNameRepo,
+  IUpdateBillboardRepo,
+} from "../../type/repo.type";
 
 class BillboardRepo {
   // getStoreBySlugAndUserId = cache(
@@ -29,7 +29,7 @@ class BillboardRepo {
   // });
 
   getBillboardByName = async (
-    data: IIsUniqueBilboard,
+    data: IGetBillboardByNameRepo,
   ): Promise<IBillboard | null> => {
     const { storeId, billboardName } = data;
     return await prismaDB.billboard.findUnique({

@@ -13,7 +13,13 @@ export interface IRenameStorePayload {
   currentStoreName: string;
   newStoreName: string;
 }
+
 export interface IIsOwnerPayload {
   storeId: string;
+  userId: string;
+}
+
+export interface IIsUniqueStorePayload {
+  storeName: string;
   userId: string;
 }

@@ -17,8 +17,8 @@ datasource db {
 
 model Store {
   id        String   @id @default(uuid())
-  name      String   @unique
-  slug      String   @unique
+  name      String
+  slug      String
   userId    String
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
@@ -26,6 +26,7 @@ model Store {
 
   @@index([userId, name])
   @@unique([userId,name])
+  @@unique([userId,slug])
 }
 
 model Billboard {

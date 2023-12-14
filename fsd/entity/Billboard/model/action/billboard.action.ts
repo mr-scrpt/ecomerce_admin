@@ -3,7 +3,7 @@ import { IBillboard } from "../../type/entity.type";
 import { authAction } from "@/fsd/shared/modle/action";
 import {
   ICreateBillboardPayload,
-  IIsUniqueBilboard,
+  IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "../../type/action.type";
 import { billboardRepo } from "../repo/billboard.repo";
@@ -97,5 +97,5 @@ const isExist = cache(
     !!(await billboardRepo.getStore(storeId)),
 );
 
-const isUnique = async (data: IIsUniqueBilboard): Promise<boolean> =>
+const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
   !!(await billboardRepo.getBillboardByName(data));

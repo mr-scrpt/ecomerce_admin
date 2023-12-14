@@ -11,3 +11,8 @@ export interface IRemoveStoreRepo {
 }
 
 export interface IIsOwnerRepo extends IIsOwnerPayload {}
+
+export interface IGetStoreByNameRepo {
+  storeName: string;
+  userId: string;
+}
