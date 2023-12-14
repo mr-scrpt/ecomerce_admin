@@ -10,3 +10,8 @@ export interface IUpdateBillboardPayload {
   name: string;
   imgUrl: string;
 }
+
+export interface IIsUniqueBilboard {
+  billboardName: string;
+  storeId: string;
+}

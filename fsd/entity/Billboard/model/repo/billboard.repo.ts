@@ -1,6 +1,9 @@
 import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
-import { ICreateBillboardPayload } from "../../type/action.type";
+import {
+  ICreateBillboardPayload,
+  IIsUniqueBilboard,
+} from "../../type/action.type";
 import { IBillboard } from "../../type/entity.type";
 import { IUpdateBillboardRepo } from "../../type/repo.type";
 
@@ -25,8 +28,14 @@ class BillboardRepo {
   //   });
   // });
 
-  getBillboardByName = async (name: string): Promise<IBillboard | null> =>
-    await prismaDB.billboard.findUnique({ where: { name } });
+  getBillboardByName = async (
+    data: IIsUniqueBilboard,
+  ): Promise<IBillboard | null> => {
+    const { storeId, billboardName } = data;
+    return await prismaDB.billboard.findUnique({
+      where: { storeId_name: { storeId, name: billboardName } },
+    });
+  };
 
   // getStoreFirst = cache(
   //   async (userId: string): Promise<IStore | null> =>
