@@ -28,7 +28,8 @@ export const createStore = cache(
         storeName,
         userId: userResponse.data!.id,
       });
-      if (isUniqueResponse) {
+
+      if (!isUniqueResponse) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NOT_UNIQUE,
           HTTPStatusEnum.BAD_REQUEST,
@@ -236,12 +237,12 @@ export const removeStoreById = cache(
 
 const isUnique = cache(
   async (data: IIsUniqueStorePayload): Promise<boolean> =>
-    !!(await storeRepo.getStoreByName(data)),
+    !(await storeRepo.getStoreByName(data)),
 );
 
 const isExist = cache(
-  async (storeName: string): Promise<boolean> =>
-    !!(await storeRepo.getStoreByName(storeName)),
+  async (data: IIsUniqueStorePayload): Promise<boolean> =>
+    !!(await storeRepo.getStoreByName(data)),
 );
 
 const isOwner = cache(

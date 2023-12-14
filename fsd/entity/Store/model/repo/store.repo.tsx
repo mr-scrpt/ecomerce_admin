@@ -35,9 +35,14 @@ class StoreRepo {
   getStoreByName = cache(
     async (data: IGetStoreByNameRepo): Promise<IStore | null> => {
       const { storeName, userId } = data;
-      return await prismaDB.store.findUnique({
+      const res = await prismaDB.store.findUnique({
         where: { userId_name: { name: storeName, userId } },
       });
+      console.log(" =>>> RES", res);
+      return res;
+      // return await prismaDB.store.findUnique({
+      //   where: { userId_name: { name: storeName, userId } },
+      // });
     },
   );
 
