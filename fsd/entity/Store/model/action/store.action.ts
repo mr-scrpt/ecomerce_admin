@@ -17,7 +17,7 @@ import { storeRepo } from "../repo";
 import { IStore } from "../../type/entity.type";
 
 export const createStore = cache(
-  async (storeName: string): Promise<ResponseDataAction<IStore | null>> => {
+  async (name: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
       const userResponse = await authAction.getAuthUser();
       if (userResponse.error) {
@@ -25,7 +25,7 @@ export const createStore = cache(
       }
 
       const isUniqueResponse = await isUnique({
-        storeName,
+        name,
         userId: userResponse.data!.id,
       });
 
@@ -35,9 +35,9 @@ export const createStore = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      const slug = slugGenerator(storeName);
+      const slug = slugGenerator(name);
       const store = await storeRepo.createStore({
-        name: storeName,
+        name,
         slug,
         userId: userResponse.data?.id as string,
       });
@@ -49,7 +49,6 @@ export const createStore = cache(
       }
       return buildResponse(store);
     } catch (e) {
-      console.log(" =>>>err", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
