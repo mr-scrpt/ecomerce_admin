@@ -21,7 +21,7 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
     if (storeCurrent) {
       try {
         setIsLoading(true);
-        const { data, error } = await storeAction.removeStoreById(
+        const { data, error } = await storeAction.removeStore(
           storeCurrent.id,
         );
         if (!data && error) {

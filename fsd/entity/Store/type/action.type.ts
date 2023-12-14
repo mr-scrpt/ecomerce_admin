@@ -20,6 +20,6 @@ export interface IIsOwnerPayload {
 }
 
 export interface IIsUniqueStorePayload {
-  storeName: string;
+  name: string;
   userId: string;
 }

@@ -157,9 +157,10 @@ export const renameStore = cache(
       if (userResponse.error) {
         throw new Error(userResponse.error);
       }
+      const userId = userResponse.data!.id;
 
       // Exist old store
-      const isExistResponse = await isExist(currentStoreName);
+      const isExistResponse = await isExist({ userId, name: currentStoreName });
       if (!isExistResponse) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NOT_EXIST,
@@ -168,8 +169,8 @@ export const renameStore = cache(
       }
 
       // Unique new store
-      const isUniqueResponse = await isUnique(newStoreName);
-      if (isUniqueResponse) {
+      const isUniqueResponse = await isUnique({ userId, name: newStoreName });
+      if (!isUniqueResponse) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NOT_UNIQUE,
           HTTPStatusEnum.BAD_REQUEST,
@@ -199,7 +200,7 @@ export const renameStore = cache(
   },
 );
 
-export const removeStoreById = cache(
+export const removeStore = cache(
   async (storeId: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
       const userResponse = await authAction.getAuthUser();
@@ -212,7 +213,7 @@ export const removeStoreById = cache(
         storeId,
         userId,
       });
-      if (isOwnerResponse) {
+      if (!isOwnerResponse) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NO_OWNER,
           HTTPStatusEnum.FORBIDDEN,
