@@ -33,7 +33,6 @@ export const createBillboard = cache(
         name,
         storeId,
       });
-      console.log(" =>>> isUniqueResponse", isUniqueResponse);
 
       if (!isUniqueResponse) {
         throw new HttpException(
@@ -57,7 +56,6 @@ export const createBillboard = cache(
       }
       return buildResponse(billboard);
     } catch (e) {
-      // console.log("error =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
