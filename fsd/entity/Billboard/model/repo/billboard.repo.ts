@@ -56,9 +56,11 @@ class BillboardRepo {
   getBillboardByName = async (
     data: IGetBillboardRepo,
   ): Promise<IBillboard | null> => {
+    console.log(" =>>> in res", data);
     const res = await prismaDB.billboard.findUnique({
       where: { storeId_name: data },
     });
+    console.log(" =>>>", res);
     return res;
   };
   //

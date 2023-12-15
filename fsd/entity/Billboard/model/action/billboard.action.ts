@@ -22,7 +22,6 @@ export const createBillboard = cache(
     data: ICreateBillboardPayload,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      console.log(" =>>> data", data);
       const userResponse = await authAction.getAuthUser();
       if (userResponse.error) {
         throw new Error(userResponse.error);
@@ -32,8 +31,9 @@ export const createBillboard = cache(
 
       const isUniqueResponse = await isUnique({
         name,
-        storeId: userResponse.data!.id,
+        storeId,
       });
+      console.log(" =>>> isUniqueResponse", isUniqueResponse);
 
       if (!isUniqueResponse) {
         throw new HttpException(
@@ -57,6 +57,7 @@ export const createBillboard = cache(
       }
       return buildResponse(billboard);
     } catch (e) {
+      // console.log("error =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -104,10 +105,8 @@ export const getBillboardListByStoreSlug = cache(
     storeSlug: string,
   ): Promise<ResponseDataAction<IBillboard[] | null>> => {
     try {
-      console.log("storeSlug =>>>", storeSlug);
       const billboardList =
         await billboardRepo.getBillboardListByStoreSlug(storeSlug);
-      console.log(" =>>> billboardList", billboardList);
       return buildResponse(billboardList);
     } catch (e) {
       const { error, status } = buildError(e);

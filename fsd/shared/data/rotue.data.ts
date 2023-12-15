@@ -6,8 +6,8 @@ export const routeData = (currentStore: string) => [
     label: RouteNameEnum.HOME,
   },
   {
-    href: `/${currentStore}${RoutePathEnum.BILBOARDS}`,
-    label: RouteNameEnum.BILBOARDS,
+    href: `/${currentStore}${RoutePathEnum.BILLBOARDS}`,
+    label: RouteNameEnum.BILLBOARDS,
   },
   {
     href: `/${currentStore}${RoutePathEnum.SETTINGS}`,

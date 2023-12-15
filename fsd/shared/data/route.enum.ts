@@ -1,9 +1,9 @@
 export enum RoutePathEnum {
   HOME = "/",
   SETTINGS = "/settings",
-  BILBOARDS = "/billboards",
-  BILBOARDS_ADD = "billboards/add", // nested path
-  BILBOARDS_EDIT = "billboards/edit", // nested path
+  BILLBOARDS = "/billboards",
+  BILLBOARDS_ADD = "billboards/add", // nested path
+  BILLBOARDS_EDIT = "billboards/edit", // nested path
   SIGN_UP = "/sign-up",
   SIGN_IN = "/sign-in",
 }
@@ -11,7 +11,7 @@ export enum RoutePathEnum {
 export enum RouteNameEnum {
   HOME = "Overview",
   SETTINGS = "Settings",
-  BILBOARDS = "Billboards",
+  BILLBOARDS = "Billboards",
   SIGN_UP = "Sign up",
   SIGN_IN = "Sign-in",
 }

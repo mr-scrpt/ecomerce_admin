@@ -11,7 +11,7 @@ interface BillboardAddProps extends HTMLAttributes<HTMLDivElement> {}
 export const BillboardAdd: FC<BillboardAddProps> = (props) => {
   return (
     <Link
-      href={RoutePathEnum.BILBOARDS_ADD}
+      href={RoutePathEnum.BILLBOARDS_ADD}
       className={cn("flex gap-2", buttonVariants())}
     >
       <Plus className="h-4 w-4" />

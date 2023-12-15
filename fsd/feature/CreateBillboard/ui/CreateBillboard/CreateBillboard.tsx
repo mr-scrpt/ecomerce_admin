@@ -53,12 +53,10 @@ export const BillboardCreate: FC<StoreCreateProps> = (props) => {
     }
     const validation = billboardCreateValidate(form);
 
-    console.log(" =>>> validation", validation);
     if (validation?.errors) {
       return toast.error("Incorrect data from the form");
     }
     const { name, imgUrl } = form;
-    console.log(" =>>> form", form);
     const { data, error } = await billboardAction.createBillboard({
       name,
       imgUrl,
@@ -68,7 +66,7 @@ export const BillboardCreate: FC<StoreCreateProps> = (props) => {
       toast.error(error);
     }
     if (data) {
-      toast.success(`Store has been created by name ${name}`);
+      toast.success(`Billboard has been created by name ${name}`);
 
       if (onSuccesUrlRedirect) {
         route.push(onSuccesUrlRedirect);
