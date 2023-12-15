@@ -21,6 +21,13 @@ class BillboardRepo {
   //   },
   // );
   //
+
+  getBillboard = async (billboardId: string): Promise<IBillboard | null> => {
+    return await prismaDB.billboard.findUnique({
+      where: { id: billboardId },
+    });
+  };
+
   getBillboardList = cache(async (storeId: string): Promise<IBillboard[]> => {
     return await prismaDB.billboard.findMany({
       where: {
@@ -29,11 +36,17 @@ class BillboardRepo {
     });
   });
 
-  getBillboard = async (billboardId: string): Promise<IBillboard | null> => {
-    return await prismaDB.billboard.findUnique({
-      where: { id: billboardId },
-    });
-  };
+  getBillboardListByStoreSlug = cache(
+    async (storeSlug: string): Promise<IBillboard[]> => {
+      return await prismaDB.billboard.findMany({
+        where: {
+          store: {
+            slug: storeSlug,
+          },
+        },
+      });
+    },
+  );
 
   // getStoreFirst = cache(
   //   async (userId: string): Promise<IStore | null> =>
@@ -42,8 +55,12 @@ class BillboardRepo {
 
   getBillboardByName = async (
     data: IGetBillboardRepo,
-  ): Promise<IBillboard | null> =>
-    await prismaDB.billboard.findUnique({ where: { storeId_name: data } });
+  ): Promise<IBillboard | null> => {
+    const res = await prismaDB.billboard.findUnique({
+      where: { storeId_name: data },
+    });
+    return res;
+  };
   //
   // getStoreIsOwner = cache(
   //   async (data: IIsOwnerRepo): Promise<IStore | null> => {

@@ -1,3 +1,4 @@
+"use server";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { IBillboard } from "../../type/entity.type";
 import { authAction } from "@/fsd/shared/modle/action";
@@ -21,6 +22,7 @@ export const createBillboard = cache(
     data: ICreateBillboardPayload,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
+      console.log(" =>>> data", data);
       const userResponse = await authAction.getAuthUser();
       if (userResponse.error) {
         throw new Error(userResponse.error);
@@ -84,10 +86,28 @@ export const getBillboard = cache(
     }
   },
 );
+
 export const getBillboardListByStoreId = cache(
   async (storeId: string): Promise<ResponseDataAction<IBillboard[] | null>> => {
     try {
       const billboardList = await billboardRepo.getBillboardList(storeId);
+      return buildResponse(billboardList);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const getBillboardListByStoreSlug = cache(
+  async (
+    storeSlug: string,
+  ): Promise<ResponseDataAction<IBillboard[] | null>> => {
+    try {
+      console.log("storeSlug =>>>", storeSlug);
+      const billboardList =
+        await billboardRepo.getBillboardListByStoreSlug(storeSlug);
+      console.log(" =>>> billboardList", billboardList);
       return buildResponse(billboardList);
     } catch (e) {
       const { error, status } = buildError(e);

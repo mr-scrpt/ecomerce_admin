@@ -3,8 +3,9 @@ import { useStoreModal } from "@/fsd/feature/ModalManager";
 import { useStoreRemoveModal } from "@/fsd/feature/ModalManager/model/store/modal.store";
 import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
 import { StoreRemove } from "@/fsd/feature/StoreRemove";
+import { useOrigin } from "@/fsd/shared/hook/useOrigin";
 import { Modal } from "@/fsd/shared/ui/modal";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 
 export const ModalProvider = () => {
@@ -23,6 +24,8 @@ export const ModalProvider = () => {
       onCloseRemove: state.onClose,
     })),
   );
+
+  const originUrl = useOrigin();
 
   // useEffect(() => {
   //   setIsMoundted(true);
@@ -46,7 +49,7 @@ export const ModalProvider = () => {
         title="Are you sure remov store?"
         description="This action cannot be undone."
       >
-        <StoreRemove onClose={onCloseRemove} />
+        <StoreRemove onClose={onCloseRemove} onSuccesUrlRedirect={originUrl} />
       </Modal>
     </>
   );

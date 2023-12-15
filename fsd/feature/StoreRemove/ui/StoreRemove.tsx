@@ -8,10 +8,11 @@ import toast from "react-hot-toast";
 
 interface StoreRemoveProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
+  onSuccesUrlRedirect: string;
 }
 
 export const StoreRemove: FC<StoreRemoveProps> = (props) => {
-  const { onClose } = props;
+  const { onClose, onSuccesUrlRedirect } = props;
   const [isLoading, setIsLoading] = useState(false);
   const { storeCurrent } = useStoreData(({ storeCurrent }) => ({
     storeCurrent,
@@ -21,17 +22,17 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
     if (storeCurrent) {
       try {
         setIsLoading(true);
-        const { data, error } = await storeAction.removeStore(
-          storeCurrent.id,
-        );
+        const { data, error } = await storeAction.removeStore(storeCurrent.id);
         if (!data && error) {
           toast.error(error);
         }
 
         if (data) {
           onClose();
-          router.replace(origin);
           toast.success(`Store ${data.name} has bean deleted.`);
+          if (onSuccesUrlRedirect) {
+            router.replace(onSuccesUrlRedirect);
+          }
         }
       } catch (error) {
         toast.error("Something went wrong.");
