@@ -1,4 +1,4 @@
-import { BillboardCreate } from "@/fsd/feature/CreateBillboard";
+import { BillboardCreate } from "@/fsd/feature/BillboardCreate";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { headers } from "next/dist/client/components/headers";
 import { FC, HTMLAttributes } from "react";

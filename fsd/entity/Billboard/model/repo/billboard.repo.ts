@@ -5,6 +5,8 @@ import { IBillboard } from "../../type/entity.type";
 import {
   IGetBillboardByNameRepo,
   IGetBillboardRepo,
+  IIsOwnerRepo,
+  IRemoveBillboardRepo,
   IUpdateBillboardRepo,
 } from "../../type/repo.type";
 
@@ -56,23 +58,21 @@ class BillboardRepo {
   getBillboardByName = async (
     data: IGetBillboardRepo,
   ): Promise<IBillboard | null> => {
-    console.log(" =>>> in res", data);
     const res = await prismaDB.billboard.findUnique({
       where: { storeId_name: data },
     });
-    console.log(" =>>>", res);
     return res;
   };
-  //
-  // getStoreIsOwner = cache(
-  //   async (data: IIsOwnerRepo): Promise<IStore | null> => {
-  //     const { storeId, userId } = data;
-  //     return await prismaDB.store.findUnique({
-  //       where: { id: storeId, userId },
-  //     });
-  //   },
-  // );
-  //
+
+  getBillboardIsOwner = cache(
+    async (data: IIsOwnerRepo): Promise<IBillboard | null> => {
+      const { storeId, userId } = data;
+      return await prismaDB.billboard.findUnique({
+        where: { id: storeId, store: { userId } },
+      });
+    },
+  );
+
   createBillboard = async (
     data: ICreateBillboardPayload,
   ): Promise<IBillboard> => {
@@ -101,16 +101,17 @@ class BillboardRepo {
       return store;
     },
   );
-  //
-  // removeStoreBy = cache(async (data: IRemoveStoreRepo): Promise<IStore> => {
-  //   const { storeId, userId } = data;
-  //   return await prismaDB.store.delete({
-  //     where: {
-  //       id: storeId,
-  //       userId,
-  //     },
-  //   });
-  // });
+
+  removeBillboard = cache(
+    async (data: IRemoveBillboardRepo): Promise<IBillboard> => {
+      const { billboardId } = data;
+      return await prismaDB.billboard.delete({
+        where: {
+          id: billboardId,
+        },
+      });
+    },
+  );
 }
 
 export const billboardRepo = new BillboardRepo();

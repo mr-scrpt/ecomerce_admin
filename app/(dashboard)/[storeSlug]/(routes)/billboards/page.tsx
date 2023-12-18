@@ -1,4 +1,5 @@
 import { BillboardAdd, billboardAction } from "@/fsd/entity/Billboard";
+import { BillboardTableList } from "@/fsd/feature/BillboardTableList";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { FC, HTMLAttributes } from "react";
@@ -23,6 +24,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         />
         <BillboardAdd />
       </div>
+      <BillboardTableList storeSlug={storeSlug} />
     </main>
   );
 };

@@ -5,6 +5,7 @@ import { authAction } from "@/fsd/shared/modle/action";
 import {
   ICreateBillboardPayload,
   IGetBillboardPayload,
+  IIsOwnerPayload,
   IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "../../type/action.type";
@@ -157,10 +158,64 @@ export const updateBillboard = cache(
   },
 );
 
+export const removeBillboard = cache(
+  async (
+    billboardId: string,
+  ): Promise<ResponseDataAction<IBillboard | null>> => {
+    try {
+      const userResponse = await authAction.getAuthUser();
+      if (userResponse.error) {
+        throw new Error(userResponse.error);
+      }
+
+      const billboard = await getBillboard(billboardId);
+      const { data } = billboard;
+
+      if (!data) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+
+      const userId = userResponse.data!.id;
+      const isOwnerResponse = await isOwner({
+        storeId: data.id,
+        userId,
+      });
+      if (!isOwnerResponse) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NO_OWNER,
+          HTTPStatusEnum.FORBIDDEN,
+        );
+      }
+      const billboardRemover = await billboardRepo.removeBillboard({
+        billboardId,
+      });
+      if (!billboardRemover) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NOT_REMOVED,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+
+      return buildResponse(billboardRemover);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
 const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
   !(await billboardRepo.getBillboardByName(data));
 
 const isExist = cache(
   async (data: IGetBillboardPayload): Promise<boolean> =>
     !!(await billboardRepo.getBillboardByName(data)),
+);
+
+const isOwner = cache(
+  async (data: IIsOwnerPayload): Promise<boolean> =>
+    !!(await billboardRepo.getBillboardIsOwner(data)),
 );

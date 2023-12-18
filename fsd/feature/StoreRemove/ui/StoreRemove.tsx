@@ -7,12 +7,13 @@ import { FC, HTMLAttributes, useState } from "react";
 import toast from "react-hot-toast";
 
 interface StoreRemoveProps extends HTMLAttributes<HTMLDivElement> {
-  onClose: () => void;
+  onSuccess: () => void;
+  onCancel: () => void;
   onSuccesUrlRedirect: string;
 }
 
 export const StoreRemove: FC<StoreRemoveProps> = (props) => {
-  const { onClose, onSuccesUrlRedirect } = props;
+  const { onSuccess, onCancel, onSuccesUrlRedirect } = props;
   const [isLoading, setIsLoading] = useState(false);
   const { storeCurrent } = useStoreData(({ storeCurrent }) => ({
     storeCurrent,
@@ -28,7 +29,7 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
         }
 
         if (data) {
-          onClose();
+          onSuccess();
           toast.success(`Store ${data.name} has bean deleted.`);
           if (onSuccesUrlRedirect) {
             router.replace(onSuccesUrlRedirect);
@@ -44,7 +45,7 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
 
   return (
     <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-      <Button disabled={isLoading} variant="outline" onClick={onClose}>
+      <Button disabled={isLoading} variant="outline" onClick={onCancel}>
         Cancel
       </Button>
       <Button disabled={isLoading} variant="destructive" onClick={onDelete}>

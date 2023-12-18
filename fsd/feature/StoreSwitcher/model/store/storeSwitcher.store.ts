@@ -13,7 +13,7 @@ export const useStoreSwitcherData = create<IStoreSwitcher>()(
       current: null,
       loading: false,
       error: null,
-      fetchStoreByUserIdAndCreateList: async (userId, storeSlug) => {
+      fetchStoreByUserId: async (userId, storeSlug) => {
         try {
           set({ loading: true });
           const { data, error } =

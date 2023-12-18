@@ -41,15 +41,19 @@ export const ModalProvider = () => {
         title="Create new store"
         description="This action has bean created new store"
       >
-        <StoreCreate onClose={onCloseCreate} />
+        <StoreCreate onCancel={onCloseCreate} />
       </Modal>
       <Modal
         isOpen={isOpenRemove}
         onClose={onCloseRemove}
-        title="Are you sure remov store?"
+        title="Are you sure remove store?"
         description="This action cannot be undone."
       >
-        <StoreRemove onClose={onCloseRemove} onSuccesUrlRedirect={originUrl} />
+        <StoreRemove
+          onSuccess={onCloseRemove}
+          onCancel={onCloseRemove}
+          onSuccesUrlRedirect={originUrl}
+        />
       </Modal>
     </>
   );

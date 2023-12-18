@@ -20,5 +20,5 @@ export interface IStoreSwitcher {
   current: IStoreSwitcherItem | null;
   loading: boolean;
   error: string | null;
-  fetchStoreByUserIdAndCreateList: (userId: string, storeSlug: string) => void;
+  fetchStoreByUserId: (userId: string, storeSlug: string) => void;
 }

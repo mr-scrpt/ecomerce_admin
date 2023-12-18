@@ -19,11 +19,11 @@ import { storeCreateValidate } from "../model/action/validation.action";
 import { StoreCreateTypeSchema, storeCreateSchema } from "../type/schema.type";
 
 interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
-  onClose: () => void;
+  onCancel: () => void;
 }
 
 export const StoreCreate: FC<StoreCreateProps> = (props) => {
-  const { onClose } = props;
+  const { onCancel } = props;
   const [loading, setLoading] = useState(false);
 
   const form = useForm<StoreCreateTypeSchema>({
@@ -77,7 +77,7 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
               disabled={loading}
               type="button"
               variant="destructive"
-              onClick={onClose}
+              onClick={onCancel}
             >
               Cancel
             </Button>

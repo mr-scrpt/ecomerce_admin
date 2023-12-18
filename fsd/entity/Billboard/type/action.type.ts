@@ -15,6 +15,10 @@ export interface IGetBillboardPayload {
   name: string;
   storeId: string;
 }
+export interface IIsOwnerPayload {
+  storeId: string;
+  userId: string;
+}
 
 export interface IIsUniqueBillboardPayload {
   name: string;

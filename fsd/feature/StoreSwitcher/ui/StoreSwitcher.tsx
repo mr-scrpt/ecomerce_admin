@@ -20,16 +20,19 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
   const { onOpen } = useStoreModal();
   const router = useRouter();
 
-  const { fetchStoreByUserIdAndCreateList, list, current, loading, error } =
-    useStoreSwitcherData();
+  const {
+    fetchStoreByUserId: fetchStoreByUserIdAndCreateList,
+    list,
+    current,
+    loading,
+    error,
+  } = useStoreSwitcherData();
 
   // console.log(" =>>> list", list);
   const { user } = useUserData();
 
   useEffect(() => {
-    console.log(" =>>> user", user, user?.id);
     if (user && user.id && storeSlug) {
-      console.log(" =>>> fethc store");
       fetchStoreByUserIdAndCreateList(user.id, storeSlug as string);
     }
   }, [user, storeSlug]);
