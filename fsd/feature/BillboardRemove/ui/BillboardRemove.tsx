@@ -1,12 +1,14 @@
 import { billboardAction } from "@/fsd/entity/Billboard";
+import { Button } from "@/fsd/shared/ui/button";
 import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, useState } from "react";
+import toast from "react-hot-toast";
 
 interface BillboardRemoveProps extends HTMLAttributes<HTMLDivElement> {
   billboardId: string;
   onSuccess: () => void;
   onCancel: () => void;
-  onSuccesUrlRedirect: string;
+  onSuccesUrlRedirect?: string;
 }
 
 export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
@@ -17,14 +19,15 @@ export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await billboardAction.remo(storeCurrent.id);
+      const { data, error } =
+        await billboardAction.removeBillboard(billboardId);
       if (!data && error) {
         toast.error(error);
       }
 
       if (data) {
         onSuccess();
-        toast.success(`Store ${data.name} has bean deleted.`);
+        toast.success(`Billboard ${data.name} has bean deleted.`);
         if (onSuccesUrlRedirect) {
           router.replace(onSuccesUrlRedirect);
         }
@@ -36,5 +39,14 @@ export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
     }
   };
 
-  return <div>BillboardRemove</div>;
+  return (
+    <div className="pt-6 space-x-2 flex items-center justify-end w-full">
+      <Button disabled={isLoading} variant="outline" onClick={onCancel}>
+        Cancel
+      </Button>
+      <Button disabled={isLoading} variant="destructive" onClick={onDelete}>
+        Continue
+      </Button>
+    </div>
+  );
 };
