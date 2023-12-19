@@ -1,14 +1,13 @@
 "use client";
 import { BillboardRemoveModal } from "@/fsd/feature/BillboardRemove";
-import { BillboardRemove } from "@/fsd/feature/BillboardRemove/ui/BillboardRemove";
 import { useStoreModal } from "@/fsd/feature/ModalManager";
 import {
   useBillboardRemoveModal,
   useStoreRemoveModal,
 } from "@/fsd/feature/ModalManager/model/store/modal.store";
 import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
-import { StoreRemove, StoreRemoveModal } from "@/fsd/feature/StoreRemove";
-import { useOrigin } from "@/fsd/shared/hook/useOrigin";
+import { StoreCreateModal } from "@/fsd/feature/StoreCreate/ui/StoreCreateModal";
+import { StoreRemoveModal } from "@/fsd/feature/StoreRemove";
 import { Modal } from "@/fsd/shared/ui/modal";
 import { useShallow } from "zustand/react/shallow";
 
@@ -37,8 +36,6 @@ export const ModalProvider = () => {
       })),
     );
 
-  // const originUrl = useOrigin();
-
   return (
     <>
       <Modal
@@ -47,7 +44,7 @@ export const ModalProvider = () => {
         title="Create new store"
         description="This action has bean created new store"
       >
-        <StoreCreate onCancel={onCloseStoreCreate} />
+        <StoreCreateModal onClose={onCloseStoreCreate} />
       </Modal>
       <Modal
         isOpen={isOpenStoreRemove}

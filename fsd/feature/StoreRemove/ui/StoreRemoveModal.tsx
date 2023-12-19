@@ -2,6 +2,7 @@ import { FC, HTMLAttributes, useCallback } from "react";
 import { StoreRemove } from "./StoreRemove";
 import { useOrigin } from "@/fsd/shared/hook/useOrigin";
 import { useStoreData } from "@/fsd/entity/Store";
+import { useRouter } from "next/navigation";
 
 interface StoreRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
@@ -10,9 +11,11 @@ interface StoreRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
 export const StoreRemoveModal: FC<StoreRemoveModalProps> = (props) => {
   const { onClose } = props;
   const originUrl = useOrigin();
+  const router = useRouter();
   const onSuccess = useCallback(() => {
     onClose();
-  }, []);
+    router.replace(originUrl);
+  }, [originUrl, onClose]);
 
   const { storeCurrent } = useStoreData(({ storeCurrent }) => ({
     storeCurrent,
@@ -24,7 +27,6 @@ export const StoreRemoveModal: FC<StoreRemoveModalProps> = (props) => {
         <StoreRemove
           onSuccess={onSuccess}
           onCancel={onClose}
-          onSuccesUrlRedirect={originUrl}
           storeId={storeCurrent.id}
         />
       )}

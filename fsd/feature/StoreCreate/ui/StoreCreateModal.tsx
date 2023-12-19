@@ -1,4 +1,5 @@
-import { FC, HTMLAttributes } from "react";
+import { useRouter } from "next/navigation";
+import { FC, HTMLAttributes, useCallback } from "react";
 import { StoreCreate } from "./StoreCreate";
 
 interface StoreCreateModalProps extends HTMLAttributes<HTMLDivElement> {
@@ -6,5 +7,12 @@ interface StoreCreateModalProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const StoreCreateModal: FC<StoreCreateModalProps> = (props) => {
-  return <StoreCreate onCancel={onCloseStoreCreate} />;
+  const { onClose } = props;
+  const router = useRouter();
+  const onSuccess = useCallback((path: string) => {
+    router.push(path);
+    onClose();
+  }, []);
+
+  return <StoreCreate onCancel={onClose} onSuccess={onSuccess} />;
 };

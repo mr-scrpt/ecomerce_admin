@@ -58,5 +58,11 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
       ),
     },
   ];
-  return <TableData columns={billboardCollumnsWithAction} data={list} />;
+  return (
+    <TableData
+      columns={billboardCollumnsWithAction}
+      data={list}
+      filterKey="name"
+    />
+  );
 });

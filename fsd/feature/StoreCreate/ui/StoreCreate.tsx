@@ -20,7 +20,7 @@ import { StoreCreateTypeSchema, storeCreateSchema } from "../type/schema.type";
 
 interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
   onCancel: () => void;
-  onSuccess?: () => void;
+  onSuccess?: (path: string) => void;
 }
 
 export const StoreCreate: FC<StoreCreateProps> = (props) => {
@@ -45,10 +45,12 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
       toast.error(error);
     }
     if (data) {
-      onSuccess?.();
+      const { slug } = data;
+      console.log(" =>>> func", onSuccess);
+      onSuccess?.(`/${slug}`);
       toast.success(`Store has been created by name ${name}`);
 
-      window.location.assign(`/${data.slug}`);
+      // window.location.assign(`/${data.slug}`);
     }
     setLoading(false);
   };

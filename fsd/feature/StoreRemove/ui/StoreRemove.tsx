@@ -9,14 +9,13 @@ interface StoreRemoveProps extends HTMLAttributes<HTMLDivElement> {
   storeId: string;
   onSuccess?: () => void;
   onCancel: () => void;
-  onSuccesUrlRedirect: string;
+  // onSuccesUrlRedirect: string;
 }
 
 export const StoreRemove: FC<StoreRemoveProps> = (props) => {
-  const { onSuccess, onCancel, onSuccesUrlRedirect, storeId } = props;
+  const { onSuccess, onCancel, storeId } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
   const onDelete = async () => {
     try {
       setIsLoading(true);
@@ -28,9 +27,6 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
       if (data) {
         onSuccess?.();
         toast.success(`Store ${data.name} has bean deleted.`);
-        if (onSuccesUrlRedirect) {
-          router.replace(onSuccesUrlRedirect);
-        }
       }
     } catch (error) {
       toast.error("Something went wrong.");

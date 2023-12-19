@@ -5,6 +5,8 @@ import {
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -16,22 +18,41 @@ import {
   TableRow,
 } from "@/fsd/shared/ui/table";
 import { ITableDataProps } from "../type/props.type";
-import { Button } from "../../button";
+import { Button } from "@/fsd/shared/ui/button";
+import { Input } from "@/fsd/shared/ui/input";
+import { useState } from "react";
 
 export const TableData = <TData, TValue>(
   props: ITableDataProps<TData, TValue>,
 ) => {
-  const { columns, data } = props;
+  const { columns, data, filterKey } = props;
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
   });
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          placeholder={`Filter by ${filterKey}...`}
+          value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn(filterKey)?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>

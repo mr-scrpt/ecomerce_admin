@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/fsd/shared/ui/alert";
 import { Badge, BadgeProps } from "@/fsd/shared/ui/badge";
 import { Button } from "@/fsd/shared/ui/button";
 import { memo, useCallback } from "react";
+import { copyText } from "../../lib/copyText";
 
 interface NoticeProps {
   title: string;
@@ -27,7 +28,7 @@ export const Notice = memo((props: NoticeProps) => {
   const { title, description, variant = "public" } = props;
 
   const onCopy = useCallback((description: string) => {
-    navigator.clipboard.writeText(description);
+    copyText(description);
     toast.success("API Route copied to clipboard.");
   }, []);
 
