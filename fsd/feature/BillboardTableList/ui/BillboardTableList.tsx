@@ -1,32 +1,23 @@
 "use client";
+import { IBillboard } from "@/fsd/entity/Billboard/type/entity.type";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
-import { FC, HTMLAttributes, memo, useEffect } from "react";
+import { FC, HTMLAttributes, memo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { useBillboardRemove } from "../../BillboardRemove";
 import { useBillboardRemoveModal } from "../../ModalManager/model/store/modal.store";
 import { billboardCollumns } from "../data/columns";
-import { useBillboardTableData } from "../model/store/billboard.store";
+import { buildBillboardRow } from "../lib/buildBillboardRow";
 import { BillboardColumn } from "../type/table.type";
 import { BillboardTableListAction } from "./BillboardTableListAction";
-import { IBillboard } from "@/fsd/entity/Billboard/type/entity.type";
-import { buildBillboardRow } from "../lib/buildBillboardRow";
 
 interface BillboardTableListProps extends HTMLAttributes<HTMLDivElement> {
-  // storeSlug: string;
   billboardList: IBillboard[];
 }
 
 export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
   const { billboardList } = props;
-  console.log(" =>>> list", billboardList);
-  // const { list, fetchList } = useBillboardTableData(
-  //   useShallow((state) => ({
-  //     list: state.list,
-  //     fetchList: state.fetchBillboardByStoreSlug,
-  //   })),
-  // );
   const list = billboardList.map((item) => buildBillboardRow(item));
 
   const { onOpen } = useBillboardRemoveModal(
@@ -40,10 +31,6 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
       setId: state.setId,
     })),
   );
-
-  // useEffect(() => {
-  //   fetchList(storeSlug);
-  // }, []);
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
