@@ -20,10 +20,11 @@ import { StoreCreateTypeSchema, storeCreateSchema } from "../type/schema.type";
 
 interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
   onCancel: () => void;
+  onSuccess?: () => void;
 }
 
 export const StoreCreate: FC<StoreCreateProps> = (props) => {
-  const { onCancel } = props;
+  const { onCancel, onSuccess } = props;
   const [loading, setLoading] = useState(false);
 
   const form = useForm<StoreCreateTypeSchema>({
@@ -44,6 +45,7 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
       toast.error(error);
     }
     if (data) {
+      onSuccess?.();
       toast.success(`Store has been created by name ${name}`);
 
       window.location.assign(`/${data.slug}`);

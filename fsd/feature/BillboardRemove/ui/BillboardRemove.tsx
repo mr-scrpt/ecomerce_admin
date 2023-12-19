@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 interface BillboardRemoveProps extends HTMLAttributes<HTMLDivElement> {
   billboardId: string;
-  onSuccess: () => void;
+  onSuccess?: () => void;
   onCancel: () => void;
   onSuccesUrlRedirect?: string;
 }
@@ -27,7 +27,7 @@ export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
       }
 
       if (data) {
-        onSuccess();
+        onSuccess?.();
         toast.success(`Billboard ${data.name} has bean deleted.`);
       }
     } catch (error) {
