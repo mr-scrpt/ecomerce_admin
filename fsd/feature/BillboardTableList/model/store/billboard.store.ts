@@ -4,6 +4,7 @@ import { IStoreBillboardTable } from "../../type/store.type";
 import { billboardAction } from "@/fsd/entity/Billboard";
 import { buildDate } from "@/fsd/shared/lib/formatDate";
 import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
+import { buildBillboardRow } from "../../lib/buildBillboardRow";
 
 export const useBillboardTableData = create<IStoreBillboardTable>()(
   devtools(
@@ -23,11 +24,7 @@ export const useBillboardTableData = create<IStoreBillboardTable>()(
           }
 
           set({
-            list: data?.map((item) => ({
-              id: item.id,
-              name: item.name,
-              createdAt: buildDate(item.createdAt),
-            })),
+            list: data?.map((item) => buildBillboardRow(item)),
           });
         } catch (e) {
           set({ error: HTTPErrorMessage.SERVER_ERROR });

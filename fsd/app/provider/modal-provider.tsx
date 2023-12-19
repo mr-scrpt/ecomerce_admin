@@ -1,59 +1,69 @@
 "use client";
+import { BillboardRemoveModal } from "@/fsd/feature/BillboardRemove";
+import { BillboardRemove } from "@/fsd/feature/BillboardRemove/ui/BillboardRemove";
 import { useStoreModal } from "@/fsd/feature/ModalManager";
-import { useStoreRemoveModal } from "@/fsd/feature/ModalManager/model/store/modal.store";
+import {
+  useBillboardRemoveModal,
+  useStoreRemoveModal,
+} from "@/fsd/feature/ModalManager/model/store/modal.store";
 import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
-import { StoreRemove } from "@/fsd/feature/StoreRemove";
+import { StoreRemove, StoreRemoveModal } from "@/fsd/feature/StoreRemove";
 import { useOrigin } from "@/fsd/shared/hook/useOrigin";
 import { Modal } from "@/fsd/shared/ui/modal";
-import { usePathname } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 
 export const ModalProvider = () => {
   // const [isMounted, setIsMoundted] = useState(false);
 
-  const { isOpenCreate, onCloseCreate } = useStoreModal(
+  const { isOpenStoreCreate, onCloseStoreCreate } = useStoreModal(
     useShallow((state) => ({
-      isOpenCreate: state.isOpen,
-      onCloseCreate: state.onClose,
+      isOpenStoreCreate: state.isOpen,
+      onCloseStoreCreate: state.onClose,
     })),
   );
 
-  const { isOpenRemove, onCloseRemove } = useStoreRemoveModal(
+  const { isOpenStoreRemove, onCloseStoreRemove } = useStoreRemoveModal(
     useShallow((state) => ({
-      isOpenRemove: state.isOpen,
-      onCloseRemove: state.onClose,
+      isOpenStoreRemove: state.isOpen,
+      onCloseStoreRemove: state.onClose,
     })),
   );
 
-  const originUrl = useOrigin();
+  const { isOpenBillboardRemove, onCloseBillboardRemove } =
+    useBillboardRemoveModal(
+      useShallow((state) => ({
+        isOpenBillboardRemove: state.isOpen,
+        onCloseBillboardRemove: state.onClose,
+      })),
+    );
 
-  // useEffect(() => {
-  //   setIsMoundted(true);
-  // }, []);
-  //
-  // if (!isMounted) return null;
+  // const originUrl = useOrigin();
 
   return (
     <>
       <Modal
-        isOpen={isOpenCreate}
-        onClose={onCloseCreate}
+        isOpen={isOpenStoreCreate}
+        onClose={onCloseStoreCreate}
         title="Create new store"
         description="This action has bean created new store"
       >
-        <StoreCreate onCancel={onCloseCreate} />
+        <StoreCreate onCancel={onCloseStoreCreate} />
       </Modal>
       <Modal
-        isOpen={isOpenRemove}
-        onClose={onCloseRemove}
+        isOpen={isOpenStoreRemove}
+        onClose={onCloseStoreRemove}
         title="Are you sure remove store?"
         description="This action cannot be undone."
       >
-        <StoreRemove
-          onSuccess={onCloseRemove}
-          onCancel={onCloseRemove}
-          onSuccesUrlRedirect={originUrl}
-        />
+        <StoreRemoveModal onClose={onCloseStoreRemove} />
+      </Modal>
+      <Modal
+        isOpen={isOpenBillboardRemove}
+        onClose={onCloseBillboardRemove}
+        title="Are you sure remove billboard?"
+        description="This action cannot be undone."
+      >
+        <BillboardRemoveModal onClose={onCloseBillboardRemove} />
       </Modal>
     </>
   );

@@ -12,3 +12,9 @@ export const useStoreRemoveModal = create<IStoreModal>((set) => ({
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));
+
+export const useBillboardRemoveModal = create<IStoreModal>((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+}));

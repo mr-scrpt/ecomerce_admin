@@ -25,11 +25,11 @@ import {
 import { useRouter } from "next/navigation";
 import { ImgUploader } from "@/fsd/shared/ui/ImgUploader/ui/ImgUploader";
 
-interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
-  onSuccesUrlRedirect?: string | null;
+interface BillboardCreateProps extends HTMLAttributes<HTMLDivElement> {
+  onSuccesUrlRedirect?: string;
 }
 
-export const BillboardCreate: FC<StoreCreateProps> = (props) => {
+export const BillboardCreate: FC<BillboardCreateProps> = (props) => {
   const { onSuccesUrlRedirect } = props;
   const [loading, setLoading] = useState(false);
 
@@ -57,11 +57,14 @@ export const BillboardCreate: FC<StoreCreateProps> = (props) => {
       return toast.error("Incorrect data from the form");
     }
     const { name, imgUrl } = form;
-    const { data, error } = await billboardAction.createBillboard({
-      name,
-      imgUrl,
-      storeId,
-    });
+    const { data, error } = await billboardAction.createBillboard(
+      {
+        name,
+        imgUrl,
+        storeId,
+      },
+      onSuccesUrlRedirect,
+    );
     if (error) {
       toast.error(error);
     }

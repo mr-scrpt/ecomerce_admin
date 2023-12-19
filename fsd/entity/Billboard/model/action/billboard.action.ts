@@ -17,10 +17,12 @@ import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { cache } from "react";
+import { revalidatePath } from "next/cache";
 
 export const createBillboard = cache(
   async (
     data: ICreateBillboardPayload,
+    revalidate?: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
       const userResponse = await authAction.getAuthUser();
@@ -54,6 +56,9 @@ export const createBillboard = cache(
           BillboardResponseErrorEnum.BILLBOARD_NOT_CREATED,
           HTTPStatusEnum.BAD_REQUEST,
         );
+      }
+      if (revalidate) {
+        revalidatePath(revalidate);
       }
       return buildResponse(billboard);
     } catch (e) {
@@ -161,6 +166,7 @@ export const updateBillboard = cache(
 export const removeBillboard = cache(
   async (
     billboardId: string,
+    revalidate?: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
       const userResponse = await authAction.getAuthUser();
@@ -192,11 +198,16 @@ export const removeBillboard = cache(
       const billboardRemover = await billboardRepo.removeBillboard({
         billboardId,
       });
+
       if (!billboardRemover) {
         throw new HttpException(
           BillboardResponseErrorEnum.BILLBOARD_NOT_REMOVED,
           HTTPStatusEnum.BAD_REQUEST,
         );
+      }
+
+      if (revalidate) {
+        revalidatePath(revalidate);
       }
 
       return buildResponse(billboardRemover);

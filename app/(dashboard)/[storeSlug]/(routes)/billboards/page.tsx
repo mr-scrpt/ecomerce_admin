@@ -14,6 +14,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
   const billboardList =
     await billboardAction.getBillboardListByStoreSlug(storeSlug);
 
+  console.log(" =>>> list =", billboardList);
   const billboardCount = billboardList.data?.length || 0;
   return (
     <main className="flex flex-col gap-3">
@@ -24,7 +25,9 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         />
         <BillboardAdd />
       </div>
-      <BillboardTableList storeSlug={storeSlug} />
+      {billboardList.data && (
+        <BillboardTableList billboardList={billboardList.data} />
+      )}
     </main>
   );
 };
