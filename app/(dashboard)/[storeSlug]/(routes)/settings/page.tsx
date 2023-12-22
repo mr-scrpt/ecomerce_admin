@@ -1,8 +1,8 @@
 import { OpenModalStoreRemove } from "@/fsd/feature/ModalManager";
-import { StoreSettings } from "@/fsd/feature/StoreSettings/ui/StoreSettings";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi/NoticeApi";
+import { StoreSettingsWidget } from "@/fsd/widget/StoreSettingsWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface SettingsPageProps extends HTMLAttributes<HTMLDivElement> {
@@ -22,7 +22,8 @@ const SettingsPage: FC<SettingsPageProps> = (props) => {
         <OpenModalStoreRemove />
       </div>
 
-      <StoreSettings />
+      {/* <StoreSettings /> */}
+      <StoreSettingsWidget />
       <NoticeApi
         title="NEXT_PUBLIC_API_URL"
         variant="public"

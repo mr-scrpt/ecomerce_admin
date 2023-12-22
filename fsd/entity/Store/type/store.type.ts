@@ -14,4 +14,5 @@ export interface IStoreStore {
   error: string | null;
 
   setStoreBySlug: (slug: string) => void;
+  // updateStoreData: (newStoreName: string) => void;
 }

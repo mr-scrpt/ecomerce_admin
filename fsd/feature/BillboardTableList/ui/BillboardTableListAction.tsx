@@ -21,7 +21,7 @@ interface BillboardTableListActionProps extends HTMLAttributes<HTMLDivElement> {
 export const BillboardTableListAction: FC<BillboardTableListActionProps> = (
   props,
 ) => {
-  const { onCopy, onDeletePopup } = props;
+  const { onCopy, onDeletePopup, onUpdate } = props;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,7 +39,7 @@ export const BillboardTableListAction: FC<BillboardTableListActionProps> = (
         >
           <Copy className="mr-2 h-4 w-4" /> Copy Id
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {}}>
+        <DropdownMenuItem onClick={onUpdate}>
           <Edit className="mr-2 h-4 w-4" /> Update
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onDeletePopup}>

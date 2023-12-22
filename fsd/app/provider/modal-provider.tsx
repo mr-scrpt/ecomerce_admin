@@ -5,15 +5,12 @@ import {
   useBillboardRemoveModal,
   useStoreRemoveModal,
 } from "@/fsd/feature/ModalManager/model/store/modal.store";
-import { StoreCreate } from "@/fsd/feature/StoreCreate/ui/StoreCreate";
 import { StoreCreateModal } from "@/fsd/feature/StoreCreate/ui/StoreCreateModal";
 import { StoreRemoveModal } from "@/fsd/feature/StoreRemove";
 import { Modal } from "@/fsd/shared/ui/modal";
 import { useShallow } from "zustand/react/shallow";
 
 export const ModalProvider = () => {
-  // const [isMounted, setIsMoundted] = useState(false);
-
   const { isOpenStoreCreate, onCloseStoreCreate } = useStoreModal(
     useShallow((state) => ({
       isOpenStoreCreate: state.isOpen,

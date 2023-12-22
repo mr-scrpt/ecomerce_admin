@@ -1,5 +1,4 @@
 "use client";
-import { useStoreData } from "@/fsd/entity/Store";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
@@ -12,35 +11,29 @@ import {
 import { Input } from "@/fsd/shared/ui/input";
 
 import { storeAction } from "@/fsd/entity/Store";
-import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useShallow } from "zustand/react/shallow";
 import { storeSettingsValidate } from "../action/validation.action";
 import {
   StoreSettingTypeSchema,
   storeSettingSchema,
 } from "../type/schema.type";
 
-interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {}
+interface StoreSettingsProps extends HTMLAttributes<HTMLDivElement> {
+  storeName?: string | null;
+  loading: boolean;
+  onSuccess?: (slug: string) => void;
+}
 
-export const StoreSettings: FC<StoreSettingsProps> = memo(() => {
-  const { storeCurrent, loading } = useStoreData(
-    useShallow((state) => ({
-      storeCurrent: state.storeCurrent,
-      loading: state.loading,
-      error: state.error,
-    })),
-  );
+export const StoreSettings: FC<StoreSettingsProps> = memo((props) => {
+  const { loading, storeName, onSuccess } = props;
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     setIsLoading(loading);
   }, [loading]);
-
-  const router = useRouter();
 
   const form = useForm<StoreSettingTypeSchema>({
     resolver: zodResolver(storeSettingSchema),
@@ -50,13 +43,13 @@ export const StoreSettings: FC<StoreSettingsProps> = memo(() => {
   });
 
   useEffect(() => {
-    if (storeCurrent) {
-      form.reset({ name: storeCurrent.name });
+    if (storeName) {
+      form.reset({ name: storeName });
     }
-  }, [form, storeCurrent]);
+  }, [form, storeName]);
 
   const onSubmit = async (form: StoreSettingTypeSchema) => {
-    if (storeCurrent) {
+    if (storeName) {
       try {
         setIsLoading(true);
         const validation = storeSettingsValidate(form);
@@ -64,16 +57,17 @@ export const StoreSettings: FC<StoreSettingsProps> = memo(() => {
           return toast.error("Incorrect data from the form");
         }
         const { data, error } = await storeAction.renameStore({
-          currentStoreName: storeCurrent?.name,
+          currentStoreName: storeName,
           newStoreName: form.name,
         });
 
         if (error) {
           toast.error(error);
         }
+
         if (data) {
-          router.replace(`/${data.slug}${RoutePathEnum.SETTINGS}`);
           toast.success("Store updated.");
+          onSuccess?.(data.slug);
         }
       } catch (error) {
         toast.error("Something went wrong.");

@@ -11,6 +11,9 @@ import { billboardCollumns } from "../data/columns";
 import { buildBillboardRow } from "../lib/buildBillboardRow";
 import { BillboardColumn } from "../type/table.type";
 import { BillboardTableListAction } from "./BillboardTableListAction";
+import { useBillboardUpdate } from "../../BillboardUpdate";
+import { useRouter } from "next/navigation";
+import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 
 interface BillboardTableListProps extends HTMLAttributes<HTMLDivElement> {
   billboardList: IBillboard[];
@@ -19,6 +22,7 @@ interface BillboardTableListProps extends HTMLAttributes<HTMLDivElement> {
 export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
   const { billboardList } = props;
   const list = billboardList.map((item) => buildBillboardRow(item));
+  const router = useRouter();
 
   const { onOpen } = useBillboardRemoveModal(
     useShallow((state) => ({
@@ -26,9 +30,15 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
     })),
   );
 
-  const { setId } = useBillboardRemove(
+  const { setIdToUpdate } = useBillboardUpdate(
     useShallow((state) => ({
-      setId: state.setId,
+      setIdToUpdate: state.setId,
+    })),
+  );
+
+  const { setIdToRemove } = useBillboardRemove(
+    useShallow((state) => ({
+      setIdToRemove: state.setId,
     })),
   );
 
@@ -38,9 +48,15 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
   };
 
   const onDeletePopup = (billboardId: string) => {
-    setId(billboardId);
+    setIdToRemove(billboardId);
 
     onOpen();
+  };
+
+  const onUpdate = (billboardId: string) => {
+    // console.log(" =>>> update", billboardId);
+    setIdToUpdate(billboardId);
+    router.push(`${RoutePathEnum.BILLBOARDS_EDIT}`);
   };
 
   const billboardCollumnsWithAction: ColumnDef<BillboardColumn>[] = [
@@ -52,7 +68,7 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
         <BillboardTableListAction
           data={row.original}
           onCopy={onCopy.bind(null, row.original.id)}
-          onUpdate={() => {}}
+          onUpdate={onUpdate.bind(null, row.original.id)}
           onDeletePopup={onDeletePopup.bind(null, row.original.id)}
         />
       ),

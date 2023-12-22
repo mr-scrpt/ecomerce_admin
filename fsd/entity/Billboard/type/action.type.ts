@@ -12,9 +12,15 @@ export interface IUpdateBillboardPayload {
 }
 
 export interface IGetBillboardPayload {
+  billboardId: string;
+  storeId: string;
+}
+
+export interface IGetBillboardByNamePayload {
   name: string;
   storeId: string;
 }
+
 export interface IIsOwnerPayload {
   storeId: string;
   userId: string;

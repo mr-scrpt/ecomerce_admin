@@ -136,7 +136,8 @@ export const updateBillboard = cache(
         throw new Error(storeResponse.error);
       }
 
-      const isExistResponse = await isExist({ name, storeId });
+      const isExistResponse = await isExist(billboardId);
+
       if (!isExistResponse) {
         throw new HttpException(
           BillboardResponseErrorEnum.BILLBOARD_NOT_EXIST,
@@ -157,6 +158,7 @@ export const updateBillboard = cache(
       }
       return buildResponse(billboard);
     } catch (e) {
+      console.log(" =>>> error", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -222,8 +224,8 @@ const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
   !(await billboardRepo.getBillboardByName(data));
 
 const isExist = cache(
-  async (data: IGetBillboardPayload): Promise<boolean> =>
-    !!(await billboardRepo.getBillboardByName(data)),
+  async (billboardId: string): Promise<boolean> =>
+    !!(await billboardRepo.getBillboard(billboardId)),
 );
 
 const isOwner = cache(

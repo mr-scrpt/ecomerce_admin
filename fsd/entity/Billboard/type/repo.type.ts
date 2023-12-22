@@ -1,4 +1,5 @@
 import {
+  IGetBillboardByNamePayload,
   IGetBillboardPayload,
   IIsOwnerPayload,
   IIsUniqueBillboardPayload,
@@ -15,5 +16,5 @@ export interface IRemoveBillboardRepo {
 
 export interface IIsOwnerRepo extends IIsOwnerPayload {}
 
-export interface IGetBillboardByNameRepo extends IIsUniqueBillboardPayload {}
 export interface IGetBillboardRepo extends IGetBillboardPayload {}
+export interface IGetBillboardByNameRepo extends IGetBillboardByNamePayload {}

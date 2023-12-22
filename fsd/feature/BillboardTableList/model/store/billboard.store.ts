@@ -1,10 +1,9 @@
+import { billboardAction } from "@/fsd/entity/Billboard";
+import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { IStoreBillboardTable } from "../../type/store.type";
-import { billboardAction } from "@/fsd/entity/Billboard";
-import { buildDate } from "@/fsd/shared/lib/formatDate";
-import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { buildBillboardRow } from "../../lib/buildBillboardRow";
+import { IStoreBillboardTable } from "../../type/store.type";
 
 export const useBillboardTableData = create<IStoreBillboardTable>()(
   devtools(
@@ -12,25 +11,29 @@ export const useBillboardTableData = create<IStoreBillboardTable>()(
       list: [],
       loading: false,
       error: null,
-      fetchBillboardByStoreSlug: async (storeSlug) => {
+      fetchBillboardListByStoreSlug: async (storeSlug) => {
         try {
-          set({ loading: true });
+          set({ loading: true }, false, "set_fetch_billboard_loading");
           const { data, error } =
             await billboardAction.getBillboardListByStoreSlug(storeSlug);
           if (error) {
-            set({ error });
+            set({ error }, false, "set_fetch_billboard_error");
             set({ list: [] });
             return;
           }
 
-          set({
-            list: data?.map((item) => buildBillboardRow(item)),
-          });
+          set(
+            {
+              list: data?.map((item) => buildBillboardRow(item)),
+            },
+            false,
+            "set_fetch_billboard_data",
+          );
         } catch (e) {
           set({ error: HTTPErrorMessage.SERVER_ERROR });
           set({ list: [] });
         } finally {
-          set({ loading: false });
+          set({ loading: false }, false, "set_fetch_billboard_loading");
         }
       },
     }),

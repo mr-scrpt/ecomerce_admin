@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
 import { billboardAction } from "@/fsd/entity/Billboard";
-import { useStoreData } from "@/fsd/entity/Store";
+import { ImgUploader } from "@/fsd/shared/ui/ImgUploader/ui/ImgUploader";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
@@ -16,26 +16,20 @@ import {
   FormMessage,
 } from "@/fsd/shared/ui/form";
 import { Input } from "@/fsd/shared/ui/input";
-import { useShallow } from "zustand/react/shallow";
 import { billboardCreateValidate } from "../../model/action/validation.action";
 import {
   BillboardCreateTypeSchema,
   billboardCreateSchema,
 } from "../../type/schema.type";
-import { useRouter } from "next/navigation";
-import { ImgUploader } from "@/fsd/shared/ui/ImgUploader/ui/ImgUploader";
 
 interface BillboardCreateProps extends HTMLAttributes<HTMLDivElement> {
-  onSuccesUrlRedirect?: string;
+  onSuccess?: () => void;
+  storeId?: string;
 }
 
 export const BillboardCreate: FC<BillboardCreateProps> = (props) => {
-  const { onSuccesUrlRedirect } = props;
+  const { onSuccess, storeId } = props;
   const [loading, setLoading] = useState(false);
-
-  const { storeId } = useStoreData(
-    useShallow((state) => ({ storeId: state.storeCurrent?.id })),
-  );
 
   const form = useForm<BillboardCreateTypeSchema>({
     resolver: zodResolver(billboardCreateSchema),
@@ -44,38 +38,38 @@ export const BillboardCreate: FC<BillboardCreateProps> = (props) => {
     },
   });
 
-  const route = useRouter();
-
   const onSubmit = async (form: BillboardCreateTypeSchema) => {
-    setLoading(true);
-    if (!storeId) {
-      return toast.error("Store Not Found");
-    }
-    const validation = billboardCreateValidate(form);
+    try {
+      setLoading(true);
 
-    if (validation?.errors) {
-      return toast.error("Incorrect data from the form");
-    }
-    const { name, imgUrl } = form;
-    const { data, error } = await billboardAction.createBillboard(
-      {
+      if (!storeId) {
+        return toast.error("Store Not Found");
+      }
+
+      const validation = billboardCreateValidate(form);
+
+      if (validation?.errors) {
+        return toast.error("Incorrect data from the form");
+      }
+
+      const { name, imgUrl } = form;
+      const { data, error } = await billboardAction.createBillboard({
         name,
         imgUrl,
         storeId,
-      },
-      onSuccesUrlRedirect,
-    );
-    if (error) {
-      toast.error(error);
-    }
-    if (data) {
-      toast.success(`Billboard has been created by name ${name}`);
-
-      if (onSuccesUrlRedirect) {
-        route.push(onSuccesUrlRedirect);
+      });
+      if (error) {
+        toast.error(error);
       }
+      if (data) {
+        toast.success(`Billboard has been created by name ${name}`);
+        onSuccess?.();
+      }
+    } catch (e) {
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

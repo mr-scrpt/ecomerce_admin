@@ -8,20 +8,17 @@ interface BillboardRemoveProps extends HTMLAttributes<HTMLDivElement> {
   billboardId: string;
   onSuccess?: () => void;
   onCancel: () => void;
-  onSuccesUrlRedirect?: string;
 }
 
 export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
-  const { billboardId, onSuccesUrlRedirect, onSuccess, onCancel } = props;
+  const { billboardId, onSuccess, onCancel } = props;
   const [isLoading, setIsLoading] = useState(false);
 
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await billboardAction.removeBillboard(
-        billboardId,
-        onSuccesUrlRedirect,
-      );
+      const { data, error } =
+        await billboardAction.removeBillboard(billboardId);
       if (!data && error) {
         toast.error(error);
       }

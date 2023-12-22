@@ -1,1 +1,1 @@
-export { BillboardCreate } from "./ui/CreateBillboard/CreateBillboard";
+export { BillboardCreate } from "./ui/BillboardCreate/BillboardCreate";

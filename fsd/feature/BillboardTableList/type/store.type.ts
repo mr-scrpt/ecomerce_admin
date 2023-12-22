@@ -9,5 +9,5 @@ export interface IStoreBillboardTable {
   list: IStoreBillboardTableItem[];
   loading: boolean;
   error: string | null;
-  fetchBillboardByStoreSlug: (storeSlug: string) => void;
+  fetchBillboardListByStoreSlug: (storeSlug: string) => void;
 }
