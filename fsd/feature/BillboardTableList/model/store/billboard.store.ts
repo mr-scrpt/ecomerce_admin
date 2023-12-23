@@ -14,6 +14,7 @@ export const useBillboardTableData = create<IStoreBillboardTable>()(
       fetchBillboardListByStoreSlug: async (storeSlug) => {
         try {
           set({ loading: true }, false, "set_fetch_billboard_loading");
+          console.log(" =>>> fetchBillboardListByStoreSlug");
           const { data, error } =
             await billboardAction.getBillboardListByStoreSlug(storeSlug);
           if (error) {

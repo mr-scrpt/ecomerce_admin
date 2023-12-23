@@ -66,9 +66,10 @@ class BillboardRepo {
 
   getBillboardIsOwner = cache(
     async (data: IIsOwnerRepo): Promise<IBillboard | null> => {
-      const { storeId, userId } = data;
+      const { billboardId, userId } = data;
+      console.log("in owner =>>>", { billboardId, userId });
       return await prismaDB.billboard.findUnique({
-        where: { id: storeId, store: { userId } },
+        where: { id: billboardId, store: { userId } },
       });
     },
   );

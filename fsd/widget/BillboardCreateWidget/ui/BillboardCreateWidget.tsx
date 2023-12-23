@@ -31,8 +31,9 @@ export const BillboardCreateWidget: FC<BillboardCreateWidgetProps> = (
 
   const onSucces = useCallback(() => {
     // revalidation billboard list
-    getBillboard(slug);
+    // getBillboard(slug);
     router.replace(path);
+    router.refresh();
   }, []);
 
   return <BillboardCreate onSuccess={onSucces} storeId={storeId} />;

@@ -35,6 +35,7 @@ export const createStore = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
+
       const slug = slugGenerator(name);
       const store = await storeRepo.createStore({
         name,
@@ -49,6 +50,7 @@ export const createStore = cache(
       }
       return buildResponse(store);
     } catch (e) {
+      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }

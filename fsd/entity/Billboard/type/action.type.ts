@@ -22,7 +22,7 @@ export interface IGetBillboardByNamePayload {
 }
 
 export interface IIsOwnerPayload {
-  storeId: string;
+  billboardId: string;
   userId: string;
 }
 

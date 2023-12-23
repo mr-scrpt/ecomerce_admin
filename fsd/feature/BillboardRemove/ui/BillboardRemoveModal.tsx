@@ -1,10 +1,10 @@
-import { FC, HTMLAttributes, useCallback } from "react";
-import { BillboardRemove } from "./BillboardRemove";
-import { useBillboardRemove } from "../model/removedBillboard.store";
-import { useShallow } from "zustand/react/shallow";
-import { usePathname } from "next/navigation";
-import { useBillboardTableData } from "../../BillboardTableList/model/store/billboard.store";
 import { useStoreData } from "@/fsd/entity/Store";
+import { FC, HTMLAttributes, useCallback } from "react";
+import { useShallow } from "zustand/react/shallow";
+import { useBillboardTableData } from "../../BillboardTableList/model/store/billboard.store";
+import { useBillboardRemove } from "../model/removedBillboard.store";
+import { BillboardRemove } from "./BillboardRemove";
+import { useRouter } from "next/navigation";
 
 interface BillboardRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
@@ -12,7 +12,7 @@ interface BillboardRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
 
 export const BillboardRemoveModal: FC<BillboardRemoveModalProps> = (props) => {
   const { onClose } = props;
-  // const path = usePathname();
+  const router = useRouter();
 
   const { billboardId, resetId } = useBillboardRemove(
     useShallow((state) => ({
@@ -33,9 +33,9 @@ export const BillboardRemoveModal: FC<BillboardRemoveModalProps> = (props) => {
   const onSuccess = useCallback(() => {
     resetId();
     onClose();
-    console.log(" =>>> on onSuccess remove");
+    router.refresh();
     getBillboard(slug!);
-  }, [resetId, onClose]);
+  }, [resetId, onClose, router, getBillboard, slug]);
 
   return (
     <BillboardRemove

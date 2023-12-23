@@ -2,6 +2,7 @@ import { BillboardAdd, billboardAction } from "@/fsd/entity/Billboard";
 import { BillboardTableList } from "@/fsd/feature/BillboardTableList";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
+import { BillboardTableWidget } from "@/fsd/widget/BillboardTableWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface BillboardPageProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,9 +25,10 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         />
         <BillboardAdd />
       </div>
-      {billboardList.data && (
-        <BillboardTableList billboardList={billboardList.data} />
-      )}
+      <BillboardTableWidget slug={storeSlug} />
+      {/* {billboardList.data && ( */}
+      {/*   <BillboardTableList billboardList={billboardList.data} /> */}
+      {/* )} */}
     </main>
   );
 };

@@ -158,7 +158,6 @@ export const updateBillboard = cache(
       }
       return buildResponse(billboard);
     } catch (e) {
-      console.log(" =>>> error", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -188,7 +187,7 @@ export const removeBillboard = cache(
 
       const userId = userResponse.data!.id;
       const isOwnerResponse = await isOwner({
-        storeId: data.id,
+        billboardId: data.id,
         userId,
       });
       if (!isOwnerResponse) {
@@ -214,6 +213,7 @@ export const removeBillboard = cache(
 
       return buildResponse(billboardRemover);
     } catch (e) {
+      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }

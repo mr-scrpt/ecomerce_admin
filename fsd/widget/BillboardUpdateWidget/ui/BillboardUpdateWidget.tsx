@@ -1,16 +1,14 @@
 "use client";
-import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
-import { useRouter } from "next/navigation";
-import { FC, HTMLAttributes, useCallback, useEffect } from "react";
-import { useBillboardTableData } from "@/fsd/feature/BillboardTableList/model/store/billboard.store";
-import { useShallow } from "zustand/react/shallow";
 import { useStoreData } from "@/fsd/entity/Store";
-import { BillboardCreate } from "@/fsd/feature/BillboardCreate";
+import { useBillboardTableData } from "@/fsd/feature/BillboardTableList/model/store/billboard.store";
 import {
   BillboardUpdate,
   useBillboardUpdate,
 } from "@/fsd/feature/BillboardUpdate";
-import { billboardAction } from "@/fsd/entity/Billboard";
+import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
+import { useRouter } from "next/navigation";
+import { FC, HTMLAttributes, useCallback, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 interface BillboardUpdateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   storeSlug: string;
@@ -46,9 +44,10 @@ export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = (
 
   const onSucces = useCallback(() => {
     // revalidation billboard list
-    getBillboard(storeSlug);
+    // getBillboard(storeSlug);
     resetBillboard();
-    router.replace(path);
+    router.push(path);
+    router.refresh();
   }, [getBillboard, resetBillboard, path, router, storeSlug]);
 
   useEffect(() => {

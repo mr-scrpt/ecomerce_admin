@@ -56,7 +56,7 @@ export const BillboardUpdate: FC<BillboardUpdateProps> = (props) => {
   return (
     <BillboardForm
       onAction={onSubmit}
-      actionName="Create"
+      actionName="Update"
       defaultValues={billboard}
       loading={loading}
     />

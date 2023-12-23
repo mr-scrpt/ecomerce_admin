@@ -1,27 +1,25 @@
 "use client";
-import { IBillboard } from "@/fsd/entity/Billboard/type/entity.type";
+import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, memo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { useBillboardRemove } from "../../BillboardRemove";
+import { useBillboardUpdate } from "../../BillboardUpdate";
 import { useBillboardRemoveModal } from "../../ModalManager/model/store/modal.store";
 import { billboardCollumns } from "../data/columns";
-import { buildBillboardRow } from "../lib/buildBillboardRow";
+import { IStoreBillboardTableItem } from "../type/store.type";
 import { BillboardColumn } from "../type/table.type";
 import { BillboardTableListAction } from "./BillboardTableListAction";
-import { useBillboardUpdate } from "../../BillboardUpdate";
-import { useRouter } from "next/navigation";
-import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 
 interface BillboardTableListProps extends HTMLAttributes<HTMLDivElement> {
-  billboardList: IBillboard[];
+  billboardList: IStoreBillboardTableItem[];
 }
 
 export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
   const { billboardList } = props;
-  const list = billboardList.map((item) => buildBillboardRow(item));
   const router = useRouter();
 
   const { onOpen } = useBillboardRemoveModal(
@@ -77,7 +75,7 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
   return (
     <TableData
       columns={billboardCollumnsWithAction}
-      data={list}
+      data={billboardList}
       filterKey="name"
     />
   );
