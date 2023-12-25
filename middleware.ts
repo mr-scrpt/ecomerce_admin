@@ -7,6 +7,7 @@ import { authMiddleware } from "@clerk/nextjs";
 import { NextResponse, type NextRequest } from "next/server";
 
 export default authMiddleware({
+  publicRoutes: ["/api/:path*"],
   beforeAuth: (req) => {
     NextResponse.next({
       request: {

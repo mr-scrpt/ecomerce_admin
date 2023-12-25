@@ -24,10 +24,18 @@ const SettingsPage: FC<SettingsPageProps> = (props) => {
 
       {/* <StoreSettings /> */}
       <StoreSettingsWidget />
+      {/* <NoticeApi */}
+      {/*   title="NEXT_PUBLIC_API_URL" */}
+      {/*   variant="public" */}
+      {/*   store={storeSlug} */}
+      {/* /> */}
       <NoticeApi
-        title="NEXT_PUBLIC_API_URL"
-        variant="public"
-        apiPath={storeSlug}
+        title="Main Endpoint"
+        description="main api route"
+        store={storeSlug}
+        onlyMain
+        // entity="billboards"
+        // entityId="billboardId"
       />
     </main>
   );

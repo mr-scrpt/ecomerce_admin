@@ -2,6 +2,7 @@ import { BillboardAdd, billboardAction } from "@/fsd/entity/Billboard";
 import { BillboardTableList } from "@/fsd/feature/BillboardTableList";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
+import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
 import { BillboardTableWidget } from "@/fsd/widget/BillboardTableWidget";
 import { FC, HTMLAttributes } from "react";
 
@@ -29,6 +30,13 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
       {/* {billboardList.data && ( */}
       {/*   <BillboardTableList billboardList={billboardList.data} /> */}
       {/* )} */}
+      <NoticeApi
+        title="Billboards Endpoint"
+        description="Api endpoints list"
+        store={storeSlug}
+        entity="billboards"
+        entityId="billboardId"
+      />
     </main>
   );
 };

@@ -19,14 +19,19 @@ import { IStore } from "../../type/entity.type";
 export const createStore = cache(
   async (name: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
 
+      const userId = udata!.id as string;
       const isUniqueResponse = await isUnique({
         name,
-        userId: userResponse.data!.id,
+        userId,
       });
 
       if (!isUniqueResponse) {
@@ -40,7 +45,7 @@ export const createStore = cache(
       const store = await storeRepo.createStore({
         name,
         slug,
-        userId: userResponse.data?.id as string,
+        userId,
       });
       if (!store) {
         throw new HttpException(
@@ -50,7 +55,6 @@ export const createStore = cache(
       }
       return buildResponse(store);
     } catch (e) {
-      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -60,10 +64,11 @@ export const createStore = cache(
 export const getStore = cache(
   async (storeId: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      const { error, status } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
+
       const store = await storeRepo.getStore(storeId);
       if (!store) {
         throw new HttpException(
@@ -88,15 +93,21 @@ export const getStoreBySlug = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
+      const userId = udata!.id as string;
 
       const store = await storeRepo.getStoreBySlug({
         slug,
-        userId: userResponse.data?.id as string,
+        userId,
       });
+
       if (!store) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NOT_FOUND,
@@ -114,13 +125,18 @@ export const getStoreBySlug = cache(
 export const getStoreStoreFirst = cache(
   async (): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      //
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
 
-      const userId = userResponse.data!.id;
+      const userId = udata!.id;
+
       const store = await storeRepo.getStoreFirst(userId);
       if (!store) {
         throw new HttpException(
@@ -154,11 +170,16 @@ export const renameStore = cache(
   ): Promise<ResponseDataAction<IStore | null>> => {
     const { currentStoreName, newStoreName } = data;
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
-      const userId = userResponse.data!.id;
+
+      const userId = udata!.id;
 
       // Exist old store
       const isExistResponse = await isExist({ userId, name: currentStoreName });
@@ -183,7 +204,7 @@ export const renameStore = cache(
         currentStoreName,
         newStoreName: newStoreName.trim(),
         newSlug,
-        userId: userResponse.data?.id as string,
+        userId,
       });
 
       if (!store) {
@@ -204,12 +225,16 @@ export const renameStore = cache(
 export const removeStore = cache(
   async (storeId: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
 
-      const userId = userResponse.data!.id;
+      const userId = udata!.id;
       const isOwnerResponse = await isOwner({
         storeId,
         userId,

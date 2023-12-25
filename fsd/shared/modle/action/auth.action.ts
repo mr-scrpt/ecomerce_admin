@@ -17,7 +17,7 @@ export const getAuthUser = cache(
       if (!user) {
         throw new HttpException(
           AuthResponseErrorEnum.USER_NOT_FOUND,
-          HTTPStatusEnum.NOT_FOUND,
+          HTTPStatusEnum.BAD_REQUEST,
         );
       }
 

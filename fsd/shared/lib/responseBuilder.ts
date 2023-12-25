@@ -1,4 +1,3 @@
-import { HTTPStatusEnum } from "../type/httpStatus.enum";
 import { ResponseDataAction } from "../type/response.type";
 
 export const buildResponse = <T>(

@@ -1,33 +1,31 @@
 "use server";
-import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { IBillboard } from "../../type/entity.type";
+import { storeAction } from "@/fsd/entity/Store";
+import { buildError } from "@/fsd/shared/lib/buildError";
+import { HttpException } from "@/fsd/shared/lib/httpException";
+import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { authAction } from "@/fsd/shared/modle/action";
+import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
+import { ResponseDataAction } from "@/fsd/shared/type/response.type";
+import { revalidatePath } from "next/cache";
+import { cache } from "react";
 import {
   ICreateBillboardPayload,
-  IGetBillboardPayload,
   IIsOwnerPayload,
   IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "../../type/action.type";
+import { IBillboard } from "../../type/entity.type";
 import { billboardRepo } from "../repo/billboard.repo";
-import { storeAction } from "@/fsd/entity/Store";
-import { HttpException } from "@/fsd/shared/lib/httpException";
 import { BillboardResponseErrorEnum } from "../repo/responseError.enum";
-import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
-import { buildError } from "@/fsd/shared/lib/buildError";
-import { cache } from "react";
-import { revalidatePath } from "next/cache";
 
 export const createBillboard = cache(
   async (
     data: ICreateBillboardPayload,
-    revalidate?: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      const { error, status } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
 
       const { storeId, name } = data;
@@ -57,9 +55,9 @@ export const createBillboard = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      if (revalidate) {
-        revalidatePath(revalidate);
-      }
+      // if (revalidate) {
+      //   revalidatePath(revalidate);
+      // }
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -73,10 +71,14 @@ export const getBillboard = cache(
     billboardId: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
-      }
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      // const { error, status } = await authAction.getAuthUser();
+      // if (error) {
+      //   throw new HttpException(error, status);
+      // }
       const billboard = await billboardRepo.getBillboard(billboardId);
       if (!billboard) {
         throw new HttpException(
@@ -124,9 +126,13 @@ export const updateBillboard = cache(
     data: IUpdateBillboardPayload,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
 
       const { storeId, billboardId, name, imgUrl } = data;
@@ -170,9 +176,13 @@ export const removeBillboard = cache(
     revalidate?: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const userResponse = await authAction.getAuthUser();
-      if (userResponse.error) {
-        throw new Error(userResponse.error);
+      // const userResponse = await authAction.getAuthUser();
+      // if (userResponse.error) {
+      //   throw new Error(userResponse.error);
+      // }
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
       }
 
       const billboard = await getBillboard(billboardId);
@@ -185,7 +195,7 @@ export const removeBillboard = cache(
         );
       }
 
-      const userId = userResponse.data!.id;
+      const userId = udata!.id;
       const isOwnerResponse = await isOwner({
         billboardId: data.id,
         userId,
@@ -213,7 +223,6 @@ export const removeBillboard = cache(
 
       return buildResponse(billboardRemover);
     } catch (e) {
-      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
