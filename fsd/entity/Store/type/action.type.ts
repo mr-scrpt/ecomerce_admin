@@ -5,8 +5,8 @@ export interface IGetStorePayload {
 
 export interface ICreateStorePayload {
   name: string;
-  slug: string;
   userId: string;
+  slug: string;
 }
 
 export interface IRenameStorePayload {

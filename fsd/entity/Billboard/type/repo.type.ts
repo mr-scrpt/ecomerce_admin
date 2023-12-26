@@ -2,7 +2,6 @@ import {
   IGetBillboardByNamePayload,
   IGetBillboardPayload,
   IIsOwnerPayload,
-  IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "./action.type";
 

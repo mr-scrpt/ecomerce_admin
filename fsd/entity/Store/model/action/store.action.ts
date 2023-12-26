@@ -44,8 +44,8 @@ export const createStore = cache(
       const slug = slugGenerator(name);
       const store = await storeRepo.createStore({
         name,
-        slug,
         userId,
+        slug,
       });
       if (!store) {
         throw new HttpException(
@@ -239,6 +239,7 @@ export const removeStore = cache(
         storeId,
         userId,
       });
+
       if (!isOwnerResponse) {
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NO_OWNER,

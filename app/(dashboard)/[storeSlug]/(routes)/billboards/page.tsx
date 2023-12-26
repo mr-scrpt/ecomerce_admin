@@ -22,7 +22,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
       <div className="flex items-center justify-between border-b pb-3">
         <Heading
           title={`${RouteNameEnum.BILLBOARDS} (${billboardCount})`}
-          description="Manage billboards for yout store"
+          description="Manage billboards for your store"
         />
         <BillboardAdd />
       </div>

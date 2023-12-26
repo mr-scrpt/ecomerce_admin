@@ -22,7 +22,6 @@ import {
 
 export const BillboardForm: FC<BillboardFormProps> = (props) => {
   const { onAction, defaultValues, actionName, loading } = props;
-  // const { name, imgUrl } = billboard;
 
   const form = useForm<BillboardFormTypeSchema>({
     resolver: zodResolver(billboardFormSchema),

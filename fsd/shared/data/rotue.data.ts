@@ -13,4 +13,8 @@ export const routeData = (currentStore: string) => [
     href: `/${currentStore}${RoutePathEnum.SETTINGS}`,
     label: RouteNameEnum.SETTINGS,
   },
+  {
+    href: `/${currentStore}${RoutePathEnum.CATEGORIES}`,
+    label: RouteNameEnum.CATEGORIES,
+  },
 ];
