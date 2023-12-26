@@ -60,6 +60,7 @@ export const createCategory = cache(
       }
       return buildResponse(category);
     } catch (e) {
+      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }

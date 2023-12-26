@@ -3,17 +3,19 @@ import { FC, HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { billboardAction } from "@/fsd/entity/Category";
+import { CategoryForm } from "@/fsd/entity/CategoryForm";
 import { categoryCreateValidate } from "../../model/action/validation.action";
 import { CategoryCreateTypeSchema } from "../../type/schema.type";
-import { CategoryForm } from "@/fsd/entity/CategoryForm";
+import { IBillboard } from "@/fsd/entity/Billboard";
 
 interface CategoryCreateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;
   storeId?: string;
+  billboardList: IBillboard[];
 }
 
 export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
-  const { onSuccess, storeId } = props;
+  const { onSuccess, storeId, billboardList } = props;
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (form: CategoryCreateTypeSchema) => {
@@ -36,6 +38,8 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
         billboardId,
         storeId,
       });
+      console.log("success data =>>>", data, error);
+
       if (error) {
         toast.error(error);
       }
@@ -58,7 +62,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
       actionName="Create"
       defaultValues={defaultValues}
       loading={loading}
-      billboardList={[]}
+      billboardList={billboardList}
     />
   );
 };

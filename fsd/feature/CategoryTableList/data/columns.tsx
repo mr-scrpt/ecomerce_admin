@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { CategoryColumn } from "../type/table.type";
 
-export const billboardCollumns: ColumnDef<CategoryColumn>[] = [
+export const categoryCollumns: ColumnDef<CategoryColumn>[] = [
   {
     accessorKey: "name",
     header: "Name",

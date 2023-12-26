@@ -43,10 +43,12 @@ class CategoryRepo {
   getCategoryByName = async (
     data: IGetCategoryByNameRepo,
   ): Promise<ICategory | null> => {
+    console.log("before =>>>", data);
     const res = await prismaDB.category.findUnique({
-      include: { billboard: true },
+      // include: { billboard: true },
       where: { storeId_name: data },
     });
+    console.log(" =>>>", res);
     return res;
   };
 

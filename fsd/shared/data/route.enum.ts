@@ -2,8 +2,8 @@ export enum RoutePathEnum {
   HOME = "/",
   SETTINGS = "/settings",
   CATEGORIES = "/categories",
-  CATEGORIES_ADD = "/categories/add",
-  CATEGORIES_EDIT = "/categories/edit",
+  CATEGORIES_ADD = "categories/add",
+  CATEGORIES_EDIT = "categories/edit",
   BILLBOARDS = "/billboards",
   BILLBOARDS_ADD = "billboards/add", // nested path
   BILLBOARDS_EDIT = "billboards/edit", // nested path

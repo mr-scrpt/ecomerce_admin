@@ -2,7 +2,7 @@ import { CategoryAdd, billboardAction } from "@/fsd/entity/Category";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
-// import { CategoryTableWidget } from "@/fsd/widget/CategoryTableWidget";
+import { CategoryTableWidget } from "@/fsd/widget/CategoryTableWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface CategoriesPageProps extends HTMLAttributes<HTMLDivElement> {

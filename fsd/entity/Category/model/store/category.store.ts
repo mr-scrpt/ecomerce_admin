@@ -5,6 +5,7 @@ import {
   IStoreCategoryUpdate,
 } from "../../type/store.type";
 import { getCategory } from "../action/category.action";
+import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 
 export const useCategoryRemove = create<IStoreCategoryRemove>()(
   devtools(
@@ -48,6 +49,10 @@ export const useCategoryUpdate = create<IStoreCategoryUpdate>()(
             set({ category: data, error: null }, false, "set_category_data");
           }
         } catch (e) {
+          set({
+            error: HTTPErrorMessage.SERVER_ERROR,
+            category: null,
+          });
         } finally {
           set({ loading: false }, false, "set_category_loading");
         }

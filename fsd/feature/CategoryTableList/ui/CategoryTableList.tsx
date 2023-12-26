@@ -1,4 +1,5 @@
 "use client";
+import { useCategoryRemove, useCategoryUpdate } from "@/fsd/entity/Category";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
@@ -6,20 +7,18 @@ import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, memo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
-import { useCategoryRemove } from "../../CategoryRemove";
-import { useCategoryUpdate } from "../../CategoryUpdate";
 import { useCategoryRemoveModal } from "../../ModalManager/model/store/modal.store";
-import { billboardCollumns } from "../data/columns";
 import { IStoreCategoryTableItem } from "../type/store.type";
 import { CategoryColumn } from "../type/table.type";
 import { CategoryTableListAction } from "./CategoryTableListAction";
+import { categoryCollumns } from "../data/columns";
 
 interface CategoryTableListProps extends HTMLAttributes<HTMLDivElement> {
-  billboardList: IStoreCategoryTableItem[];
+  categoryList: IStoreCategoryTableItem[];
 }
 
 export const CategoryTableList: FC<CategoryTableListProps> = memo((props) => {
-  const { billboardList } = props;
+  const { categoryList } = props;
   const router = useRouter();
 
   const { onOpen } = useCategoryRemoveModal(
@@ -45,20 +44,19 @@ export const CategoryTableList: FC<CategoryTableListProps> = memo((props) => {
     toast.success("Category ID copied to clipboard.");
   };
 
-  const onDeletePopup = (billboardId: string) => {
-    setIdToRemove(billboardId);
+  const onDeletePopup = (categoryId: string) => {
+    setIdToRemove(categoryId);
 
     onOpen();
   };
 
-  const onUpdate = (billboardId: string) => {
-    // console.log(" =>>> update", billboardId);
-    setIdToUpdate(billboardId);
-    router.push(`${RoutePathEnum.BILLBOARDS_EDIT}`);
+  const onUpdate = (categoryId: string) => {
+    setIdToUpdate(categoryId);
+    router.push(`${RoutePathEnum.CATEGORIES_EDIT}`);
   };
 
-  const billboardCollumnsWithAction: ColumnDef<CategoryColumn>[] = [
-    ...billboardCollumns,
+  const categoryCollumnsWithAction: ColumnDef<CategoryColumn>[] = [
+    ...categoryCollumns,
     {
       header: "Actions",
       id: "actions",
@@ -74,8 +72,8 @@ export const CategoryTableList: FC<CategoryTableListProps> = memo((props) => {
   ];
   return (
     <TableData
-      columns={billboardCollumnsWithAction}
-      data={billboardList}
+      columns={categoryCollumnsWithAction}
+      data={categoryList}
       filterKey="name"
     />
   );

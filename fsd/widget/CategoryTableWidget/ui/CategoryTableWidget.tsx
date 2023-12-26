@@ -1,23 +1,23 @@
 "use client";
-import { BillboardTableList } from "@/fsd/feature/BillboardTableList";
-import { useBillboardTableData } from "@/fsd/feature/BillboardTableList/model/store/billboard.store";
+import { CategoryTableList } from "@/fsd/feature/CategoryTableList";
+import { useCategoryTableData } from "@/fsd/feature/CategoryTableList/model/store/category.store";
 import { FC, HTMLAttributes, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-interface BillboardTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
+interface CategoryTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
 }
 
-export const CategoryTableWidget: FC<BillboardTableWidgetProps> = (props) => {
+export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
   const { slug } = props;
-  const { billboardList, fetchBillboardList } = useBillboardTableData(
+  const { categoryList, fetchCategoryList } = useCategoryTableData(
     useShallow((state) => ({
-      billboardList: state.list,
-      fetchBillboardList: state.fetchBillboardListByStoreSlug,
+      categoryList: state.list,
+      fetchCategoryList: state.fetchCategoryListByStoreSlug,
     })),
   );
   useEffect(() => {
-    fetchBillboardList(slug);
+    fetchCategoryList(slug);
   }, []);
-  return <BillboardTableList billboardList={billboardList} />;
+  return <CategoryTableList categoryList={categoryList} />;
 };
