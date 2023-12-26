@@ -151,6 +151,14 @@ export const updateBillboard = cache(
         );
       }
 
+      const isUniqueResponse = await isUnique({ name, storeId });
+      if (!isUniqueResponse) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NOT_UNIQUE,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+
       const billboard = await billboardRepo.updateBillboard({
         billboardId,
         name,

@@ -61,6 +61,7 @@ class BillboardRepo {
     const res = await prismaDB.billboard.findUnique({
       where: { storeId_name: data },
     });
+    console.log(" =>>> res", res);
     return res;
   };
 
