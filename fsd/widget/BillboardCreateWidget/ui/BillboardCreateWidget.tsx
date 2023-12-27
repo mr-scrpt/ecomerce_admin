@@ -5,7 +5,8 @@ import { FC, HTMLAttributes, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useStoreData } from "@/fsd/entity/Store";
 import { BillboardCreate } from "@/fsd/feature/BillboardCreate";
-import { useBillboardTableData } from "@/fsd/entity/Billboard";
+import { useBillboardList } from "@/fsd/entity/Billboard";
+// import { useBillboardTableData } from "@/fsd/entity/Billboard";
 
 interface BillboardCreateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -19,9 +20,14 @@ export const BillboardCreateWidget: FC<BillboardCreateWidgetProps> = (
   const router = useRouter();
   const path = `/${slug}${RoutePathEnum.BILLBOARDS}`;
 
-  const { getBillboardList: getBillboard } = useBillboardTableData(
+  // const { getBillboardList: getBillboard } = useBillboardTableData(
+  //   useShallow((state) => ({
+  //     getBillboardList: state.fetchBillboardListByStoreSlug,
+  //   })),
+  // );
+  const { getBillboardList: getBillboard } = useBillboardList(
     useShallow((state) => ({
-      getBillboardList: state.fetchBillboardListByStoreSlug,
+      getBillboardList: state.fetchBillboardList,
     })),
   );
 

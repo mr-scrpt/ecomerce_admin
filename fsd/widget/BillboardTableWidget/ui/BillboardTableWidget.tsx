@@ -1,5 +1,5 @@
 "use client";
-import { BillboardColumn, useBillboardTableData } from "@/fsd/entity/Billboard";
+import { BillboardColumn, useBillboardList } from "@/fsd/entity/Billboard";
 import { useBillboardRemove } from "@/fsd/feature/BillboardRemove";
 import { useBillboardUpdate } from "@/fsd/feature/BillboardUpdate";
 import { useBillboardRemoveModal } from "@/fsd/feature/ModalManager";
@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { BillboardTableAction } from "./BillboardTableAction";
 import { billboardCollumns } from "../data/columns";
+import { buildBillboardRow } from "../lib/buildBillboardRow";
 
 interface BillboardTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -20,10 +21,10 @@ interface BillboardTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
 export const BillboardTableWidget: FC<BillboardTableWidgetProps> = (props) => {
   const { slug } = props;
 
-  const { billboardList, fetchBillboardList } = useBillboardTableData(
+  const { billboardList, fetchBillboardList } = useBillboardList(
     useShallow((state) => ({
-      billboardList: state.list,
-      fetchBillboardList: state.fetchBillboardListByStoreSlug,
+      billboardList: state.billboardList,
+      fetchBillboardList: state.fetchBillboardList,
     })),
   );
   useEffect(() => {
@@ -81,10 +82,12 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = (props) => {
       ),
     },
   ];
+
+  const listFormated = billboardList.map((item) => buildBillboardRow(item));
   return (
     <TableData
       columns={billboardCollumnsWithAction}
-      data={billboardList}
+      data={listFormated}
       filterKey="name"
     />
   );
