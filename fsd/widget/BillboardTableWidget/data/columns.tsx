@@ -1,8 +1,8 @@
 "use client";
 
+import { BillboardColumn } from "@/fsd/entity/Billboard";
 import { ColumnDef } from "@tanstack/react-table";
-import { BillboardTableListAction } from "../ui/BillboardTableListAction";
-import { BillboardColumn } from "../type/table.type";
+// import { BillboardTableListAction } from "../ui/BillboardTableListAction";
 
 export const billboardCollumns: ColumnDef<BillboardColumn>[] = [
   {

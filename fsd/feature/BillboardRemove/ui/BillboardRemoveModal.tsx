@@ -1,10 +1,10 @@
 import { useStoreData } from "@/fsd/entity/Store";
 import { FC, HTMLAttributes, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { useBillboardTableData } from "../../BillboardTableList/model/store/billboard.store";
 import { useBillboardRemove } from "../model/removedBillboard.store";
 import { BillboardRemove } from "./BillboardRemove";
 import { useRouter } from "next/navigation";
+import { useBillboardTableData } from "@/fsd/entity/Billboard";
 
 interface BillboardRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;

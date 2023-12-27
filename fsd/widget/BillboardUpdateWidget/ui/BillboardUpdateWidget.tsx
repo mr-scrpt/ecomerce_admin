@@ -1,6 +1,6 @@
 "use client";
+import { useBillboardTableData } from "@/fsd/entity/Billboard";
 import { useStoreData } from "@/fsd/entity/Store";
-import { useBillboardTableData } from "@/fsd/feature/BillboardTableList/model/store/billboard.store";
 import {
   BillboardUpdate,
   useBillboardUpdate,

@@ -1,2 +1,7 @@
-export { useStoreModal, useStoreRemoveModal } from "./model/store/modal.store";
+export {
+  useStoreModal,
+  useStoreRemoveModal,
+  useBillboardRemoveModal,
+  useCategoryRemoveModal,
+} from "./model/store/modal.store";
 export { OpenModalStoreRemove } from "./ui/OpenModalStoreRemove/OpenModalStoreRemove";
