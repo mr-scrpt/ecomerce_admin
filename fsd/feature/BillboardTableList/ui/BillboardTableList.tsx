@@ -52,7 +52,6 @@ export const BillboardTableList: FC<BillboardTableListProps> = memo((props) => {
   };
 
   const onUpdate = (billboardId: string) => {
-    // console.log(" =>>> update", billboardId);
     setIdToUpdate(billboardId);
     router.push(`${RoutePathEnum.BILLBOARDS_EDIT}`);
   };
