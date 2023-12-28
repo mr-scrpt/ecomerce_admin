@@ -7,7 +7,7 @@ import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { FC, HTMLAttributes, useEffect } from "react";
+import { FC, HTMLAttributes, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { BillboardTableAction } from "./BillboardTableAction";
@@ -83,7 +83,10 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = (props) => {
     },
   ];
 
-  const listFormated = billboardList.map((item) => buildBillboardRow(item));
+  const listFormated = useMemo(
+    () => billboardList.map((item) => buildBillboardRow(item)),
+    [billboardList],
+  );
   return (
     <TableData
       columns={billboardCollumnsWithAction}

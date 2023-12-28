@@ -4,7 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useBillboardRemove } from "../model/removedBillboard.store";
 import { BillboardRemove } from "./BillboardRemove";
 import { useRouter } from "next/navigation";
-import { useBillboardTableData } from "@/fsd/entity/Billboard";
+import { useBillboardList } from "@/fsd/entity/Billboard";
 
 interface BillboardRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
@@ -21,9 +21,9 @@ export const BillboardRemoveModal: FC<BillboardRemoveModalProps> = (props) => {
     })),
   );
 
-  const { getBillboard } = useBillboardTableData(
+  const { getBillboard } = useBillboardList(
     useShallow((state) => ({
-      getBillboard: state.fetchBillboardListByStoreSlug,
+      getBillboard: state.fetchBillboardList,
     })),
   );
   const { slug } = useStoreData(

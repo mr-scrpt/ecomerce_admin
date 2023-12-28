@@ -29,7 +29,7 @@ class CategoryRepo {
 
   getCategoryListByStoreSlug = cache(
     async (storeSlug: string): Promise<ICategoryWithRelations[]> => {
-      return await prismaDB.category.findMany({
+      const res = await prismaDB.category.findMany({
         include: { billboard: true },
         where: {
           store: {
@@ -37,18 +37,18 @@ class CategoryRepo {
           },
         },
       });
+      console.log(" =>>> result =", res);
+      return res;
     },
   );
 
   getCategoryByName = async (
     data: IGetCategoryByNameRepo,
   ): Promise<ICategory | null> => {
-    console.log("before =>>>", data);
     const res = await prismaDB.category.findUnique({
-      // include: { billboard: true },
+      include: { billboard: true },
       where: { storeId_name: data },
     });
-    console.log(" =>>>", res);
     return res;
   };
 
@@ -74,21 +74,21 @@ class CategoryRepo {
     });
   };
   //
-  //   updateCategory = cache(
-  //     async (data: IUpdateCategoryRepo): Promise<ICategory> => {
-  //       const { categoryId, name, imgUrl } = data;
-  //       const store = await prismaDB.category.update({
-  //         where: {
-  //           id: categoryId,
-  //         },
-  //         data: {
-  //           name,
-  //           imgUrl,
-  //         },
-  //       });
-  //       return store;
-  //     },
-  //   );
+  updateCategory = cache(
+    async (data: IUpdateCategoryRepo): Promise<ICategory> => {
+      const { categoryId, name, billboardId } = data;
+      const store = await prismaDB.category.update({
+        where: {
+          id: categoryId,
+        },
+        data: {
+          name,
+          billboardId,
+        },
+      });
+      return store;
+    },
+  );
   //
   //   removeCategory = cache(
   //     async (data: IRemoveCategoryRepo): Promise<ICategory> => {

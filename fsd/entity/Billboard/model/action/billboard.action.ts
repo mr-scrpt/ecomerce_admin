@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import {
   ICreateBillboardPayload,
+  IIsCurrentBillboardPayload,
   IIsOwnerPayload,
   IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
@@ -151,12 +152,16 @@ export const updateBillboard = cache(
         );
       }
 
-      const isUniqueResponse = await isUnique({ name, storeId });
-      if (!isUniqueResponse) {
-        throw new HttpException(
-          BillboardResponseErrorEnum.BILLBOARD_NOT_UNIQUE,
-          HTTPStatusEnum.BAD_REQUEST,
-        );
+      const isCurrentResponse = await isCurrent({ name, billboardId });
+
+      if (!isCurrentResponse) {
+        const isUniqueResponse = await isUnique({ name, storeId });
+        if (!isUniqueResponse) {
+          throw new HttpException(
+            BillboardResponseErrorEnum.BILLBOARD_NOT_UNIQUE,
+            HTTPStatusEnum.BAD_REQUEST,
+          );
+        }
       }
 
       const billboard = await billboardRepo.updateBillboard({
@@ -239,6 +244,16 @@ export const removeBillboard = cache(
 
 const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
   !(await billboardRepo.getBillboardByName(data));
+
+const isCurrent = async (
+  data: IIsCurrentBillboardPayload,
+): Promise<boolean> => {
+  const { name, billboardId } = data;
+  const bill = await billboardRepo.getBillboard(billboardId);
+  const isCurrent = bill && bill.name === name;
+
+  return !!isCurrent;
+};
 
 const isExist = cache(
   async (billboardId: string): Promise<boolean> =>

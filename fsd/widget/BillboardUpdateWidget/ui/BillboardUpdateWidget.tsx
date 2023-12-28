@@ -1,5 +1,5 @@
 "use client";
-import { useBillboardTableData } from "@/fsd/entity/Billboard";
+import { useBillboardList } from "@/fsd/entity/Billboard";
 import { useStoreData } from "@/fsd/entity/Store";
 import {
   BillboardUpdate,
@@ -22,9 +22,9 @@ export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = (
   const router = useRouter();
   const path = `/${storeSlug}${RoutePathEnum.BILLBOARDS}`;
 
-  const { getBillboardList: getBillboard } = useBillboardTableData(
+  const { getBillboardList: getBillboard } = useBillboardList(
     useShallow((state) => ({
-      getBillboardList: state.fetchBillboardListByStoreSlug,
+      getBillboardList: state.fetchBillboardList,
     })),
   );
 

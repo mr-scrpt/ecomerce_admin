@@ -1,12 +1,8 @@
 import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import {
-  IStoreBillboardList,
-  IStoreBillboardTable,
-} from "../../type/store.type";
+import { IStoreBillboardList } from "../../type/store.type";
 import { getBillboardListByStoreSlug } from "../action/billboard.action";
-import { buildBillboardRow } from "../../lib/buildBillboardRow";
 
 export const useBillboardList = create<IStoreBillboardList>()(
   devtools(
@@ -42,39 +38,3 @@ export const useBillboardList = create<IStoreBillboardList>()(
     { name: "useBillboardList" },
   ),
 );
-
-// export const useBillboardTableData = create<IStoreBillboardTable>()(
-//   devtools(
-//     (set) => ({
-//       list: [],
-//       loading: false,
-//       error: null,
-//       fetchBillboardListByStoreSlug: async (storeSlug) => {
-//         try {
-//           set({ loading: true }, false, "set_fetch_billboard_loading");
-//           console.log(" =>>> fetchBillboardListByStoreSlug");
-//           const { data, error } = await getBillboardListByStoreSlug(storeSlug);
-//           if (error) {
-//             set({ error }, false, "set_fetch_billboard_error");
-//             set({ list: [] });
-//             return;
-//           }
-//
-//           set(
-//             {
-//               list: data?.map((item) => buildBillboardRow(item)),
-//             },
-//             false,
-//             "set_fetch_billboard_data",
-//           );
-//         } catch (e) {
-//           set({ error: HTTPErrorMessage.SERVER_ERROR });
-//           set({ list: [] });
-//         } finally {
-//           set({ loading: false }, false, "set_fetch_billboard_loading");
-//         }
-//       },
-//     }),
-//     { name: "useBillboardTableData" },
-//   ),
-// );

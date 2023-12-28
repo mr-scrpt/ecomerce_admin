@@ -11,16 +11,14 @@ import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
 import { CategoryColumn } from "../type/table.type";
 
-interface CategoryTableListActionProps extends HTMLAttributes<HTMLDivElement> {
+interface CategoryTableActionProps extends HTMLAttributes<HTMLDivElement> {
   data: CategoryColumn;
   onCopy: () => void;
   onUpdate: () => void;
   onDeletePopup: () => void;
 }
 
-export const CategoryTableListAction: FC<CategoryTableListActionProps> = (
-  props,
-) => {
+export const CategoryTableAction: FC<CategoryTableActionProps> = (props) => {
   const { onCopy, onDeletePopup, onUpdate } = props;
   return (
     <DropdownMenu>

@@ -1,5 +1,4 @@
 import { BillboardAdd, billboardAction } from "@/fsd/entity/Billboard";
-import { BillboardTableList } from "@/fsd/feature/BillboardTableList";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";

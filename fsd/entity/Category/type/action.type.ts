@@ -8,6 +8,7 @@ export interface IUpdateCategoryPayload {
   storeId: string;
   categoryId: string;
   name: string;
+  billboardId: string;
   // imgUrl: string;
 }
 
@@ -28,5 +29,11 @@ export interface IIsOwnerPayload {
 
 export interface IIsUniqueCategoryPayload {
   name: string;
+  // categoryId: string;
   storeId: string;
+}
+
+export interface IIsCurrentCategoryPayload {
+  name: string;
+  categoryId: string;
 }

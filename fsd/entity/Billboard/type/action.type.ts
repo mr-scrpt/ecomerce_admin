@@ -30,3 +30,8 @@ export interface IIsUniqueBillboardPayload {
   name: string;
   storeId: string;
 }
+
+export interface IIsCurrentBillboardPayload {
+  name: string;
+  billboardId: string;
+}

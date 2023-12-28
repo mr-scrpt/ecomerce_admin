@@ -4,8 +4,8 @@ import { toast } from "react-hot-toast";
 
 import { billboardAction } from "@/fsd/entity/Billboard";
 import { BillboardForm } from "@/fsd/entity/BillboardForm";
-import { billboardCreateValidate } from "../../model/action/validation.action";
 import { BillboardCreateTypeSchema } from "../../type/schema.type";
+import { billboardCreateValidate } from "../../model/validation/billboardCreate.validation";
 
 interface BillboardCreateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;

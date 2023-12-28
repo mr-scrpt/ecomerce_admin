@@ -4,7 +4,7 @@ import { toast } from "react-hot-toast";
 
 import { billboardAction } from "@/fsd/entity/Category";
 import { CategoryForm } from "@/fsd/entity/CategoryForm";
-import { categoryCreateValidate } from "../../model/action/validation.action";
+import { categoryCreateValidate } from "../../model/validation/categoryCreate.validation";
 import { CategoryCreateTypeSchema } from "../../type/schema.type";
 import { IBillboard } from "@/fsd/entity/Billboard";
 

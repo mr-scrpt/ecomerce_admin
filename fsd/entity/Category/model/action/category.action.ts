@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import {
   ICreateCategoryPayload,
+  IIsCurrentCategoryPayload,
   IIsOwnerPayload,
   IIsUniqueCategoryPayload,
   IUpdateCategoryPayload,
@@ -106,64 +107,71 @@ export const getCategoryListByStoreSlug = cache(
         await categoryRepo.getCategoryListByStoreSlug(storeSlug);
       return buildResponse(categoryList);
     } catch (e) {
+      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
   },
 );
 
-// export const updateCategory = cache(
-//   async (
-//     data: IUpdateCategoryPayload,
-//   ): Promise<ResponseDataAction<ICategory | null>> => {
-//     try {
-//       const { error, status } = await authAction.getAuthUser();
-//       if (error) {
-//         throw new HttpException(error, status);
-//       }
-//
-//       const { storeId, categoryId, name, imgUrl } = data;
-//
-//       const storeResponse = await storeAction.getStore(storeId);
-//       if (storeResponse.error) {
-//         throw new Error(storeResponse.error);
-//       }
-//
-//       const isExistResponse = await isExist(categoryId);
-//
-//       if (!isExistResponse) {
-//         throw new HttpException(
-//           CategoryResponseErrorEnum.CATEGORY_NOT_EXIST,
-//           HTTPStatusEnum.NOT_FOUND,
-//         );
-//       }
-//
-//       const isUniqueResponse = await isUnique({ name, storeId });
-//       if (!isUniqueResponse) {
-//         throw new HttpException(
-//           CategoryResponseErrorEnum.CATEGORY_NOT_UNIQUE,
-//           HTTPStatusEnum.BAD_REQUEST,
-//         );
-//       }
-//
-//       const category = await categoryRepo.updateCategory({
-//         categoryId,
-//         name,
-//         imgUrl,
-//       });
-//       if (!category) {
-//         throw new HttpException(
-//           CategoryResponseErrorEnum.CATEGORY_NOT_UPDATED,
-//           HTTPStatusEnum.BAD_REQUEST,
-//         );
-//       }
-//       return buildResponse(category);
-//     } catch (e) {
-//       const { error, status } = buildError(e);
-//       return buildResponse(null, error, status);
-//     }
-//   },
-// );
+export const updateCategory = cache(
+  async (
+    data: IUpdateCategoryPayload,
+  ): Promise<ResponseDataAction<ICategory | null>> => {
+    try {
+      const { error, status } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
+      }
+
+      const { storeId, categoryId, name, billboardId } = data;
+
+      const storeResponse = await storeAction.getStore(storeId);
+      if (storeResponse.error) {
+        throw new Error(storeResponse.error);
+      }
+
+      const isExistResponse = await isExist(categoryId);
+
+      if (!isExistResponse) {
+        throw new HttpException(
+          CategoryResponseErrorEnum.CATEGORY_NOT_EXIST,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+
+      const isCurrentResponse = await isCurrent({ name, categoryId });
+
+      if (!isCurrentResponse) {
+        const isUniqueResponse = await isUnique({ name, storeId });
+
+        if (!isUniqueResponse) {
+          throw new HttpException(
+            CategoryResponseErrorEnum.CATEGORY_NOT_UNIQUE,
+            HTTPStatusEnum.BAD_REQUEST,
+          );
+        }
+      }
+
+      const category = await categoryRepo.updateCategory({
+        categoryId,
+        name,
+        billboardId,
+      });
+
+      if (!category) {
+        throw new HttpException(
+          CategoryResponseErrorEnum.CATEGORY_NOT_UPDATED,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+      return buildResponse(category);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
 
 // export const removeCategory = cache(
 //   async (categoryId: string): Promise<ResponseDataAction<ICategory | null>> => {
@@ -215,6 +223,14 @@ export const getCategoryListByStoreSlug = cache(
 
 const isUnique = async (data: IIsUniqueCategoryPayload): Promise<boolean> =>
   !(await categoryRepo.getCategoryByName(data));
+
+const isCurrent = async (data: IIsCurrentCategoryPayload): Promise<boolean> => {
+  const { name, categoryId } = data;
+  const cat = await categoryRepo.getCategory(categoryId);
+  const isCurrent = cat && cat.name === name;
+
+  return !!isCurrent;
+};
 
 const isExist = cache(
   async (categoryId: string): Promise<boolean> =>
