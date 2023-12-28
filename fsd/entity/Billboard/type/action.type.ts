@@ -35,3 +35,8 @@ export interface IIsCurrentBillboardPayload {
   name: string;
   billboardId: string;
 }
+
+export interface IIsRelationCategory {
+  billboardId: string;
+  // storeId: string;
+}

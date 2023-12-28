@@ -31,6 +31,7 @@ export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
       toast.error("Something went wrong.");
     } finally {
       setIsLoading(false);
+      onCancel();
     }
   };
 

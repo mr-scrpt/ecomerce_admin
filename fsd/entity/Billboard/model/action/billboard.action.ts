@@ -12,12 +12,14 @@ import {
   ICreateBillboardPayload,
   IIsCurrentBillboardPayload,
   IIsOwnerPayload,
+  IIsRelationCategory,
   IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "../../type/action.type";
 import { IBillboard } from "../../type/entity.type";
 import { billboardRepo } from "../repo/billboard.repo";
 import { BillboardResponseErrorEnum } from "../repo/responseError.enum";
+import { categoryRepo } from "@/fsd/entity/Category/model/repo/category.repo";
 
 export const createBillboard = cache(
   async (
@@ -186,13 +188,8 @@ export const updateBillboard = cache(
 export const removeBillboard = cache(
   async (
     billboardId: string,
-    revalidate?: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status, data: udata } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -219,6 +216,19 @@ export const removeBillboard = cache(
           HTTPStatusEnum.FORBIDDEN,
         );
       }
+
+      const relationCategory = await isRelationCategory({
+        billboardId,
+        // storeId,
+      });
+
+      if (relationCategory) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.RELATION_CAT_USE,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+
       const billboardRemover = await billboardRepo.removeBillboard({
         billboardId,
       });
@@ -230,10 +240,6 @@ export const removeBillboard = cache(
         );
       }
 
-      if (revalidate) {
-        revalidatePath(revalidate);
-      }
-
       return buildResponse(billboardRemover);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -241,6 +247,13 @@ export const removeBillboard = cache(
     }
   },
 );
+
+const isRelationCategory = async (
+  data: IIsRelationCategory,
+): Promise<boolean> => {
+  const isRelation = await categoryRepo.getCategoryByBillboard(data);
+  return !!isRelation;
+};
 
 const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>
   !(await billboardRepo.getBillboardByName(data));

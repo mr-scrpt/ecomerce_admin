@@ -10,6 +10,7 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import {
   ICreateCategoryPayload,
+  IGetCategoryByBillboard,
   IIsCurrentCategoryPayload,
   IIsOwnerPayload,
   IIsUniqueCategoryPayload,
@@ -112,6 +113,10 @@ export const getCategoryListByStoreSlug = cache(
       return buildResponse(null, error, status);
     }
   },
+);
+
+export const getCategoryByBillboard = cache(
+  async (data: IGetCategoryByBillboard): Promise<ICategory> => {},
 );
 
 export const updateCategory = cache(

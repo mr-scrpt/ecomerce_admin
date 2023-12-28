@@ -2,13 +2,17 @@ import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
 import {
   ICreateCategoryRepo,
+  IGetCategoryByBillboardRepo,
   IGetCategoryByNameRepo,
   IIsOwnerRepo,
   IRemoveCategoryRepo,
   IUpdateCategoryRepo,
 } from "../../type/repo.type";
 import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
-import { ICreateCategoryPayload } from "../../type/action.type";
+import {
+  ICreateCategoryPayload,
+  IGetCategoryByBillboardPayload,
+} from "../../type/action.type";
 
 class CategoryRepo {
   getCategory = async (categoryId: string): Promise<ICategory | null> => {
@@ -57,6 +61,15 @@ class CategoryRepo {
       const { categoryId, userId } = data;
       return await prismaDB.category.findUnique({
         where: { id: categoryId, store: { userId } },
+      });
+    },
+  );
+
+  getCategoryByBillboard = cache(
+    async (data: IGetCategoryByBillboardRepo): Promise<ICategory[]> => {
+      const { billboardId } = data;
+      return await prismaDB.category.findMany({
+        where: { billboardId },
       });
     },
   );

@@ -7,6 +7,8 @@ export enum BillboardResponseErrorEnum {
   BILLBOARD_NOT_UPDATED = "Billboard has not been updated",
   BILLBOARD_NOT_REMOVED = "Billboard has not been removed",
   BILLBOARD_NO_OWNER = "You are not owner this billboard",
+
+  RELATION_CAT_USE = "Some categories use this billboard, so it cannot be deleted.",
   //
   // BILLBOARD_SLUG_EMPTY = "Slug not must be empty",
   // BILLBOARD_LIST_NOT_FOUND = "Store list has not been found",

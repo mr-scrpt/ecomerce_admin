@@ -1,5 +1,6 @@
 import {
   ICreateCategoryPayload,
+  IGetCategoryByBillboardPayload,
   IGetCategoryByNamePayload,
   IGetCategoryPayload,
   IIsOwnerPayload,
@@ -20,3 +21,6 @@ export interface ICreateCategoryRepo extends ICreateCategoryPayload {
 }
 export interface IGetCategoryRepo extends IGetCategoryPayload {}
 export interface IGetCategoryByNameRepo extends IGetCategoryByNamePayload {}
+
+export interface IGetCategoryByBillboardRepo
+  extends IGetCategoryByBillboardPayload {}

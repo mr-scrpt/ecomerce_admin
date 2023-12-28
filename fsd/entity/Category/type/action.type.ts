@@ -37,3 +37,8 @@ export interface IIsCurrentCategoryPayload {
   name: string;
   categoryId: string;
 }
+
+export interface IGetCategoryByBillboardPayload {
+  // storeId: string;
+  billboardId: string;
+}
