@@ -20,6 +20,7 @@ import { IBillboard } from "../../type/entity.type";
 import { billboardRepo } from "../repo/billboard.repo";
 import { BillboardResponseErrorEnum } from "../repo/responseError.enum";
 import { categoryRepo } from "@/fsd/entity/Category/model/repo/category.repo";
+import { categoryAction } from "@/fsd/entity/Category";
 
 export const createBillboard = cache(
   async (
@@ -58,9 +59,6 @@ export const createBillboard = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      // if (revalidate) {
-      //   revalidatePath(revalidate);
-      // }
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -129,10 +127,6 @@ export const updateBillboard = cache(
     data: IUpdateBillboardPayload,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -171,12 +165,14 @@ export const updateBillboard = cache(
         name,
         imgUrl,
       });
+
       if (!billboard) {
         throw new HttpException(
           BillboardResponseErrorEnum.BILLBOARD_NOT_UPDATED,
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
+
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -217,10 +213,10 @@ export const removeBillboard = cache(
         );
       }
 
-      const relationCategory = await isRelationCategory({
+      const relationCategory = await isRelationCategory(
         billboardId,
         // storeId,
-      });
+      );
 
       if (relationCategory) {
         throw new HttpException(
@@ -248,11 +244,9 @@ export const removeBillboard = cache(
   },
 );
 
-const isRelationCategory = async (
-  data: IIsRelationCategory,
-): Promise<boolean> => {
-  const isRelation = await categoryRepo.getCategoryByBillboard(data);
-  return !!isRelation;
+const isRelationCategory = async (billboardId: string): Promise<boolean> => {
+  const { data } = await categoryAction.getCategoryListByBillboard(billboardId);
+  return !!data?.length;
 };
 
 const isUnique = async (data: IIsUniqueBillboardPayload): Promise<boolean> =>

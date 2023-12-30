@@ -1,18 +1,12 @@
 import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
-import {
-  ICreateCategoryRepo,
-  IGetCategoryByBillboardRepo,
-  IGetCategoryByNameRepo,
-  IIsOwnerRepo,
-  IRemoveCategoryRepo,
-  IUpdateCategoryRepo,
-} from "../../type/repo.type";
 import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import {
-  ICreateCategoryPayload,
-  IGetCategoryByBillboardPayload,
-} from "../../type/action.type";
+  ICreateCategoryRepo,
+  IGetCategoryByNameRepo,
+  IIsOwnerRepo,
+  IUpdateCategoryRepo,
+} from "../../type/repo.type";
 
 class CategoryRepo {
   getCategory = async (categoryId: string): Promise<ICategory | null> => {
@@ -41,7 +35,6 @@ class CategoryRepo {
           },
         },
       });
-      console.log(" =>>> result =", res);
       return res;
     },
   );
@@ -66,8 +59,7 @@ class CategoryRepo {
   );
 
   getCategoryByBillboard = cache(
-    async (data: IGetCategoryByBillboardRepo): Promise<ICategory[]> => {
-      const { billboardId } = data;
+    async (billboardId: string): Promise<ICategory[]> => {
       return await prismaDB.category.findMany({
         where: { billboardId },
       });
@@ -102,17 +94,17 @@ class CategoryRepo {
       return store;
     },
   );
-  //
-  //   removeCategory = cache(
-  //     async (data: IRemoveCategoryRepo): Promise<ICategory> => {
-  //       const { categoryId } = data;
-  //       return await prismaDB.category.delete({
-  //         where: {
-  //           id: categoryId,
-  //         },
-  //       });
-  //     },
-  //   );
+
+  removeCategory = cache(
+    async (data: IRemoveCategoryRepo): Promise<ICategory> => {
+      const { categoryId } = data;
+      return await prismaDB.category.delete({
+        where: {
+          id: categoryId,
+        },
+      });
+    },
+  );
 }
 
 export const categoryRepo = new CategoryRepo();

@@ -20,15 +20,18 @@ interface CategoryTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
 
 export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
   const { slug } = props;
+
   const { categoryList, fetchCategoryList } = useCategoryList(
     useShallow((state) => ({
       categoryList: state.categoryList,
       fetchCategoryList: state.fetchCategoryList,
     })),
   );
+
   useEffect(() => {
     fetchCategoryList(slug);
   }, []);
+
   const router = useRouter();
 
   const { onOpen } = useCategoryRemoveModal(

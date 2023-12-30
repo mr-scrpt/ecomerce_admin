@@ -1,10 +1,12 @@
 "use client";
 import { BillboardRemoveModal } from "@/fsd/feature/BillboardRemove";
+import { CategoryRemoveModal } from "@/fsd/feature/CategoryRemove";
 import { useStoreModal } from "@/fsd/feature/ModalManager";
 import {
   useBillboardRemoveModal,
+  useCategoryRemoveModal,
   useStoreRemoveModal,
-} from "@/fsd/feature/ModalManager/model/store/modal.store";
+} from "@/fsd/feature/ModalManager";
 import { StoreCreateModal } from "@/fsd/feature/StoreCreate/ui/StoreCreateModal";
 import { StoreRemoveModal } from "@/fsd/feature/StoreRemove";
 import { Modal } from "@/fsd/shared/ui/modal";
@@ -33,6 +35,14 @@ export const ModalProvider = () => {
       })),
     );
 
+  const { isOpenCategoryRemove, onCloseCategoryRemove } =
+    useCategoryRemoveModal(
+      useShallow((state) => ({
+        isOpenCategoryRemove: state.isOpen,
+        onCloseCategoryRemove: state.onClose,
+      })),
+    );
+
   return (
     <>
       <Modal
@@ -58,6 +68,14 @@ export const ModalProvider = () => {
         description="This action cannot be undone."
       >
         <BillboardRemoveModal onClose={onCloseBillboardRemove} />
+      </Modal>
+      <Modal
+        isOpen={isOpenCategoryRemove}
+        onClose={onCloseCategoryRemove}
+        title="Are you sure remove category?"
+        description="This action cannot be undone."
+      >
+        <CategoryRemoveModal onClose={onCloseCategoryRemove} />
       </Modal>
     </>
   );

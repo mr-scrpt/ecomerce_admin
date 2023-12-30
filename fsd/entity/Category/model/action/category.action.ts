@@ -3,23 +3,21 @@ import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { authAction } from "@/fsd/shared/modle/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import {
   ICreateCategoryPayload,
-  IGetCategoryByBillboard,
   IIsCurrentCategoryPayload,
   IIsOwnerPayload,
   IIsUniqueCategoryPayload,
   IUpdateCategoryPayload,
 } from "../../type/action.type";
+import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import { categoryRepo } from "../repo/category.repo";
 import { CategoryResponseErrorEnum } from "../repo/responseError.enum";
-import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
-import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 
 export const createCategory = cache(
   async (
@@ -108,15 +106,25 @@ export const getCategoryListByStoreSlug = cache(
         await categoryRepo.getCategoryListByStoreSlug(storeSlug);
       return buildResponse(categoryList);
     } catch (e) {
-      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
   },
 );
 
-export const getCategoryByBillboard = cache(
-  async (data: IGetCategoryByBillboard): Promise<ICategory> => {},
+export const getCategoryListByBillboard = cache(
+  async (
+    billboardId: string,
+  ): Promise<ResponseDataAction<ICategory[] | null>> => {
+    try {
+      const categoryList =
+        await categoryRepo.getCategoryByBillboard(billboardId);
+      return buildResponse(categoryList);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
 );
 
 export const updateCategory = cache(
@@ -178,53 +186,54 @@ export const updateCategory = cache(
   },
 );
 
-// export const removeCategory = cache(
-//   async (categoryId: string): Promise<ResponseDataAction<ICategory | null>> => {
-//     try {
-//       const { error, status, data: udata } = await authAction.getAuthUser();
-//       if (error) {
-//         throw new HttpException(error, status);
-//       }
-//
-//       const category = await getCategory(categoryId);
-//       const { data } = category;
-//
-//       if (!data) {
-//         throw new HttpException(
-//           CategoryResponseErrorEnum.CATEGORY_NOT_FOUND,
-//           HTTPStatusEnum.NOT_FOUND,
-//         );
-//       }
-//
-//       const userId = udata!.id;
-//       const isOwnerResponse = await isOwner({
-//         categoryId: data.id,
-//         userId,
-//       });
-//       if (!isOwnerResponse) {
-//         throw new HttpException(
-//           CategoryResponseErrorEnum.CATEGORY_NO_OWNER,
-//           HTTPStatusEnum.FORBIDDEN,
-//         );
-//       }
-//       const categoryRemover = await categoryRepo.removeCategory({
-//         categoryId,
-//       });
-//
-//       if (!categoryRemover) {
-//         throw new HttpException(
-//           CategoryResponseErrorEnum.CATEGORY_NOT_REMOVED,
-//           HTTPStatusEnum.BAD_REQUEST,
-//         );
-//       }
-//
-//       return buildResponse(categoryRemover);
-//     } catch (e) {
-//       const { error, status } = buildError(e);
-//       return buildResponse(null, error, status);
-//     }
-//   },
-// );
+export const removeCategory = cache(
+  async (categoryId: string): Promise<ResponseDataAction<ICategory | null>> => {
+    try {
+      const { error, status, data: udata } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
+      }
+
+      const category = await getCategory(categoryId);
+      const { data } = category;
+
+      if (!data) {
+        throw new HttpException(
+          CategoryResponseErrorEnum.CATEGORY_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+
+      const userId = udata!.id;
+      const isOwnerResponse = await isOwner({
+        categoryId: data.id,
+        userId,
+      });
+      if (!isOwnerResponse) {
+        throw new HttpException(
+          CategoryResponseErrorEnum.CATEGORY_NO_OWNER,
+          HTTPStatusEnum.FORBIDDEN,
+        );
+      }
+
+      const categoryRemover = await categoryRepo.removeCategory({
+        categoryId,
+      });
+
+      if (!categoryRemover) {
+        throw new HttpException(
+          CategoryResponseErrorEnum.CATEGORY_NOT_REMOVED,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+
+      return buildResponse(categoryRemover);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
 
 const isUnique = async (data: IIsUniqueCategoryPayload): Promise<boolean> =>
   !(await categoryRepo.getCategoryByName(data));

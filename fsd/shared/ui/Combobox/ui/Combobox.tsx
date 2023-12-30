@@ -25,7 +25,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
     isOpen,
     onOpen,
     triggerIcon,
-    className,
     placeholderSearch,
     placeholderEmpty,
   } = props;

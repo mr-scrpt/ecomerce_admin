@@ -19,7 +19,7 @@ export const storeSwitcherActionData: IStoreSwitcherGroup = {
       icon: StoreSwitcherIconEnum.REMOVE,
       isActive: false,
       value: "remove",
-      handler: StoreSwitcherHandlerEnum.CREATE,
+      handler: StoreSwitcherHandlerEnum.REMOVE,
       slug: "",
     },
   ],

@@ -15,14 +15,11 @@ import {
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { storeRepo } from "../repo";
 import { IStore } from "../../type/entity.type";
+import { categoryAction } from "@/fsd/entity/Category";
 
 export const createStore = cache(
   async (name: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status, data: udata } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -93,10 +90,6 @@ export const getStoreBySlug = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status, data: udata } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -125,11 +118,6 @@ export const getStoreBySlug = cache(
 export const getStoreStoreFirst = cache(
   async (): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      // const userResponse = await authAction.getAuthUser();
-      //
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status, data: udata } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -170,10 +158,6 @@ export const renameStore = cache(
   ): Promise<ResponseDataAction<IStore | null>> => {
     const { currentStoreName, newStoreName } = data;
     try {
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status, data: udata } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -225,10 +209,6 @@ export const renameStore = cache(
 export const removeStore = cache(
   async (storeId: string): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
       const { error, status, data: udata } = await authAction.getAuthUser();
       if (error) {
         throw new HttpException(error, status);
@@ -244,6 +224,14 @@ export const removeStore = cache(
         throw new HttpException(
           StoreResponseErrorEnum.STORE_NO_OWNER,
           HTTPStatusEnum.FORBIDDEN,
+        );
+      }
+      const relationCategory = await isRelationCategory(storeId);
+
+      if (relationCategory) {
+        throw new HttpException(
+          StoreResponseErrorEnum.RELATION_CAT_USE,
+          HTTPStatusEnum.BAD_REQUEST,
         );
       }
 
@@ -262,6 +250,11 @@ export const removeStore = cache(
     }
   },
 );
+
+const isRelationCategory = async (storeId: string): Promise<boolean> => {
+  const { data } = await categoryAction.getCategoryListByStoreId(storeId);
+  return !!data?.length;
+};
 
 const isUnique = cache(
   async (data: IIsUniqueStorePayload): Promise<boolean> =>

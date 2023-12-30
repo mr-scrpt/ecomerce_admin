@@ -1,6 +1,6 @@
 "use client";
 import { useUserData } from "@/fsd/entity/User/model/store/user.store";
-import { useStoreModal } from "@/fsd/feature/ModalManager";
+import { useStoreModal, useStoreRemoveModal } from "@/fsd/feature/ModalManager";
 import { Combobox } from "@/fsd/shared/ui/Combobox";
 import { MinusIcon, PlusCircleIcon, StoreIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -12,12 +12,22 @@ import { StoreSwitcherHandlerEnum } from "../type/handler.enum";
 import { StoreSwitcherIconEnum } from "../type/icon.enum";
 import { StoreSwitcherProps } from "../type/props.type";
 import { IHandlerCollection, IIconCollection } from "../type/type";
+import { useShallow } from "zustand/react/shallow";
 
 export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
   const { storeSlug } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   // TODO: one fsd layer
-  const { onOpen } = useStoreModal();
+  const { onOpenCreate } = useStoreModal(
+    useShallow((state) => ({
+      onOpenCreate: state.onOpen,
+    })),
+  );
+
+  const { onOpenRemove } = useStoreRemoveModal(
+    useShallow((state) => ({ onOpenRemove: state.onOpen })),
+  );
+
   const router = useRouter();
 
   const {
@@ -47,6 +57,7 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
     setIsOpen(false);
     router.push(`/${slug}`);
   }, []);
+
   const iconCollection: IIconCollection = useMemo(
     () => ({
       [StoreSwitcherIconEnum.STORE]: <StoreIcon />,
@@ -59,10 +70,10 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
   const handlerCollection: IHandlerCollection = useMemo(
     () => ({
       [StoreSwitcherHandlerEnum.SELECT]: onStoreSelected,
-      [StoreSwitcherHandlerEnum.CREATE]: onOpen,
-      [StoreSwitcherHandlerEnum.REMOVE]: console.log,
+      [StoreSwitcherHandlerEnum.CREATE]: onOpenCreate,
+      [StoreSwitcherHandlerEnum.REMOVE]: onOpenRemove,
     }),
-    [onOpen, onStoreSelected],
+    [onOpenCreate, onOpenRemove, onStoreSelected],
   );
   const listItem = useMemo(() => {
     return buildStoreSwitcherUI(list, iconCollection, handlerCollection);
@@ -75,7 +86,7 @@ export const StoreSwitcher = memo((props: StoreSwitcherProps) => {
       {!loading && !!list.length && (
         <Combobox
           isOpen={isOpen}
-          onOpen={() => setIsOpen(!isOpen)}
+          onOpen={setIsOpen.bind(false, !isOpen)}
           data={listItem}
           currentItem={current?.name}
           triggerIcon={<StoreIcon />}

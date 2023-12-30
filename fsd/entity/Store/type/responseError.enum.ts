@@ -8,6 +8,8 @@ export enum StoreResponseErrorEnum {
   STORE_NOT_REMOVED = "Store has not been removed",
   STORE_NO_OWNER = "You are not owner this store",
 
+  RELATION_CAT_USE = "Some categories use this store, so it cannot be deleted.",
+
   STORE_SLUG_EMPTY = "Slug not must be empty",
   STORE_LIST_NOT_FOUND = "Store list has not been found",
   USER_NOT_FOUND = "User not found",
