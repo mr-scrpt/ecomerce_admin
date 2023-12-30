@@ -2,7 +2,7 @@
 import { FC, HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { billboardAction } from "@/fsd/entity/Category";
+import { categoryAction } from "@/fsd/entity/Category";
 import { CategoryForm } from "@/fsd/entity/CategoryForm";
 import { categoryCreateValidate } from "../../model/validation/categoryCreate.validation";
 import { CategoryCreateTypeSchema } from "../../type/schema.type";
@@ -33,7 +33,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
       }
 
       const { name, billboardId } = form;
-      const { data, error } = await billboardAction.createCategory({
+      const { data, error } = await categoryAction.createCategory({
         name,
         billboardId,
         storeId,

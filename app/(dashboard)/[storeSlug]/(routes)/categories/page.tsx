@@ -1,4 +1,4 @@
-import { CategoryAdd, billboardAction } from "@/fsd/entity/Category";
+import { CategoryAdd, categoryAction } from "@/fsd/entity/Category";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
@@ -13,7 +13,7 @@ const CategoriesPage: FC<CategoriesPageProps> = async (props) => {
   const { params } = props;
   const { storeSlug } = params;
   const categoriesList =
-    await billboardAction.getCategoryListByStoreSlug(storeSlug);
+    await categoryAction.getCategoryListByStoreSlug(storeSlug);
 
   const categoriesCount = categoriesList.data?.length || 0;
   return (

@@ -5,6 +5,7 @@ import {
   ICreateCategoryRepo,
   IGetCategoryByNameRepo,
   IIsOwnerRepo,
+  IRemoveCategoryRepo,
   IUpdateCategoryRepo,
 } from "../../type/repo.type";
 
@@ -81,7 +82,7 @@ class CategoryRepo {
   //
   updateCategory = cache(
     async (data: IUpdateCategoryRepo): Promise<ICategory> => {
-      const { categoryId, name, billboardId } = data;
+      const { categoryId, name, newSlug, billboardId } = data;
       const store = await prismaDB.category.update({
         where: {
           id: categoryId,
@@ -89,6 +90,7 @@ class CategoryRepo {
         data: {
           name,
           billboardId,
+          slug: newSlug,
         },
       });
       return store;

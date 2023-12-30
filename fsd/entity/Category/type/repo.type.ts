@@ -7,7 +7,9 @@ import {
 } from "./action.type";
 
 export interface IUpdateCategoryRepo
-  extends Omit<IUpdateCategoryPayload, "storeId"> {}
+  extends Omit<IUpdateCategoryPayload, "storeId"> {
+  newSlug: string;
+}
 
 export interface IRemoveCategoryRepo {
   categoryId: string;

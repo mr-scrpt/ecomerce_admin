@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { IStoreCategoryRemove } from "../type/store.type";
 
 export const useCategoryRemove = create<IStoreCategoryRemove>()(
   devtools(

@@ -18,6 +18,7 @@ import {
 import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import { categoryRepo } from "../repo/category.repo";
 import { CategoryResponseErrorEnum } from "../repo/responseError.enum";
+import { billboardAction } from "@/fsd/entity/Billboard";
 
 export const createCategory = cache(
   async (
@@ -44,8 +45,9 @@ export const createCategory = cache(
       }
 
       const storeResponse = await storeAction.getStore(storeId);
+
       if (storeResponse.error) {
-        throw new Error(storeResponse.error);
+        throw new HttpException(storeResponse.error);
       }
 
       const slug = slugGenerator(name);
@@ -60,7 +62,6 @@ export const createCategory = cache(
       }
       return buildResponse(category);
     } catch (e) {
-      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -104,6 +105,7 @@ export const getCategoryListByStoreSlug = cache(
     try {
       const categoryList =
         await categoryRepo.getCategoryListByStoreSlug(storeSlug);
+
       return buildResponse(categoryList);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -139,9 +141,15 @@ export const updateCategory = cache(
 
       const { storeId, categoryId, name, billboardId } = data;
 
+      console.log(" =>>>billboardId", billboardId);
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
-        throw new Error(storeResponse.error);
+        throw new HttpException(storeResponse.error);
+      }
+
+      const billboardResponse = await billboardAction.getBillboard(billboardId);
+      if (billboardResponse.error) {
+        throw new HttpException(billboardResponse.error);
       }
 
       const isExistResponse = await isExist(categoryId);
@@ -180,6 +188,7 @@ export const updateCategory = cache(
       }
       return buildResponse(category);
     } catch (e) {
+      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }

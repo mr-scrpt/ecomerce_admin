@@ -47,8 +47,10 @@ export const createBillboard = cache(
       }
 
       const storeResponse = await storeAction.getStore(storeId);
+
       if (storeResponse.error) {
-        throw new Error(storeResponse.error);
+        // console.log(" =>>>", storeResponse.error);
+        // throw new Error(storeResponse.error);
       }
 
       const billboard = await billboardRepo.createBillboard(data);
@@ -62,6 +64,7 @@ export const createBillboard = cache(
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
+      // console.log(" =>>> custom", error, status);
       return buildResponse(null, error, status);
     }
   },
