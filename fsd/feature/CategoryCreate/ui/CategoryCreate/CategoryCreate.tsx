@@ -3,9 +3,11 @@ import { FC, HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { categoryAction } from "@/fsd/entity/Category";
-import { CategoryForm } from "@/fsd/entity/CategoryForm";
+import {
+  CategoryForm,
+  CategoryFormTypeSchema,
+} from "@/fsd/entity/CategoryForm";
 import { categoryCreateValidate } from "../../model/validation/categoryCreate.validation";
-import { CategoryCreateTypeSchema } from "../../type/schema.type";
 import { IBillboard } from "@/fsd/entity/Billboard";
 
 interface CategoryCreateProps extends HTMLAttributes<HTMLDivElement> {
@@ -18,7 +20,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
   const { onSuccess, storeId, billboardList } = props;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: CategoryCreateTypeSchema) => {
+  const onSubmit = async (form: CategoryFormTypeSchema) => {
     try {
       setLoading(true);
 

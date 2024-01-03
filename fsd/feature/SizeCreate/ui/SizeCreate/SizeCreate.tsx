@@ -3,9 +3,8 @@ import { FC, HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { sizeAction } from "@/fsd/entity/Size";
-import { SizeForm } from "@/fsd/entity/SizeForm";
+import { SizeForm, SizeFormTypeSchema } from "@/fsd/entity/SizeForm";
 import { sizeCreateValidate } from "../../model/validation/sizeCreate.validation";
-import { SizeCreateTypeSchema } from "../../type/schema.type";
 
 interface SizeCreateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;
@@ -17,7 +16,7 @@ export const SizeCreate: FC<SizeCreateProps> = (props) => {
   const { onSuccess, storeId } = props;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: SizeCreateTypeSchema) => {
+  const onSubmit = async (form: SizeFormTypeSchema) => {
     try {
       setLoading(true);
 

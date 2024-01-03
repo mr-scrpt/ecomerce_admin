@@ -24,3 +24,9 @@ export const useCategoryRemoveModal = create<IStoreModal>((set) => ({
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));
+
+export const useSizeRemoveModal = create<IStoreModal>((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+}));

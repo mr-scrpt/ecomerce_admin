@@ -12,6 +12,7 @@ import { sizeCollumns } from "../data/columns";
 import { buildSizeRow } from "../lib/buildSizeRow";
 import { SizeColumn } from "../type/table.type";
 import { SizeTableAction } from "./SizeTableAction";
+import { useSizeRemoveModal } from "@/fsd/feature/ModalManager";
 
 interface SizeTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -33,11 +34,11 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
 
   const router = useRouter();
 
-  // const { onOpen } = useSizeRemoveModal(
-  //   useShallow((state) => ({
-  //     onOpen: state.onOpen,
-  //   })),
-  // );
+  const { onOpen } = useSizeRemoveModal(
+    useShallow((state) => ({
+      onOpen: state.onOpen,
+    })),
+  );
 
   // const { setIdToUpdate } = useSizeUpdate(
   //   useShallow((state) => ({
@@ -59,7 +60,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
   const onDeletePopup = (sizeId: string) => {
     setIdToRemove(sizeId);
 
-    // onOpen();
+    onOpen();
   };
 
   const onUpdate = (sizeId: string) => {

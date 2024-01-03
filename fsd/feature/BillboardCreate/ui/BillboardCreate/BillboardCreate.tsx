@@ -3,8 +3,10 @@ import { FC, HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { billboardAction } from "@/fsd/entity/Billboard";
-import { BillboardForm } from "@/fsd/entity/BillboardForm";
-import { BillboardCreateTypeSchema } from "../../type/schema.type";
+import {
+  BillboardForm,
+  BillboardFormTypeSchema,
+} from "@/fsd/entity/BillboardForm";
 import { billboardCreateValidate } from "../../model/validation/billboardCreate.validation";
 
 interface BillboardCreateProps extends HTMLAttributes<HTMLDivElement> {
@@ -16,7 +18,7 @@ export const BillboardCreate: FC<BillboardCreateProps> = (props) => {
   const { onSuccess, storeId } = props;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: BillboardCreateTypeSchema) => {
+  const onSubmit = async (form: BillboardFormTypeSchema) => {
     try {
       setLoading(true);
 

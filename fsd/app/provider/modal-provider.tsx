@@ -1,13 +1,14 @@
 "use client";
 import { BillboardRemoveModal } from "@/fsd/feature/BillboardRemove";
 import { CategoryRemoveModal } from "@/fsd/feature/CategoryRemove";
-import { useStoreModal } from "@/fsd/feature/ModalManager";
+import { useSizeRemoveModal, useStoreModal } from "@/fsd/feature/ModalManager";
 import {
   useBillboardRemoveModal,
   useCategoryRemoveModal,
   useStoreRemoveModal,
 } from "@/fsd/feature/ModalManager";
-import { StoreCreateModal } from "@/fsd/feature/StoreCreate/ui/StoreCreateModal";
+import { SizeRemoveModal } from "@/fsd/feature/SizeRemove";
+import { StoreCreateModal } from "@/fsd/feature/StoreCreate";
 import { StoreRemoveModal } from "@/fsd/feature/StoreRemove";
 import { Modal } from "@/fsd/shared/ui/modal";
 import { useShallow } from "zustand/react/shallow";
@@ -42,6 +43,12 @@ export const ModalProvider = () => {
         onCloseCategoryRemove: state.onClose,
       })),
     );
+  const { isOpenSizeRemove, onCloseSizeRemove } = useSizeRemoveModal(
+    useShallow((state) => ({
+      isOpenSizeRemove: state.isOpen,
+      onCloseSizeRemove: state.onClose,
+    })),
+  );
 
   return (
     <>
@@ -76,6 +83,14 @@ export const ModalProvider = () => {
         description="This action cannot be undone."
       >
         <CategoryRemoveModal onClose={onCloseCategoryRemove} />
+      </Modal>
+      <Modal
+        isOpen={isOpenSizeRemove}
+        onClose={onCloseSizeRemove}
+        title="Are you sure remove size?"
+        description="This action cannot be undone."
+      >
+        <SizeRemoveModal onClose={onCloseSizeRemove} />
       </Modal>
     </>
   );
