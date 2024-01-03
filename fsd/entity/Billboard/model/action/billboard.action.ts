@@ -64,7 +64,6 @@ export const createBillboard = cache(
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
-      // console.log(" =>>> custom", error, status);
       return buildResponse(null, error, status);
     }
   },
@@ -75,21 +74,15 @@ export const getBillboard = cache(
     billboardId: string,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      // const userResponse = await authAction.getAuthUser();
-      // if (userResponse.error) {
-      //   throw new Error(userResponse.error);
-      // }
-      // const { error, status } = await authAction.getAuthUser();
-      // if (error) {
-      //   throw new HttpException(error, status);
-      // }
       const billboard = await billboardRepo.getBillboard(billboardId);
+
       if (!billboard) {
         throw new HttpException(
           BillboardResponseErrorEnum.BILLBOARD_NOT_FOUND,
           HTTPStatusEnum.NOT_FOUND,
         );
       }
+
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);

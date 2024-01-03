@@ -1,4 +1,8 @@
 import { CategoryAdd, categoryAction } from "@/fsd/entity/Category";
+import {
+  PageDescriptionEnum,
+  PageTitleEnum,
+} from "@/fsd/shared/data/page.title";
 import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
@@ -12,16 +16,16 @@ interface CategoriesPageProps extends HTMLAttributes<HTMLDivElement> {
 const CategoriesPage: FC<CategoriesPageProps> = async (props) => {
   const { params } = props;
   const { storeSlug } = params;
-  const categoriesList =
-    await categoryAction.getCategoryListByStoreSlug(storeSlug);
-
-  const categoriesCount = categoriesList.data?.length || 0;
+  // const categoriesList =
+  //   await categoryAction.getCategoryListByStoreSlug(storeSlug);
+  //
+  // const categoriesCount = categoriesList.data?.length || 0;
   return (
     <main className="flex flex-col gap-3">
       <div className="flex items-center justify-between border-b pb-3">
         <Heading
-          title={`${RouteNameEnum.CATEGORIES} (${categoriesCount})`}
-          description="Manage categories for your store"
+          title={PageTitleEnum.CATEGORY}
+          description={PageDescriptionEnum.CATEGORY}
         />
         <CategoryAdd />
       </div>

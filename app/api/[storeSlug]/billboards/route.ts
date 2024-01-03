@@ -30,33 +30,32 @@ export const GET = async (_: Request, meta: IMetaBillboard) => {
   }
 };
 
-export const POST = async (req: Request, meta: IMetaBillboard) => {
-  try {
-    const body = await req.json();
-    const { storeId, name, imgUrl } = body;
-
-    if (!storeId || !name || !imgUrl) {
-      throw new HttpException(
-        ResponseErrorEnum.BAD_DATA,
-        HTTPStatusEnum.BAD_REQUEST,
-      );
-    }
-
-    const { data, error, status } = await billboardAction.createBillboard({
-      storeId,
-      name,
-      imgUrl,
-    });
-
-    if (error) {
-      console.log(" =>>> error", error);
-      throw new HttpException(error, status);
-    }
-    const response = buildResponse(data);
-    return NextResponse.json(response);
-  } catch (e) {
-    const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
-  }
-};
+// export const POST = async (req: Request, meta: IMetaBillboard) => {
+//   try {
+//     const body = await req.json();
+//     const { storeId, name, imgUrl } = body;
+//
+//     if (!storeId || !name || !imgUrl) {
+//       throw new HttpException(
+//         ResponseErrorEnum.BAD_DATA,
+//         HTTPStatusEnum.BAD_REQUEST,
+//       );
+//     }
+//
+//     const { data, error, status } = await billboardAction.createBillboard({
+//       storeId,
+//       name,
+//       imgUrl,
+//     });
+//
+//     if (error) {
+//       throw new HttpException(error, status);
+//     }
+//     const response = buildResponse(data);
+//     return NextResponse.json(response);
+//   } catch (e) {
+//     const { error, status } = buildError(e);
+//     const errorResponse = buildResponse(null, error, status);
+//     return NextResponse.json(errorResponse, { status });
+//   }
+// };

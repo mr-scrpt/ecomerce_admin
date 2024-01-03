@@ -1,4 +1,7 @@
-import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
+import {
+  PageDescriptionEnum,
+  PageTitleEnum,
+} from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { HTMLAttributes } from "react";
 interface DashboardPageProps extends HTMLAttributes<HTMLDivElement> {
@@ -6,12 +9,13 @@ interface DashboardPageProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const DashboardPage = (props: DashboardPageProps) => {
-  const { params } = props;
-
   return (
     <main className="flex flex-col gap-3">
       <div className="flex items-center justify-between border-b pb-3">
-        <Heading title={RouteNameEnum.HOME} description="Store overview" />
+        <Heading
+          title={PageTitleEnum.MAIN}
+          description={PageDescriptionEnum.MAIN}
+        />
       </div>
     </main>
   );

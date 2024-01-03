@@ -1,5 +1,8 @@
 import { BillboardAdd, billboardAction } from "@/fsd/entity/Billboard";
-import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
+import {
+  PageDescriptionEnum,
+  PageTitleEnum,
+} from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
 import { BillboardTableWidget } from "@/fsd/widget/BillboardTableWidget";
@@ -12,16 +15,16 @@ interface BillboardPageProps extends HTMLAttributes<HTMLDivElement> {
 const BillboardPage: FC<BillboardPageProps> = async (props) => {
   const { params } = props;
   const { storeSlug } = params;
-  const billboardList =
-    await billboardAction.getBillboardListByStoreSlug(storeSlug);
+  // const billboardList =
+  //   await billboardAction.getBillboardListByStoreSlug(storeSlug);
 
-  const billboardCount = billboardList.data?.length || 0;
+  // const billboardCount = billboardList.data?.length || 0;
   return (
     <main className="flex flex-col gap-3">
       <div className="flex items-center justify-between border-b pb-3">
         <Heading
-          title={`${RouteNameEnum.BILLBOARDS} (${billboardCount})`}
-          description="Manage billboards for your store"
+          title={PageTitleEnum.BILLBOARD}
+          description={PageDescriptionEnum.BILLBOARD}
         />
         <BillboardAdd />
       </div>

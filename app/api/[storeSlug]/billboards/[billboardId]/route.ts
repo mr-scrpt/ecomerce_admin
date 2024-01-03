@@ -35,54 +35,54 @@ export const GET = async (
   }
 };
 
-export const DELETE = async (_: Request, meta: IMetaBillboard) => {
-  try {
-    const { params } = meta;
-    const { billboardId } = params;
-
-    const { data, error, status } =
-      await billboardAction.removeBillboard(billboardId);
-    if (error) {
-      throw new HttpException(error, status);
-    }
-    const response = buildResponse(data);
-    return NextResponse.json(response);
-  } catch (e) {
-    const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
-  }
-};
-
-export const PATCH = async (req: Request, meta: IMetaBillboard) => {
-  try {
-    const { params } = meta;
-    const { billboardId } = params;
-    const body = await req.json();
-    const { storeId, name, imgUrl } = body;
-
-    if (!storeId || !name || !imgUrl) {
-      throw new HttpException(
-        ResponseErrorEnum.BAD_DATA,
-        HTTPStatusEnum.BAD_REQUEST,
-      );
-    }
-
-    const { data, error, status } = await billboardAction.updateBillboard({
-      storeId,
-      billboardId,
-      name,
-      imgUrl,
-    });
-
-    if (error) {
-      throw new HttpException(error, status);
-    }
-    const response = buildResponse(data);
-    return NextResponse.json(response);
-  } catch (e) {
-    const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
-  }
-};
+// export const DELETE = async (_: Request, meta: IMetaBillboard) => {
+//   try {
+//     const { params } = meta;
+//     const { billboardId } = params;
+//
+//     const { data, error, status } =
+//       await billboardAction.removeBillboard(billboardId);
+//     if (error) {
+//       throw new HttpException(error, status);
+//     }
+//     const response = buildResponse(data);
+//     return NextResponse.json(response);
+//   } catch (e) {
+//     const { error, status } = buildError(e);
+//     const errorResponse = buildResponse(null, error, status);
+//     return NextResponse.json(errorResponse, { status });
+//   }
+// };
+//
+// export const PATCH = async (req: Request, meta: IMetaBillboard) => {
+//   try {
+//     const { params } = meta;
+//     const { billboardId } = params;
+//     const body = await req.json();
+//     const { storeId, name, imgUrl } = body;
+//
+//     if (!storeId || !name || !imgUrl) {
+//       throw new HttpException(
+//         ResponseErrorEnum.BAD_DATA,
+//         HTTPStatusEnum.BAD_REQUEST,
+//       );
+//     }
+//
+//     const { data, error, status } = await billboardAction.updateBillboard({
+//       storeId,
+//       billboardId,
+//       name,
+//       imgUrl,
+//     });
+//
+//     if (error) {
+//       throw new HttpException(error, status);
+//     }
+//     const response = buildResponse(data);
+//     return NextResponse.json(response);
+//   } catch (e) {
+//     const { error, status } = buildError(e);
+//     const errorResponse = buildResponse(null, error, status);
+//     return NextResponse.json(errorResponse, { status });
+//   }
+// };

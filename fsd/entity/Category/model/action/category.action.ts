@@ -141,7 +141,6 @@ export const updateCategory = cache(
 
       const { storeId, categoryId, name, billboardId } = data;
 
-      console.log(" =>>>billboardId", billboardId);
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
         throw new HttpException(storeResponse.error);
@@ -174,9 +173,12 @@ export const updateCategory = cache(
         }
       }
 
+      const newSlug = slugGenerator(name);
+
       const category = await categoryRepo.updateCategory({
         categoryId,
         name,
+        newSlug,
         billboardId,
       });
 
@@ -188,7 +190,6 @@ export const updateCategory = cache(
       }
       return buildResponse(category);
     } catch (e) {
-      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
