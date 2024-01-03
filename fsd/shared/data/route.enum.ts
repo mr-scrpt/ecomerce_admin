@@ -7,6 +7,9 @@ export enum RoutePathEnum {
   BILLBOARDS = "/billboards",
   BILLBOARDS_ADD = "billboards/add", // nested path
   BILLBOARDS_EDIT = "billboards/edit", // nested path
+  SIZES = "/sizes",
+  SIZE_ADD = "sizes/add",
+  SIZE_UPDATE = "sizes/edit",
   SIGN_UP = "/sign-up",
   SIGN_IN = "/sign-in",
 }
@@ -16,6 +19,7 @@ export enum RouteNameEnum {
   SETTINGS = "Settings",
   BILLBOARDS = "Billboards",
   CATEGORIES = "Categories",
+  SIZES = "Sizes",
   SIGN_UP = "Sign up",
   SIGN_IN = "Sign-in",
 }

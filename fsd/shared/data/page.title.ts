@@ -5,9 +5,14 @@ export enum PageTitleEnum {
   BILLBOARD_UPDATE = "Billboard update",
 
   SETTING = "Settitngs",
+
   CATEGORY = "Categories",
   CATEGORY_ADD = "Category create",
   CATEGORY_UPDATE = "Category update",
+
+  SIZES = "Sizes",
+  SIZE_ADD = "Size create",
+  SIZE_UPDATE = "Size update",
 }
 
 export enum PageDescriptionEnum {
@@ -18,6 +23,10 @@ export enum PageDescriptionEnum {
 
   SETTING = "Manage store preference",
   CATEGORY = "Manage categories for your store",
-  CATEGORY_ADD = "Add new Category",
+  CATEGORY_ADD = "Add new category",
   CATEGORY_UPDATE = "Update category",
+
+  SIZES = "Manage sizes for your store",
+  SIZE_ADD = "Add new size",
+  SIZE_UPDATE = "Update size",
 }

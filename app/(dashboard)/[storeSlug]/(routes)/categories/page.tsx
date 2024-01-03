@@ -1,9 +1,8 @@
-import { CategoryAdd, categoryAction } from "@/fsd/entity/Category";
+import { CategoryAdd } from "@/fsd/entity/Category";
 import {
   PageDescriptionEnum,
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
-import { RouteNameEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
 import { CategoryTableWidget } from "@/fsd/widget/CategoryTableWidget";

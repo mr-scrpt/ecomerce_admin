@@ -37,21 +37,21 @@ export const NoticeApi: FC<NoticeApiProps> = (props) => {
             variant="public"
             description={`${routeComputed}/{${entityId}}`}
           />
-          <Notice
-            title="POST"
-            variant="admin"
-            description={`${routeComputed}/`}
-          />
-          <Notice
-            title="PATCH"
-            variant="admin"
-            description={`${routeComputed}/{${entityId}}`}
-          />
-          <Notice
-            title="DELETE"
-            variant="admin"
-            description={`${routeComputed}/{${entityId}}`}
-          />
+          {/* <Notice */}
+          {/*   title="POST" */}
+          {/*   variant="admin" */}
+          {/*   description={`${routeComputed}/`} */}
+          {/* /> */}
+          {/* <Notice */}
+          {/*   title="PATCH" */}
+          {/*   variant="admin" */}
+          {/*   description={`${routeComputed}/{${entityId}}`} */}
+          {/* /> */}
+          {/* <Notice */}
+          {/*   title="DELETE" */}
+          {/*   variant="admin" */}
+          {/*   description={`${routeComputed}/{${entityId}}`} */}
+          {/* /> */}
         </>
       ) : (
         <Notice title="GET" variant="public" description={routeBase} />

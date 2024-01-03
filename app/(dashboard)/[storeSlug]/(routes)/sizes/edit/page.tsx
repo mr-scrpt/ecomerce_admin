@@ -3,14 +3,13 @@ import {
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
-import { CategoryUpdateWidget } from "@/fsd/widget/CategoryUpdateWidget";
 import { FC, HTMLAttributes } from "react";
 
-interface CategoryUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
+interface SizeUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
   params: { storeSlug: string };
 }
 
-const CategoryUpdatePage: FC<CategoryUpdatePageProps> = (props) => {
+const SizeUpdatePage: FC<SizeUpdatePageProps> = (props) => {
   const { params } = props;
   const { storeSlug } = params;
   // const _headers = headers();
@@ -20,13 +19,14 @@ const CategoryUpdatePage: FC<CategoryUpdatePageProps> = (props) => {
     <main className="flex flex-col gap-3">
       <div className="flex items-center justify-between border-b pb-3">
         <Heading
-          title={PageTitleEnum.CATEGORY_UPDATE}
-          description={PageDescriptionEnum.CATEGORY_UPDATE}
+          title={PageTitleEnum.SIZE_UPDATE}
+          description={PageDescriptionEnum.SIZE_UPDATE}
         />
+        {/* <BillboardAdd /> */}
       </div>
-      <CategoryUpdateWidget storeSlug={storeSlug} />;
+      {/* <BillboardUpdateWidget storeSlug={storeSlug} /> */}
     </main>
   );
 };
 
-export default CategoryUpdatePage;
+export default SizeUpdatePage;
