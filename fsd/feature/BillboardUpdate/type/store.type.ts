@@ -1,12 +1,12 @@
-import { IBillboard } from "@/fsd/entity/Billboard";
+import { IBillboard, IGetBillboardBySlugPayload } from "@/fsd/entity/Billboard";
 
 export interface IStoreBillboardUpdate {
-  billboardId: string;
+  // billboardId: string;
   billboard: IBillboard | null;
   error: string | null;
   loading: boolean;
-  setId: (billboardId: string) => void;
-  resetId: () => void;
+  // setId: (billboardId: string) => void;
+  // resetId: () => void;
   resetBillboard: () => void;
-  getBillboardCurrent: () => void;
+  getBillboardCurrent: (data: IGetBillboardBySlugPayload) => void;
 }

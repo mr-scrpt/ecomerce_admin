@@ -3,6 +3,7 @@ import {
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
+import { SizeUpdateWidget } from "@/fsd/widget/SizeUpdateWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface SizeUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,7 +25,7 @@ const SizeUpdatePage: FC<SizeUpdatePageProps> = (props) => {
         />
         {/* <BillboardAdd /> */}
       </div>
-      {/* <BillboardUpdateWidget storeSlug={storeSlug} /> */}
+      <SizeUpdateWidget storeSlug={storeSlug} />
     </main>
   );
 };

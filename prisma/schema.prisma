@@ -33,16 +33,19 @@ model Store {
 
 model Billboard {
   id          String @id @default(uuid())
+  name        String
+  slug      String
   storeId     String
   store       Store @relation("StoreToBillboard", fields: [storeId], references: [id])
-  name        String
   imgUrl      String
   categories  Category[] @relation("BillboardToCategory")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([storeId, name])
+  @@index([storeId, slug])
   @@unique([storeId,name])
+  @@unique([storeId,slug])
 }
 
 model Category {

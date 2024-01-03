@@ -1,9 +1,11 @@
 import { ICategory, categoryAction } from "@/fsd/entity/Category";
-import { CategoryForm } from "@/fsd/entity/CategoryForm";
+import {
+  CategoryForm,
+  CategoryFormTypeSchema,
+} from "@/fsd/entity/CategoryForm";
 import { FC, HTMLAttributes, useState } from "react";
 import toast from "react-hot-toast";
 import { categoryUpdateValidate } from "../model/validation/categoryUpdate.validation";
-import { CategoryUpdateTypeSchema } from "../type/schema.type";
 import { IBillboard } from "@/fsd/entity/Billboard";
 
 interface CategoryUpdateProps extends HTMLAttributes<HTMLDivElement> {
@@ -18,7 +20,7 @@ export const CategoryUpdate: FC<CategoryUpdateProps> = (props) => {
   const { id } = category;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: CategoryUpdateTypeSchema) => {
+  const onSubmit = async (form: CategoryFormTypeSchema) => {
     try {
       setLoading(true);
 
@@ -44,7 +46,7 @@ export const CategoryUpdate: FC<CategoryUpdateProps> = (props) => {
         toast.error(error);
       }
       if (data) {
-        toast.success(`Billboard has been created by name ${name}`);
+        toast.success(`Category has been created by name ${name}`);
         onSuccess?.();
       }
     } catch (e) {

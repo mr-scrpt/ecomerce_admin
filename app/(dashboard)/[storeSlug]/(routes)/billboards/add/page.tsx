@@ -23,7 +23,7 @@ const BillboardNewPage: FC<BillboardNewPageProps> = (props) => {
         />
         {/* <BillboardAdd /> */}
       </div>
-      <BillboardCreateWidget slug={storeSlug} />;
+      <BillboardCreateWidget slug={storeSlug} />
     </main>
   );
 };

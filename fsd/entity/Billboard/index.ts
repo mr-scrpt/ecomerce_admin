@@ -4,3 +4,4 @@ export { useBillboardList } from "./model/store/billboard.store";
 
 export type { BillboardColumn } from "./type/table.type";
 export type { IBillboard } from "./type/entity.type";
+export type * from "./type/action.type";

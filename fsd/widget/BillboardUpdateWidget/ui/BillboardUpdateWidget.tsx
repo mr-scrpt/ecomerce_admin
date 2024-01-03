@@ -12,12 +12,13 @@ import { useShallow } from "zustand/react/shallow";
 
 interface BillboardUpdateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   storeSlug: string;
+  billboardSlug: string;
 }
 
 export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = (
   props,
 ) => {
-  const { storeSlug } = props;
+  const { storeSlug, billboardSlug } = props;
 
   const router = useRouter();
   const path = `/${storeSlug}${RoutePathEnum.BILLBOARDS}`;
@@ -32,13 +33,13 @@ export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = (
     useShallow((state) => ({ storeId: state.storeCurrent?.id })),
   );
 
-  const { getBillboardCurrent, resetBillboard, billboard, loading } =
+  const { getBillboardCurrent, billboard, resetBillboard, loading } =
     useBillboardUpdate(
       useShallow((state) => ({
         billboard: state.billboard,
+        resetBillboard: state.resetBillboard,
         getBillboardCurrent: state.getBillboardCurrent,
         loading: state.loading,
-        resetBillboard: state.resetBillboard,
       })),
     );
 
@@ -48,10 +49,10 @@ export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = (
     resetBillboard();
     router.push(path);
     router.refresh();
-  }, [getBillboard, resetBillboard, path, router, storeSlug]);
+  }, [path, router]);
 
   useEffect(() => {
-    getBillboardCurrent();
+    getBillboardCurrent({ billboardSlug, storeSlug });
   }, []);
 
   return (

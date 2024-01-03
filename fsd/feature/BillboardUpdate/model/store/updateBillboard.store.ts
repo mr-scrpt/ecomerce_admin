@@ -1,28 +1,22 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { IStoreBillboardUpdate } from "../type/store.type";
 import { billboardAction } from "@/fsd/entity/Billboard";
+import { IStoreBillboardUpdate } from "../../type/store.type";
+import { IGetBillboardBySlugPayload } from "@/fsd/entity/Billboard";
 
 export const useBillboardUpdate = create<IStoreBillboardUpdate>()(
   devtools(
     (set, get) => ({
-      billboardId: "",
       billboard: null,
       error: null,
       loading: false,
-      setId: (billboardId: string) => {
-        set({ billboardId });
-      },
-      resetId: () => {
-        set({ billboardId: "" });
-      },
-      resetBillboard: () => set({ billboard: null }),
-      getBillboardCurrent: async () => {
+      resetBillboard: () =>
+        set({ billboard: null }, false, "reset_billboard_data"),
+      getBillboardCurrent: async (payload: IGetBillboardBySlugPayload) => {
         try {
           set({ loading: true }, false, "set_billboard_loading");
-          const billboardId = get().billboardId;
           const { data, error } =
-            await billboardAction.getBillboard(billboardId);
+            await billboardAction.getBillboardBySlug(payload);
           if (error) {
             set({ error, billboard: null }, false, "set_billboard_error");
             return;

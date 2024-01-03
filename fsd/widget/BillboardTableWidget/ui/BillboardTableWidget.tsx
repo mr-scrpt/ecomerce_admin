@@ -39,11 +39,11 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = (props) => {
     })),
   );
 
-  const { setIdToUpdate } = useBillboardUpdate(
-    useShallow((state) => ({
-      setIdToUpdate: state.setId,
-    })),
-  );
+  // const { setIdToUpdate } = useBillboardUpdate(
+  //   useShallow((state) => ({
+  //     : state.setId,
+  //   })),
+  // );
 
   const { setIdToRemove } = useBillboardRemove(
     useShallow((state) => ({
@@ -62,9 +62,8 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = (props) => {
     onOpen();
   };
 
-  const onUpdate = (billboardId: string) => {
-    setIdToUpdate(billboardId);
-    router.push(`${RoutePathEnum.BILLBOARDS_EDIT}`);
+  const updateHref = (billboardSlug: string) => {
+    return `${RoutePathEnum.BILLBOARDS_EDIT}/${billboardSlug}`;
   };
 
   const billboardCollumnsWithAction: ColumnDef<BillboardColumn>[] = [
@@ -72,14 +71,18 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = (props) => {
     {
       header: "Actions",
       id: "actions",
-      cell: ({ row }) => (
-        <BillboardTableAction
-          data={row.original}
-          onCopy={onCopy.bind(null, row.original.id)}
-          onUpdate={onUpdate.bind(null, row.original.id)}
-          onDeletePopup={onDeletePopup.bind(null, row.original.id)}
-        />
-      ),
+      cell: ({ row }) => {
+        console.log(" =>>> row", row.original);
+        return (
+          <BillboardTableAction
+            data={row.original}
+            onCopy={onCopy.bind(null, row.original.id)}
+            // onUpdate={onUpdate.bind(null, row.original.slug)}
+            hrefUpdate={updateHref(row.original.slug)}
+            onDeletePopup={onDeletePopup.bind(null, row.original.id)}
+          />
+        );
+      },
     },
   ];
 

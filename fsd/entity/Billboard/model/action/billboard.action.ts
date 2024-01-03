@@ -1,4 +1,5 @@
 "use server";
+import { categoryAction } from "@/fsd/entity/Category";
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
@@ -6,21 +7,20 @@ import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { authAction } from "@/fsd/shared/modle/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { revalidatePath } from "next/cache";
 import { cache } from "react";
 import {
   ICreateBillboardPayload,
+  IGetBillboardBySlugPayload,
   IIsCurrentBillboardPayload,
   IIsOwnerPayload,
-  IIsRelationCategory,
   IIsUniqueBillboardPayload,
   IUpdateBillboardPayload,
 } from "../../type/action.type";
 import { IBillboard } from "../../type/entity.type";
 import { billboardRepo } from "../repo/billboard.repo";
 import { BillboardResponseErrorEnum } from "../repo/responseError.enum";
-import { categoryRepo } from "@/fsd/entity/Category/model/repo/category.repo";
-import { categoryAction } from "@/fsd/entity/Category";
+import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
+import { IGetBillboardBySlugRepo } from "../../type/repo.type";
 
 export const createBillboard = cache(
   async (
@@ -49,11 +49,13 @@ export const createBillboard = cache(
       const storeResponse = await storeAction.getStore(storeId);
 
       if (storeResponse.error) {
+        throw new HttpException(storeResponse.error);
         // console.log(" =>>>", storeResponse.error);
         // throw new Error(storeResponse.error);
       }
+      const slug = slugGenerator(name);
 
-      const billboard = await billboardRepo.createBillboard(data);
+      const billboard = await billboardRepo.createBillboard({ ...data, slug });
 
       if (!billboard) {
         throw new HttpException(
@@ -75,6 +77,41 @@ export const getBillboard = cache(
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
       const billboard = await billboardRepo.getBillboard(billboardId);
+
+      if (!billboard) {
+        throw new HttpException(
+          BillboardResponseErrorEnum.BILLBOARD_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+
+      return buildResponse(billboard);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const getBillboardBySlug = cache(
+  async (
+    data: IGetBillboardBySlugPayload,
+  ): Promise<ResponseDataAction<IBillboard | null>> => {
+    try {
+      const { storeSlug, billboardSlug } = data;
+
+      const storeResponse = await storeAction.getStoreBySlug(storeSlug);
+
+      if (storeResponse.error) {
+        throw new Error(storeResponse.error);
+      }
+
+      const store = storeResponse.data;
+
+      const billboard = await billboardRepo.getBillboardBySlug({
+        billboardSlug,
+        storeId: store!.id,
+      });
 
       if (!billboard) {
         throw new HttpException(
@@ -155,10 +192,12 @@ export const updateBillboard = cache(
           );
         }
       }
+      const newSlug = slugGenerator(name);
 
       const billboard = await billboardRepo.updateBillboard({
         billboardId,
         name,
+        newSlug,
         imgUrl,
       });
 

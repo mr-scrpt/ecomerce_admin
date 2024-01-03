@@ -10,6 +10,7 @@ export interface IStoreBillboardList {
 export interface IStoreBillboardTableItem {
   id: string;
   name: string;
+  slug: string;
   createdAt: string;
 }
 export interface IStoreBillboardTable {

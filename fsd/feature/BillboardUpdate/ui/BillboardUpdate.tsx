@@ -3,8 +3,10 @@ import { FC, HTMLAttributes, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { IBillboard, billboardAction } from "@/fsd/entity/Billboard";
-import { BillboardForm } from "@/fsd/entity/BillboardForm";
-import { BillboardUpdateTypeSchema } from "../type/schema.type";
+import {
+  BillboardForm,
+  BillboardFormTypeSchema,
+} from "@/fsd/entity/BillboardForm";
 import { billboardUpdateValidate } from "../model/validation/billboardUpdate.validation";
 
 interface BillboardUpdateProps extends HTMLAttributes<HTMLDivElement> {
@@ -18,7 +20,7 @@ export const BillboardUpdate: FC<BillboardUpdateProps> = (props) => {
   const { id } = billboard;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: BillboardUpdateTypeSchema) => {
+  const onSubmit = async (form: BillboardFormTypeSchema) => {
     try {
       setLoading(true);
 

@@ -3,7 +3,6 @@ import {
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
-import { BillboardCreateWidget } from "@/fsd/widget/BillboardCreateWidget";
 import { SizeCreateWidget } from "@/fsd/widget/SizeCreateWidget";
 import { FC, HTMLAttributes } from "react";
 

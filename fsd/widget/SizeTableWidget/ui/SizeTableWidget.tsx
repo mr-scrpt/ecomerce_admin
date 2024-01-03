@@ -1,6 +1,5 @@
 "use client";
 import { useSizeList, useSizeRemove } from "@/fsd/entity/Size";
-// import { useSizeUpdate } from "@/fsd/feature/SizeUpdate";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
@@ -13,6 +12,7 @@ import { buildSizeRow } from "../lib/buildSizeRow";
 import { SizeColumn } from "../type/table.type";
 import { SizeTableAction } from "./SizeTableAction";
 import { useSizeRemoveModal } from "@/fsd/feature/ModalManager";
+import { useSizeUpdate } from "@/fsd/feature/SizeUpdate";
 
 interface SizeTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -40,11 +40,11 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
     })),
   );
 
-  // const { setIdToUpdate } = useSizeUpdate(
-  //   useShallow((state) => ({
-  //     setIdToUpdate: state.setId,
-  //   })),
-  // );
+  const { setIdToUpdate } = useSizeUpdate(
+    useShallow((state) => ({
+      setIdToUpdate: state.setId,
+    })),
+  );
 
   const { setIdToRemove } = useSizeRemove(
     useShallow((state) => ({
@@ -54,7 +54,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Size ID copied to clipboard.");
+    toast.success("Size value copied to clipboard.");
   };
 
   const onDeletePopup = (sizeId: string) => {
@@ -64,7 +64,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
   };
 
   const onUpdate = (sizeId: string) => {
-    // setIdToUpdate(sizeId);
+    setIdToUpdate(sizeId);
     router.push(`${RoutePathEnum.SIZE_EDIT}`);
   };
 
@@ -76,7 +76,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
       cell: ({ row }) => (
         <SizeTableAction
           data={row.original}
-          onCopy={onCopy.bind(null, row.original.id)}
+          onCopy={onCopy.bind(null, row.original.value)}
           onUpdate={onUpdate.bind(null, row.original.id)}
           onDeletePopup={onDeletePopup.bind(null, row.original.id)}
         />

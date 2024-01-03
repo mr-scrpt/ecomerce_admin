@@ -8,6 +8,7 @@ export interface IUpdateBillboardPayload {
   storeId: string;
   billboardId: string;
   name: string;
+  newSlug: string;
   imgUrl: string;
 }
 
@@ -19,6 +20,11 @@ export interface IGetBillboardPayload {
 export interface IGetBillboardByNamePayload {
   name: string;
   storeId: string;
+}
+
+export interface IGetBillboardBySlugPayload {
+  billboardSlug: string;
+  storeSlug: string;
 }
 
 export interface IIsOwnerPayload {

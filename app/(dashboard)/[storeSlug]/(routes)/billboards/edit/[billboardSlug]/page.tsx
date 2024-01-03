@@ -7,12 +7,12 @@ import { BillboardUpdateWidget } from "@/fsd/widget/BillboardUpdateWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface BillboardUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
-  params: { storeSlug: string };
+  params: { storeSlug: string; billboardSlug: string };
 }
 
 const BillboardUpdatePage: FC<BillboardUpdatePageProps> = (props) => {
   const { params } = props;
-  const { storeSlug } = params;
+  const { storeSlug, billboardSlug } = params;
   // const _headers = headers();
   // const currentUrl = _headers.get("x-url");
 
@@ -23,9 +23,11 @@ const BillboardUpdatePage: FC<BillboardUpdatePageProps> = (props) => {
           title={PageTitleEnum.BILLBOARD_UPDATE}
           description={PageDescriptionEnum.BILLBOARD_UPDATE}
         />
-        {/* <BillboardAdd /> */}
       </div>
-      <BillboardUpdateWidget storeSlug={storeSlug} />
+      <BillboardUpdateWidget
+        storeSlug={storeSlug}
+        billboardSlug={billboardSlug}
+      />
     </main>
   );
 };

@@ -9,19 +9,21 @@ import {
   DropdownMenuTrigger,
 } from "@/fsd/shared/ui/dropdown-menu";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import Link from "next/link";
 import { FC, HTMLAttributes } from "react";
 
 interface BillboardTableListActionProps extends HTMLAttributes<HTMLDivElement> {
   data: BillboardColumn;
   onCopy: () => void;
-  onUpdate: () => void;
+  // onUpdate: () => void;
+  hrefUpdate: string;
   onDeletePopup: () => void;
 }
 
 export const BillboardTableAction: FC<BillboardTableListActionProps> = (
   props,
 ) => {
-  const { onCopy, onDeletePopup, onUpdate } = props;
+  const { onCopy, onDeletePopup, hrefUpdate } = props;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,8 +41,10 @@ export const BillboardTableAction: FC<BillboardTableListActionProps> = (
         >
           <Copy className="mr-2 h-4 w-4" /> Copy Id
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={onUpdate}>
-          <Edit className="mr-2 h-4 w-4" /> Update
+        <DropdownMenuItem asChild>
+          <Link href={hrefUpdate}>
+            <Edit className="mr-2 h-4 w-4" /> Update
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onDeletePopup}>
           <Trash className="mr-2 h-4 w-4" /> Delete
