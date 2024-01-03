@@ -4,6 +4,7 @@ import {
 } from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { BillboardCreateWidget } from "@/fsd/widget/BillboardCreateWidget";
+import { SizeCreateWidget } from "@/fsd/widget/SizeCreateWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface SizeNewPageProps extends HTMLAttributes<HTMLDivElement> {
@@ -21,9 +22,8 @@ const SizeNewPage: FC<SizeNewPageProps> = (props) => {
           title={PageTitleEnum.SIZE_ADD}
           description={PageDescriptionEnum.SIZE_ADD}
         />
-        {/* <BillboardAdd /> */}
       </div>
-      {/* <BillboardCreateWidget slug={storeSlug} />; */}
+      <SizeCreateWidget slug={storeSlug} />
     </main>
   );
 };

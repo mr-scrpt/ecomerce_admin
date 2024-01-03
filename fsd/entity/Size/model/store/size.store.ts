@@ -1,8 +1,8 @@
+import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IStoreSizeList, IStoreSizeRemove } from "../../type/store.type";
-import { getSize, getSizeListByStoreSlug } from "../action/size.action";
-import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
+import { getSizeListByStoreSlug } from "../action/size.action";
 
 export const useSizeList = create<IStoreSizeList>()(
   devtools(
@@ -12,11 +12,11 @@ export const useSizeList = create<IStoreSizeList>()(
       error: null,
       fetchSizeList: async (storeSlug) => {
         try {
-          set({ loading: true }, false, "set_fetch_billboard_loading");
+          set({ loading: true }, false, "set_fetch_size_loading");
           const { data, error } = await getSizeListByStoreSlug(storeSlug);
 
           if (error) {
-            set({ error }, false, "set_fetch_billboard_error");
+            set({ error }, false, "set_fetch_size_error");
             set({ sizeList: [] });
             return;
           }
@@ -35,7 +35,7 @@ export const useSizeList = create<IStoreSizeList>()(
           set({ error: HTTPErrorMessage.SERVER_ERROR });
           set({ sizeList: [] });
         } finally {
-          set({ loading: false }, false, "set_fetch_billboard_loading");
+          set({ loading: false }, false, "set_fetch_size_loading");
         }
       },
     }),

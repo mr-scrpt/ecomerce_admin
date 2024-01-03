@@ -1,11 +1,11 @@
 import {
-  BillboardUpdateTypeSchema,
-  billboardUpdateSchema,
-} from "../../type/schema.type";
+  BillboardFormTypeSchema,
+  billboardFormSchema,
+} from "@/fsd/entity/BillboardForm";
 
-export const billboardUpdateValidate = (data: BillboardUpdateTypeSchema) => {
+export const billboardUpdateValidate = (data: BillboardFormTypeSchema) => {
   const { name, imgUrl } = data;
-  const validateFields = billboardUpdateSchema.safeParse({
+  const validateFields = billboardFormSchema.safeParse({
     name,
     imgUrl,
   });

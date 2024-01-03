@@ -1,11 +1,11 @@
 import {
-  CategoryUpdateTypeSchema,
-  categoryUpdateSchema,
-} from "../../type/schema.type";
+  CategoryFormTypeSchema,
+  categoryFormSchema,
+} from "@/fsd/entity/CategoryForm";
 
-export const categoryUpdateValidate = (data: CategoryUpdateTypeSchema) => {
+export const categoryUpdateValidate = (data: CategoryFormTypeSchema) => {
   const { name, billboardId } = data;
-  const validateFields = categoryUpdateSchema.safeParse({
+  const validateFields = categoryFormSchema.safeParse({
     name,
     billboardId,
   });

@@ -1,9 +1,11 @@
+import { SizeAdd } from "@/fsd/entity/Size";
 import {
   PageDescriptionEnum,
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
+import { SizeTableWidget } from "@/fsd/widget/SizeTableWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface SizePageProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,9 +26,9 @@ const SizePage: FC<SizePageProps> = async (props) => {
           title={PageTitleEnum.SIZES}
           description={PageDescriptionEnum.SIZES}
         />
-        {/* <SizeAdd /> */}
+        <SizeAdd />
       </div>
-      {/* <SizeTableWidget slug={storeSlug} /> */}
+      <SizeTableWidget slug={storeSlug} />
       {/* {sizeList.data && ( */}
       {/*   <SizeTableList sizeList={sizeList.data} /> */}
       {/* )} */}

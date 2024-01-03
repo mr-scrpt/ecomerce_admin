@@ -9,7 +9,7 @@ export enum RoutePathEnum {
   BILLBOARDS_EDIT = "billboards/edit", // nested path
   SIZES = "/sizes",
   SIZE_ADD = "sizes/add",
-  SIZE_UPDATE = "sizes/edit",
+  SIZE_EDIT = "sizes/edit",
   SIGN_UP = "/sign-up",
   SIGN_IN = "/sign-in",
 }
