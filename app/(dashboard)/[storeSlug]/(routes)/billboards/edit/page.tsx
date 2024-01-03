@@ -1,9 +1,7 @@
-import { BillboardCreate } from "@/fsd/feature/BillboardCreate";
 import {
   PageDescriptionEnum,
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
-import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { BillboardUpdateWidget } from "@/fsd/widget/BillboardUpdateWidget";
 import { FC, HTMLAttributes } from "react";
@@ -27,7 +25,7 @@ const BillboardUpdatePage: FC<BillboardUpdatePageProps> = (props) => {
         />
         {/* <BillboardAdd /> */}
       </div>
-      <BillboardUpdateWidget storeSlug={storeSlug} />;
+      <BillboardUpdateWidget storeSlug={storeSlug} />
     </main>
   );
 };
