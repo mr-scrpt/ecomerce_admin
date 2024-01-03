@@ -49,15 +49,20 @@ model Category {
   id          String      @id @default(uuid())
   name        String
   slug        String
+
   storeId     String      // Foreign Key to Store
   store       Store       @relation("StoreToCategory", fields: [storeId], references: [id])
+
   billboard   Billboard   @relation("BillboardToCategory",fields: [billboardId], references: [id])
   billboardId String      // Foreign Key to Billboard
+
+  SizeList    Size[]      @relation("SizeToCategory")
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   @@index([storeId,name])
   @@index([billboardId])
+
   @@unique([storeId,name])
   @@unique([storeId,slug])
 }
@@ -66,11 +71,19 @@ model Size {
   id          String    @id @default(uuid())
   name        String
   slug        String
+  value       String
+
   storeId     String    // Foreign Key to Store
   store       Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  value       String
+
+  categoryList  Category[] @relation("SizeToCategory")
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([storeId])
+  @@index([storeId,name])
+
+  @@unique([storeId,name])
+  @@unique([storeId,slug])
 }
