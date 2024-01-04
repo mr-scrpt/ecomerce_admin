@@ -1,5 +1,5 @@
 import { useStoreData } from "@/fsd/entity/Store";
-import { FC, HTMLAttributes, useCallback } from "react";
+import { FC, HTMLAttributes, memo, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { SizeRemove } from "./SizeRemove";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ interface SizeRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
 }
 
-export const SizeRemoveModal: FC<SizeRemoveModalProps> = (props) => {
+export const SizeRemoveModal: FC<SizeRemoveModalProps> = memo((props) => {
   const { onClose } = props;
   const router = useRouter();
 
@@ -39,4 +39,4 @@ export const SizeRemoveModal: FC<SizeRemoveModalProps> = (props) => {
   return (
     <SizeRemove onSuccess={onSuccess} onCancel={onClose} sizeId={sizeId} />
   );
-};
+});

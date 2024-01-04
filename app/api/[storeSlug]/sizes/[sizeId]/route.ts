@@ -2,9 +2,7 @@ import { ISize, sizeAction } from "@/fsd/entity/Size";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
-import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { ResponseErrorEnum } from "@/fsd/shared/type/responseError.enum";
 import { NextResponse } from "next/server";
 
 interface IMetaSize {

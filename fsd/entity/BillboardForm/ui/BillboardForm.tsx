@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, memo, useEffect, useMemo } from "react";
+import { FC, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { ImgUploader } from "@/fsd/shared/ui/ImgUploader/ui/ImgUploader";

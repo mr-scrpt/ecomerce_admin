@@ -1,15 +1,23 @@
 export enum RoutePathEnum {
   HOME = "/",
   SETTINGS = "/settings",
+
   CATEGORIES = "/categories",
   CATEGORIES_ADD = "categories/add",
   CATEGORIES_EDIT = "categories/edit",
+
   BILLBOARDS = "/billboards",
   BILLBOARDS_ADD = "billboards/add", // nested path
   BILLBOARDS_EDIT = "billboards/edit", // nested path
+
   SIZES = "/sizes",
   SIZE_ADD = "sizes/add",
   SIZE_EDIT = "sizes/edit",
+
+  COLOR = "/colors",
+  COLOR_ADD = "colors/add",
+  COLOR_EDIT = "colors/edit",
+
   SIGN_UP = "/sign-up",
   SIGN_IN = "/sign-in",
 }
@@ -20,6 +28,7 @@ export enum RouteNameEnum {
   BILLBOARDS = "Billboards",
   CATEGORIES = "Categories",
   SIZES = "Sizes",
+  COLORS = "Colors",
   SIGN_UP = "Sign up",
   SIGN_IN = "Sign-in",
 }
