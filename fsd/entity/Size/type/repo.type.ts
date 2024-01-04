@@ -22,5 +22,10 @@ export interface ICreateSizeRepo extends ICreateSizePayload {
 export interface IGetSizeRepo extends IGetSizePayload {}
 export interface IGetSizeByNameRepo extends IGetSizeByNamePayload {}
 
+export interface IGetSizeBySlugRepo {
+  sizeSlug: string;
+  storeId: string;
+}
+
 // export interface IGetSizeByBillboardRepo
 //   extends IGetSizeByBillboardPayload {}

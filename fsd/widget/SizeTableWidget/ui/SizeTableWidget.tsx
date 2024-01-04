@@ -4,7 +4,7 @@ import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { FC, HTMLAttributes, useEffect, useMemo } from "react";
+import { FC, HTMLAttributes, useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { sizeCollumns } from "../data/columns";
@@ -63,10 +63,9 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
     onOpen();
   };
 
-  const onUpdate = (sizeId: string) => {
-    setIdToUpdate(sizeId);
-    router.push(`${RoutePathEnum.SIZE_EDIT}`);
-  };
+  const updateHref = useCallback((sizeSlug: string) => {
+    return `${RoutePathEnum.SIZE_EDIT}/${sizeSlug}`;
+  }, []);
 
   const sizeCollumnsWithAction: ColumnDef<SizeColumn>[] = [
     ...sizeCollumns,
@@ -77,7 +76,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
         <SizeTableAction
           data={row.original}
           onCopy={onCopy.bind(null, row.original.value)}
-          onUpdate={onUpdate.bind(null, row.original.id)}
+          hrefUpdate={updateHref(row.original.slug)}
           onDeletePopup={onDeletePopup.bind(null, row.original.id)}
         />
       ),

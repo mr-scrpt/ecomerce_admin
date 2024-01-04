@@ -13,7 +13,6 @@ export const useCategoryUpdate = create<IStoreCategoryUpdate>()(
       loading: false,
       resetCategory: () => set({ category: null }),
       getCategoryCurrent: async (payload: IGetCategoryBySlugPayload) => {
-        console.log("get current =>>>", payload);
         try {
           set({ loading: true }, false, "set_category_loading");
           const { data, error } =

@@ -15,7 +15,6 @@ import Link from "next/link";
 interface CategoryTableActionProps extends HTMLAttributes<HTMLDivElement> {
   data: CategoryColumn;
   onCopy: () => void;
-  // onUpdate: () => void;
   hrefUpdate: string;
   onDeletePopup: () => void;
 }

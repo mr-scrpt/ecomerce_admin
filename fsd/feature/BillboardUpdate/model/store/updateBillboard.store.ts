@@ -14,7 +14,6 @@ export const useBillboardUpdate = create<IStoreBillboardUpdate>()(
         set({ billboard: null }, false, "reset_billboard_data"),
       getBillboardCurrent: async (payload: IGetBillboardBySlugPayload) => {
         try {
-          console.log("fetch in store =>>>", payload);
           set({ loading: true }, false, "set_billboard_loading");
           const { data, error } =
             await billboardAction.getBillboardBySlug(payload);

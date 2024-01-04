@@ -4,6 +4,7 @@ import { ISize, ISizeWithRelations } from "../../type/entity.type";
 import {
   ICreateSizeRepo,
   IGetSizeByNameRepo,
+  IGetSizeBySlugRepo,
   IIsOwnerRepo,
   IRemoveSizeRepo,
   IUpdateSizeRepo,
@@ -44,6 +45,15 @@ class SizeRepo {
     const res = await prismaDB.size.findUnique({
       include: { store: true },
       where: { storeId_name: data },
+    });
+    return res;
+  };
+
+  getSizeBySlug = async (data: IGetSizeBySlugRepo): Promise<ISize | null> => {
+    const { storeId, sizeSlug } = data;
+    const res = await prismaDB.size.findUnique({
+      include: { store: true },
+      where: { storeId_slug: { storeId, slug: sizeSlug } },
     });
     return res;
   };

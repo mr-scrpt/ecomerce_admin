@@ -10,16 +10,17 @@ import {
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
 import { SizeColumn } from "../type/table.type";
+import Link from "next/link";
 
 interface SizeTableActionProps extends HTMLAttributes<HTMLDivElement> {
   data: SizeColumn;
   onCopy: () => void;
-  onUpdate: () => void;
+  hrefUpdate: string;
   onDeletePopup: () => void;
 }
 
 export const SizeTableAction: FC<SizeTableActionProps> = (props) => {
-  const { onCopy, onDeletePopup, onUpdate } = props;
+  const { onCopy, onDeletePopup, hrefUpdate } = props;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,9 +38,12 @@ export const SizeTableAction: FC<SizeTableActionProps> = (props) => {
         >
           <Copy className="mr-2 h-4 w-4" /> Copy Id
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={onUpdate}>
-          <Edit className="mr-2 h-4 w-4" /> Update
+        <DropdownMenuItem asChild>
+          <Link href={hrefUpdate}>
+            <Edit className="mr-2 h-4 w-4" /> Update
+          </Link>
         </DropdownMenuItem>
+
         <DropdownMenuItem onClick={onDeletePopup}>
           <Trash className="mr-2 h-4 w-4" /> Delete
         </DropdownMenuItem>

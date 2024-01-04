@@ -1,4 +1,5 @@
 "use server";
+import { billboardAction } from "@/fsd/entity/Billboard";
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
@@ -10,15 +11,15 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
 import {
   ICreateSizePayload,
+  IGetSizeBySlugPayload,
   IIsCurrentSizePayload,
   IIsOwnerPayload,
   IIsUniqueSizePayload,
   IUpdateSizePayload,
 } from "../../type/action.type";
 import { ISize, ISizeWithRelations } from "../../type/entity.type";
-import { sizeRepo } from "../repo/size.repo";
 import { SizeResponseErrorEnum } from "../repo/responseError.enum";
-import { billboardAction } from "@/fsd/entity/Billboard";
+import { sizeRepo } from "../repo/size.repo";
 
 export const createSize = cache(
   async (
@@ -58,6 +59,39 @@ export const createSize = cache(
         throw new HttpException(
           SizeResponseErrorEnum.SIZE_NOT_CREATED,
           HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+      return buildResponse(size);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const getSizeBySlug = cache(
+  async (
+    data: IGetSizeBySlugPayload,
+  ): Promise<ResponseDataAction<ISize | null>> => {
+    try {
+      const { storeSlug, sizeSlug } = data;
+
+      const storeResponse = await storeAction.getStoreBySlug(storeSlug);
+
+      if (storeResponse.error) {
+        throw new Error(storeResponse.error);
+      }
+
+      const store = storeResponse.data;
+
+      const size = await sizeRepo.getSizeBySlug({
+        sizeSlug,
+        storeId: store!.id,
+      });
+      if (!size) {
+        throw new HttpException(
+          SizeResponseErrorEnum.SIZE_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
         );
       }
       return buildResponse(size);
@@ -140,11 +174,6 @@ export const updateSize = cache(
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
         throw new HttpException(storeResponse.error);
-      }
-
-      const billboardResponse = await billboardAction.getBillboard(value);
-      if (billboardResponse.error) {
-        throw new HttpException(billboardResponse.error);
       }
 
       const isExistResponse = await isExist(sizeId);

@@ -7,6 +7,7 @@ export const buildSizeRow = (
 ): IStoreSizeTableItem => ({
   id: item.id,
   name: item.name,
+  slug: item.slug,
   value: item.value,
   createdAt: buildDate(item.createdAt),
 });

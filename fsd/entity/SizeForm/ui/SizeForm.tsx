@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, memo } from "react";
+import { FC, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/fsd/shared/ui/button";
@@ -23,6 +23,10 @@ export const SizeForm: FC<SizeFormProps> = memo((props) => {
     resolver: zodResolver(sizeFormSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   return (
     <div className="space-x-4 pt-2 pb-4">

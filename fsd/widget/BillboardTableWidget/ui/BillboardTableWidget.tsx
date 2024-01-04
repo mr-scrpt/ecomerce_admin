@@ -65,7 +65,7 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
     );
 
     const updateHref = useCallback((billboardSlug: string) => {
-      return `${RoutePathEnum.BILLBOARDS_EDIT}/${billboardSlug}`;
+      return `${RoutePathEnum.BILLBOARD_EDIT}/${billboardSlug}`;
     }, []);
 
     const billboardCollumnsWithAction: ColumnDef<BillboardColumn>[] = [

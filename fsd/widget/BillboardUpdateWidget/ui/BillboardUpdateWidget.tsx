@@ -36,15 +36,15 @@ export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = memo(
         })),
       );
 
-    useEffect(() => {
-      getBillboardCurrent({ billboardSlug, storeSlug });
-    }, [billboardSlug, storeSlug, getBillboardCurrent]);
-
     const onSucces = useCallback(() => {
       resetBillboard();
       router.push(path);
       router.refresh();
     }, [path, router, resetBillboard]);
+
+    useEffect(() => {
+      getBillboardCurrent({ billboardSlug, storeSlug });
+    }, [billboardSlug, storeSlug, getBillboardCurrent]);
 
     return (
       <>

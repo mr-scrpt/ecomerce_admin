@@ -17,6 +17,11 @@ export interface IGetSizePayload {
   storeId: string;
 }
 
+export interface IGetSizeBySlugPayload {
+  sizeSlug: string;
+  storeSlug: string;
+}
+
 export interface IGetSizeByNamePayload {
   name: string;
   storeId: string;

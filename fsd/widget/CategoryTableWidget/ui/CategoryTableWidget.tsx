@@ -58,8 +58,8 @@ export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
     [onOpen, setIdToRemove],
   );
 
-  const updateHref = useCallback((billboardSlug: string) => {
-    return `${RoutePathEnum.CATEGORIES_EDIT}/${billboardSlug}`;
+  const updateHref = useCallback((categorySlug: string) => {
+    return `${RoutePathEnum.CATEGORIES_EDIT}/${categorySlug}`;
   }, []);
 
   const categoryCollumnsWithAction: ColumnDef<CategoryColumn>[] = [

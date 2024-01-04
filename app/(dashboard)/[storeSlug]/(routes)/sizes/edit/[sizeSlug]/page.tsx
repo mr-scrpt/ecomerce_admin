@@ -7,12 +7,12 @@ import { SizeUpdateWidget } from "@/fsd/widget/SizeUpdateWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface SizeUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
-  params: { storeSlug: string };
+  params: { storeSlug: string; sizeSlug: string };
 }
 
 const SizeUpdatePage: FC<SizeUpdatePageProps> = (props) => {
   const { params } = props;
-  const { storeSlug } = params;
+  const { storeSlug, sizeSlug } = params;
   // const _headers = headers();
   // const currentUrl = _headers.get("x-url");
 
@@ -25,7 +25,7 @@ const SizeUpdatePage: FC<SizeUpdatePageProps> = (props) => {
         />
         {/* <BillboardAdd /> */}
       </div>
-      <SizeUpdateWidget storeSlug={storeSlug} />
+      <SizeUpdateWidget storeSlug={storeSlug} sizeSlug={sizeSlug} />
     </main>
   );
 };

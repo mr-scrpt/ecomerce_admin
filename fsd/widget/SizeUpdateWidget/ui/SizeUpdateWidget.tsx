@@ -8,26 +8,14 @@ import { useShallow } from "zustand/react/shallow";
 
 interface SizeUpdateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   storeSlug: string;
+  sizeSlug: string;
 }
 
 export const SizeUpdateWidget: FC<SizeUpdateWidgetProps> = (props) => {
-  const { storeSlug } = props;
+  const { storeSlug, sizeSlug } = props;
 
   const router = useRouter();
-  const path = `/${storeSlug}${RoutePathEnum.CATEGORIES}`;
-
-  // const { getSizeList: getSize } = useSizeList(
-  //   useShallow((state) => ({
-  //     getSizeList: state.fetchSizeList,
-  //   })),
-  // );
-
-  // const { billboardList, fetchBillboardList } = useBillboardList(
-  //   useShallow((state) => ({
-  //     billboardList: state.billboardList,
-  //     fetchBillboardList: state.fetchBillboardList,
-  //   })),
-  // );
+  const path = `/${storeSlug}${RoutePathEnum.SIZES}`;
 
   const { storeId } = useStoreData(
     useShallow((state) => ({ storeId: state.storeCurrent?.id })),
@@ -43,16 +31,14 @@ export const SizeUpdateWidget: FC<SizeUpdateWidgetProps> = (props) => {
   );
 
   const onSucces = useCallback(() => {
-    // revalidation size list
-    // getSize(storeSlug);
     resetSize();
     router.push(path);
     router.refresh();
   }, [resetSize, path, router]);
 
   useEffect(() => {
-    getSizeCurrent();
-  }, [getSizeCurrent]);
+    getSizeCurrent({ sizeSlug, storeSlug });
+  }, [getSizeCurrent, sizeSlug, storeSlug]);
 
   return (
     <>
