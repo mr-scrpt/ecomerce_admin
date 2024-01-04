@@ -14,7 +14,7 @@ export enum RoutePathEnum {
   SIZE_ADD = "sizes/add",
   SIZE_EDIT = "sizes/edit",
 
-  COLOR = "/colors",
+  COLORS = "/colors",
   COLOR_ADD = "colors/add",
   COLOR_EDIT = "colors/edit",
 

@@ -13,19 +13,14 @@ import { useShallow } from "zustand/react/shallow";
 
 interface CategoryUpdateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   storeSlug: string;
+  categorySlug: string;
 }
 
 export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
-  const { storeSlug } = props;
+  const { storeSlug, categorySlug } = props;
 
   const router = useRouter();
   const path = `/${storeSlug}${RoutePathEnum.CATEGORIES}`;
-
-  // const { getCategoryList: getCategory } = useCategoryList(
-  //   useShallow((state) => ({
-  //     getCategoryList: state.fetchCategoryList,
-  //   })),
-  // );
 
   const { billboardList, fetchBillboardList } = useBillboardList(
     useShallow((state) => ({
@@ -54,11 +49,11 @@ export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
     resetCategory();
     router.push(path);
     router.refresh();
-  }, [resetCategory, path, router, storeSlug]);
+  }, [resetCategory, path, router]);
 
   useEffect(() => {
-    getCategoryCurrent();
-  }, []);
+    getCategoryCurrent({ categorySlug, storeSlug });
+  }, [getCategoryCurrent, categorySlug, storeSlug]);
 
   useEffect(() => {
     if (storeSlug) {

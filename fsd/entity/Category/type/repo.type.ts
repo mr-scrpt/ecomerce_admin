@@ -23,5 +23,10 @@ export interface ICreateCategoryRepo extends ICreateCategoryPayload {
 export interface IGetCategoryRepo extends IGetCategoryPayload {}
 export interface IGetCategoryByNameRepo extends IGetCategoryByNamePayload {}
 
+export interface IGetCategoryBySlugRepo {
+  categorySlug: string;
+  storeId: string;
+}
+
 // export interface IGetCategoryByBillboardRepo
 //   extends IGetCategoryByBillboardPayload {}

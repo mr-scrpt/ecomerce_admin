@@ -17,6 +17,11 @@ export interface IGetCategoryPayload {
   storeId: string;
 }
 
+export interface IGetCategoryBySlugPayload {
+  categorySlug: string;
+  storeSlug: string;
+}
+
 export interface IGetCategoryByNamePayload {
   name: string;
   storeId: string;

@@ -30,3 +30,9 @@ export const useSizeRemoveModal = create<IStoreModal>((set) => ({
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));
+
+export const useColorRemoveModal = create<IStoreModal>((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+}));

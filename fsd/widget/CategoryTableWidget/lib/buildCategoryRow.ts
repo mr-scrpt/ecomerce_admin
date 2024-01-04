@@ -7,6 +7,7 @@ export const buildCategoryRow = (
 ): IStoreCategoryTableItem => ({
   id: item.id,
   name: item.name,
+  slug: item.slug,
   billboardName: item.billboard.name,
   createdAt: buildDate(item.createdAt),
 });

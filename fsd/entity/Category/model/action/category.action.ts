@@ -10,6 +10,7 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
 import {
   ICreateCategoryPayload,
+  IGetCategoryBySlugPayload,
   IIsCurrentCategoryPayload,
   IIsOwnerPayload,
   IIsUniqueCategoryPayload,
@@ -72,6 +73,39 @@ export const getCategory = cache(
   async (categoryId: string): Promise<ResponseDataAction<ICategory | null>> => {
     try {
       const category = await categoryRepo.getCategory(categoryId);
+      if (!category) {
+        throw new HttpException(
+          CategoryResponseErrorEnum.CATEGORY_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+      return buildResponse(category);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const getCategoryBySlug = cache(
+  async (
+    data: IGetCategoryBySlugPayload,
+  ): Promise<ResponseDataAction<ICategory | null>> => {
+    try {
+      const { storeSlug, categorySlug } = data;
+      const storeResponse = await storeAction.getStoreBySlug(storeSlug);
+
+      if (storeResponse.error) {
+        throw new Error(storeResponse.error);
+      }
+
+      const store = storeResponse.data;
+
+      const category = await categoryRepo.getCategoryBySlug({
+        categorySlug,
+        storeId: store!.id,
+      });
+
       if (!category) {
         throw new HttpException(
           CategoryResponseErrorEnum.CATEGORY_NOT_FOUND,

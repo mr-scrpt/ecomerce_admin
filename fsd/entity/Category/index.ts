@@ -7,3 +7,4 @@ export {
 export * as categoryAction from "./model/action/category.action";
 
 export type { ICategory, ICategoryWithRelations } from "./type/entity.type";
+export type { IGetCategoryBySlugPayload } from "./type/action.type";

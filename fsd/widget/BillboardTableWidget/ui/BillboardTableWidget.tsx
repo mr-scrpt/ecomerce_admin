@@ -50,16 +50,19 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
       })),
     );
 
-    const onCopy = (id: string) => {
+    const onCopy = useCallback((id: string) => {
       navigator.clipboard.writeText(id);
       toast.success("Billboard ID copied to clipboard.");
-    };
+    }, []);
 
-    const onDeletePopup = (billboardId: string) => {
-      setIdToRemove(billboardId);
+    const onDeletePopup = useCallback(
+      (billboardId: string) => {
+        setIdToRemove(billboardId);
 
-      onOpen();
-    };
+        onOpen();
+      },
+      [setIdToRemove, onOpen],
+    );
 
     const updateHref = useCallback((billboardSlug: string) => {
       return `${RoutePathEnum.BILLBOARDS_EDIT}/${billboardSlug}`;

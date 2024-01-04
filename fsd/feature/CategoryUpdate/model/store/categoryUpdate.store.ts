@@ -3,26 +3,21 @@ import { IStoreCategoryUpdate } from "../../type/store.type";
 import { devtools } from "zustand/middleware";
 import { categoryAction } from "@/fsd/entity/Category";
 import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
+import { IGetCategoryBySlugPayload } from "@/fsd/entity/Category";
 
 export const useCategoryUpdate = create<IStoreCategoryUpdate>()(
   devtools(
     (set, get) => ({
-      categoryId: "",
       category: null,
       error: null,
       loading: false,
-      setId: (categoryId: string) => {
-        set({ categoryId });
-      },
-      resetId: () => {
-        set({ categoryId: "" });
-      },
       resetCategory: () => set({ category: null }),
-      getCategoryCurrent: async () => {
+      getCategoryCurrent: async (payload: IGetCategoryBySlugPayload) => {
+        console.log("get current =>>>", payload);
         try {
           set({ loading: true }, false, "set_category_loading");
-          const categoryId = get().categoryId;
-          const { data, error } = await categoryAction.getCategory(categoryId);
+          const { data, error } =
+            await categoryAction.getCategoryBySlug(payload);
           if (error) {
             set({ error, category: null }, false, "set_category_error");
             return;

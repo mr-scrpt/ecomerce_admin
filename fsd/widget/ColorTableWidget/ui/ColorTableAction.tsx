@@ -9,19 +9,17 @@ import {
 } from "@/fsd/shared/ui/dropdown-menu";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
-import { CategoryColumn } from "../type/table.type";
-import Link from "next/link";
+import { ColorColumn } from "../type/table.type";
 
-interface CategoryTableActionProps extends HTMLAttributes<HTMLDivElement> {
-  data: CategoryColumn;
+interface ColorTableActionProps extends HTMLAttributes<HTMLDivElement> {
+  data: ColorColumn;
   onCopy: () => void;
-  // onUpdate: () => void;
-  hrefUpdate: string;
+  onUpdate: () => void;
   onDeletePopup: () => void;
 }
 
-export const CategoryTableAction: FC<CategoryTableActionProps> = (props) => {
-  const { onCopy, onDeletePopup, hrefUpdate } = props;
+export const ColorTableAction: FC<ColorTableActionProps> = (props) => {
+  const { onCopy, onDeletePopup, onUpdate } = props;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,12 +37,9 @@ export const CategoryTableAction: FC<CategoryTableActionProps> = (props) => {
         >
           <Copy className="mr-2 h-4 w-4" /> Copy Id
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={hrefUpdate}>
-            <Edit className="mr-2 h-4 w-4" /> Update
-          </Link>
+        <DropdownMenuItem onClick={onUpdate}>
+          <Edit className="mr-2 h-4 w-4" /> Update
         </DropdownMenuItem>
-
         <DropdownMenuItem onClick={onDeletePopup}>
           <Trash className="mr-2 h-4 w-4" /> Delete
         </DropdownMenuItem>

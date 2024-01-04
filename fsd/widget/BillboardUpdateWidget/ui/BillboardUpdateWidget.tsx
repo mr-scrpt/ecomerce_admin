@@ -37,7 +37,6 @@ export const BillboardUpdateWidget: FC<BillboardUpdateWidgetProps> = memo(
       );
 
     useEffect(() => {
-      console.log("change slug =>>>", billboardSlug);
       getBillboardCurrent({ billboardSlug, storeSlug });
     }, [billboardSlug, storeSlug, getBillboardCurrent]);
 

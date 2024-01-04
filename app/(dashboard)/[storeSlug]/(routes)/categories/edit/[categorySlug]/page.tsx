@@ -7,12 +7,12 @@ import { CategoryUpdateWidget } from "@/fsd/widget/CategoryUpdateWidget";
 import { FC, HTMLAttributes } from "react";
 
 interface CategoryUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
-  params: { storeSlug: string };
+  params: { storeSlug: string; categorySlug: string };
 }
 
 const CategoryUpdatePage: FC<CategoryUpdatePageProps> = (props) => {
   const { params } = props;
-  const { storeSlug } = params;
+  const { storeSlug, categorySlug } = params;
 
   return (
     <main className="flex flex-col gap-3">
@@ -22,7 +22,7 @@ const CategoryUpdatePage: FC<CategoryUpdatePageProps> = (props) => {
           description={PageDescriptionEnum.CATEGORY_UPDATE}
         />
       </div>
-      <CategoryUpdateWidget storeSlug={storeSlug} />
+      <CategoryUpdateWidget storeSlug={storeSlug} categorySlug={categorySlug} />
     </main>
   );
 };

@@ -4,6 +4,7 @@ import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import {
   ICreateCategoryRepo,
   IGetCategoryByNameRepo,
+  IGetCategoryBySlugRepo,
   IIsOwnerRepo,
   IRemoveCategoryRepo,
   IUpdateCategoryRepo,
@@ -46,6 +47,17 @@ class CategoryRepo {
     const res = await prismaDB.category.findUnique({
       include: { billboard: true },
       where: { storeId_name: data },
+    });
+    return res;
+  };
+
+  getCategoryBySlug = async (
+    data: IGetCategoryBySlugRepo,
+  ): Promise<ICategory | null> => {
+    const { categorySlug, storeId } = data;
+    const res = await prismaDB.category.findUnique({
+      include: { billboard: true },
+      where: { storeId_slug: { slug: categorySlug, storeId } },
     });
     return res;
   };

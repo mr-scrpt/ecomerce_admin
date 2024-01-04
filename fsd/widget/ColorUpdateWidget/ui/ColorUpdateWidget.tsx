@@ -1,24 +1,24 @@
 "use client";
 import { useStoreData } from "@/fsd/entity/Store";
-import { SizeUpdate, useSizeUpdate } from "@/fsd/feature/SizeUpdate";
+import { ColorUpdate, useColorUpdate } from "@/fsd/feature/ColorUpdate";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, useCallback, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-interface SizeUpdateWidgetProps extends HTMLAttributes<HTMLDivElement> {
+interface ColorUpdateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   storeSlug: string;
 }
 
-export const SizeUpdateWidget: FC<SizeUpdateWidgetProps> = (props) => {
+export const ColorUpdateWidget: FC<ColorUpdateWidgetProps> = (props) => {
   const { storeSlug } = props;
 
   const router = useRouter();
   const path = `/${storeSlug}${RoutePathEnum.CATEGORIES}`;
 
-  // const { getSizeList: getSize } = useSizeList(
+  // const { getColorList: getColor } = useColorList(
   //   useShallow((state) => ({
-  //     getSizeList: state.fetchSizeList,
+  //     getColorList: state.fetchColorList,
   //   })),
   // );
 
@@ -33,31 +33,31 @@ export const SizeUpdateWidget: FC<SizeUpdateWidgetProps> = (props) => {
     useShallow((state) => ({ storeId: state.storeCurrent?.id })),
   );
 
-  const { getSizeCurrent, resetSize, size, loading } = useSizeUpdate(
+  const { getColorCurrent, resetColor, color, loading } = useColorUpdate(
     useShallow((state) => ({
-      size: state.size,
-      getSizeCurrent: state.getSizeCurrent,
+      color: state.color,
+      getColorCurrent: state.getColorCurrent,
       loading: state.loading,
-      resetSize: state.resetSize,
+      resetColor: state.resetColor,
     })),
   );
 
   const onSucces = useCallback(() => {
-    // revalidation size list
-    // getSize(storeSlug);
-    resetSize();
+    // revalidation color list
+    // getColor(storeSlug);
+    resetColor();
     router.push(path);
     router.refresh();
-  }, [resetSize, path, router]);
+  }, [resetColor, path, router]);
 
   useEffect(() => {
-    getSizeCurrent();
-  }, [getSizeCurrent]);
+    getColorCurrent();
+  }, [getColorCurrent]);
 
   return (
     <>
-      {size && (
-        <SizeUpdate onSuccess={onSucces} storeId={storeId} size={size} />
+      {color && (
+        <ColorUpdate onSuccess={onSucces} storeId={storeId} color={color} />
       )}
     </>
   );

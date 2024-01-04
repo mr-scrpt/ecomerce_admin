@@ -1,6 +1,7 @@
 export interface IStoreCategoryTableItem {
   id: string;
   name: string;
+  slug: string;
   billboardName: string;
 
   // imgUrl: string[];

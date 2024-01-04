@@ -2,17 +2,15 @@
 import { useCategoryList, useCategoryRemove } from "@/fsd/entity/Category";
 import { useCategoryRemoveModal } from "@/fsd/feature/ModalManager";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
+import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
-import { FC, HTMLAttributes, useEffect, useMemo } from "react";
+import { FC, HTMLAttributes, useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { categoryCollumns } from "../data/columns";
-import { CategoryColumn } from "../type/table.type";
-import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
-import { CategoryTableAction } from "./CategoryTableAction";
 import { buildCategoryRow } from "../lib/buildCategoryRow";
-import { useCategoryUpdate } from "@/fsd/feature/CategoryUpdate";
+import { CategoryColumn } from "../type/table.type";
+import { CategoryTableAction } from "./CategoryTableAction";
 
 interface CategoryTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -32,17 +30,11 @@ export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
     fetchCategoryList(slug);
   }, []);
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const { onOpen } = useCategoryRemoveModal(
     useShallow((state) => ({
       onOpen: state.onOpen,
-    })),
-  );
-
-  const { setIdToUpdate } = useCategoryUpdate(
-    useShallow((state) => ({
-      setIdToUpdate: state.setId,
     })),
   );
 
@@ -57,16 +49,18 @@ export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
     toast.success("Category ID copied to clipboard.");
   };
 
-  const onDeletePopup = (categoryId: string) => {
-    setIdToRemove(categoryId);
+  const onDeletePopup = useCallback(
+    (categoryId: string) => {
+      setIdToRemove(categoryId);
 
-    onOpen();
-  };
+      onOpen();
+    },
+    [onOpen, setIdToRemove],
+  );
 
-  const onUpdate = (categoryId: string) => {
-    setIdToUpdate(categoryId);
-    router.push(`${RoutePathEnum.CATEGORIES_EDIT}`);
-  };
+  const updateHref = useCallback((billboardSlug: string) => {
+    return `${RoutePathEnum.CATEGORIES_EDIT}/${billboardSlug}`;
+  }, []);
 
   const categoryCollumnsWithAction: ColumnDef<CategoryColumn>[] = [
     ...categoryCollumns,
@@ -77,7 +71,7 @@ export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
         <CategoryTableAction
           data={row.original}
           onCopy={onCopy.bind(null, row.original.id)}
-          onUpdate={onUpdate.bind(null, row.original.id)}
+          hrefUpdate={updateHref(row.original.slug)}
           onDeletePopup={onDeletePopup.bind(null, row.original.id)}
         />
       ),
