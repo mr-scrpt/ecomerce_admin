@@ -32,6 +32,7 @@ export const SizeUpdate: FC<SizeUpdateProps> = memo((props) => {
         }
 
         const { name, value } = form;
+
         const { data, error } = await sizeAction.updateSize({
           name,
           value,

@@ -69,6 +69,24 @@ export const createSize = cache(
   },
 );
 
+export const getSize = cache(
+  async (sizeId: string): Promise<ResponseDataAction<ISize | null>> => {
+    try {
+      const size = await sizeRepo.getSize(sizeId);
+      if (!size) {
+        throw new HttpException(
+          SizeResponseErrorEnum.SIZE_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+      return buildResponse(size);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
 export const getSizeBySlug = cache(
   async (
     data: IGetSizeBySlugPayload,
@@ -88,24 +106,6 @@ export const getSizeBySlug = cache(
         sizeSlug,
         storeId: store!.id,
       });
-      if (!size) {
-        throw new HttpException(
-          SizeResponseErrorEnum.SIZE_NOT_FOUND,
-          HTTPStatusEnum.NOT_FOUND,
-        );
-      }
-      return buildResponse(size);
-    } catch (e) {
-      const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
-    }
-  },
-);
-
-export const getSize = cache(
-  async (sizeId: string): Promise<ResponseDataAction<ISize | null>> => {
-    try {
-      const size = await sizeRepo.getSize(sizeId);
       if (!size) {
         throw new HttpException(
           SizeResponseErrorEnum.SIZE_NOT_FOUND,

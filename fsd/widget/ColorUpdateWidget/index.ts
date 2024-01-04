@@ -1,1 +1,1 @@
-export { SizeUpdateWidget } from "./ui/ColorUpdateWidget";
+export { ColorUpdateWidget } from "./ui/ColorUpdateWidget";

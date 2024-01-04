@@ -10,9 +10,13 @@ export enum PageTitleEnum {
   CATEGORY_ADD = "Category create",
   CATEGORY_UPDATE = "Category update",
 
-  SIZES = "Sizes",
+  SIZE = "Sizes",
   SIZE_ADD = "Size create",
   SIZE_UPDATE = "Size update",
+
+  COLOR = "Colors",
+  COLOR_ADD = "Color create",
+  COLOR_UPDATE = "Color update",
 }
 
 export enum PageDescriptionEnum {
@@ -29,4 +33,8 @@ export enum PageDescriptionEnum {
   SIZES = "Manage sizes for your store",
   SIZE_ADD = "Add new size",
   SIZE_UPDATE = "Update size",
+
+  COLOR = "Manage color for your store",
+  COLOR_ADD = "Add new color",
+  COLOR_UPDATE = "Update color",
 }

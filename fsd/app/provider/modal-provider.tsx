@@ -1,7 +1,12 @@
 "use client";
 import { BillboardRemoveModal } from "@/fsd/feature/BillboardRemove";
 import { CategoryRemoveModal } from "@/fsd/feature/CategoryRemove";
-import { useSizeRemoveModal, useStoreModal } from "@/fsd/feature/ModalManager";
+import { ColorRemoveModal } from "@/fsd/feature/ColorRemove";
+import {
+  useColorRemoveModal,
+  useSizeRemoveModal,
+  useStoreModal,
+} from "@/fsd/feature/ModalManager";
 import {
   useBillboardRemoveModal,
   useCategoryRemoveModal,
@@ -43,10 +48,18 @@ export const ModalProvider = () => {
         onCloseCategoryRemove: state.onClose,
       })),
     );
+
   const { isOpenSizeRemove, onCloseSizeRemove } = useSizeRemoveModal(
     useShallow((state) => ({
       isOpenSizeRemove: state.isOpen,
       onCloseSizeRemove: state.onClose,
+    })),
+  );
+
+  const { isOpenColorRemove, onCloseColorRemove } = useColorRemoveModal(
+    useShallow((state) => ({
+      isOpenColorRemove: state.isOpen,
+      onCloseColorRemove: state.onClose,
     })),
   );
 
@@ -91,6 +104,15 @@ export const ModalProvider = () => {
         description="This action cannot be undone."
       >
         <SizeRemoveModal onClose={onCloseSizeRemove} />
+      </Modal>
+
+      <Modal
+        isOpen={isOpenColorRemove}
+        onClose={onCloseColorRemove}
+        title="Are you sure remove color?"
+        description="This action cannot be undone."
+      >
+        <ColorRemoveModal onClose={onCloseColorRemove} />
       </Modal>
     </>
   );

@@ -21,4 +21,8 @@ export const routeData = (currentStore: string) => [
     href: `/${currentStore}${RoutePathEnum.SIZES}`,
     label: RouteNameEnum.SIZES,
   },
+  {
+    href: `/${currentStore}${RoutePathEnum.COLORS}`,
+    label: RouteNameEnum.COLORS,
+  },
 ];

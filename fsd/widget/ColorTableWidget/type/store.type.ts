@@ -2,6 +2,7 @@ export interface IStoreColorTableItem {
   id: string;
   name: string;
   value: string;
+  slug: string;
 
   createdAt: string;
 }

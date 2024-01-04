@@ -23,7 +23,7 @@ const SizePage: FC<SizePageProps> = async (props) => {
     <main className="flex flex-col gap-3">
       <div className="flex items-center justify-between border-b pb-3">
         <Heading
-          title={PageTitleEnum.SIZES}
+          title={PageTitleEnum.SIZE}
           description={PageDescriptionEnum.SIZES}
         />
         <SizeAdd />

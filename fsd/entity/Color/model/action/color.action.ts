@@ -10,6 +10,7 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
 import {
   ICreateColorPayload,
+  IGetColorBySlugPayload,
   IIsCurrentColorPayload,
   IIsOwnerPayload,
   IIsUniqueColorPayload,
@@ -39,7 +40,7 @@ export const createColor = cache(
 
       if (!isUniqueResponse) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_UNIQUE,
+          ColorResponseErrorEnum.COLOR_NOT_UNIQUE,
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
@@ -56,8 +57,40 @@ export const createColor = cache(
 
       if (!color) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_CREATED,
+          ColorResponseErrorEnum.COLOR_NOT_CREATED,
           HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+      return buildResponse(color);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const getColorBySlug = cache(
+  async (
+    data: IGetColorBySlugPayload,
+  ): Promise<ResponseDataAction<IColor | null>> => {
+    try {
+      const { storeSlug, colorSlug } = data;
+
+      const storeResponse = await storeAction.getStoreBySlug(storeSlug);
+
+      if (storeResponse.error) {
+        throw new Error(storeResponse.error);
+      }
+
+      const store = storeResponse.data;
+      const color = await colorRepo.getColorBySlug({
+        colorSlug,
+        storeId: store!.id,
+      });
+      if (!color) {
+        throw new HttpException(
+          ColorResponseErrorEnum.COLOR_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
         );
       }
       return buildResponse(color);
@@ -74,7 +107,7 @@ export const getColor = cache(
       const color = await colorRepo.getColor(colorId);
       if (!color) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_FOUND,
+          ColorResponseErrorEnum.COLOR_NOT_FOUND,
           HTTPStatusEnum.NOT_FOUND,
         );
       }
@@ -142,16 +175,11 @@ export const updateColor = cache(
         throw new HttpException(storeResponse.error);
       }
 
-      const billboardResponse = await billboardAction.getBillboard(value);
-      if (billboardResponse.error) {
-        throw new HttpException(billboardResponse.error);
-      }
-
       const isExistResponse = await isExist(colorId);
 
       if (!isExistResponse) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_EXIST,
+          ColorResponseErrorEnum.COLOR_NOT_EXIST,
           HTTPStatusEnum.NOT_FOUND,
         );
       }
@@ -163,7 +191,7 @@ export const updateColor = cache(
 
         if (!isUniqueResponse) {
           throw new HttpException(
-            ColorResponseErrorEnum.color_NOT_UNIQUE,
+            ColorResponseErrorEnum.COLOR_NOT_UNIQUE,
             HTTPStatusEnum.BAD_REQUEST,
           );
         }
@@ -180,7 +208,7 @@ export const updateColor = cache(
 
       if (!color) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_UPDATED,
+          ColorResponseErrorEnum.COLOR_NOT_UPDATED,
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
@@ -205,7 +233,7 @@ export const removeColor = cache(
 
       if (!data) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_FOUND,
+          ColorResponseErrorEnum.COLOR_NOT_FOUND,
           HTTPStatusEnum.NOT_FOUND,
         );
       }
@@ -217,7 +245,7 @@ export const removeColor = cache(
       });
       if (!isOwnerResponse) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NO_OWNER,
+          ColorResponseErrorEnum.COLOR_NO_OWNER,
           HTTPStatusEnum.FORBIDDEN,
         );
       }
@@ -228,7 +256,7 @@ export const removeColor = cache(
 
       if (!colorRemover) {
         throw new HttpException(
-          ColorResponseErrorEnum.color_NOT_REMOVED,
+          ColorResponseErrorEnum.COLOR_NOT_REMOVED,
           HTTPStatusEnum.BAD_REQUEST,
         );
       }

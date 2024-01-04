@@ -22,5 +22,10 @@ export interface ICreateColorRepo extends ICreateColorPayload {
 export interface IGetColorRepo extends IGetColorPayload {}
 export interface IGetColorByNameRepo extends IGetColorByNamePayload {}
 
+export interface IGetColorBySlugRepo {
+  colorSlug: string;
+  storeId: string;
+}
+
 // export interface IGetColorByBillboardRepo
 //   extends IGetColorByBillboardPayload {}

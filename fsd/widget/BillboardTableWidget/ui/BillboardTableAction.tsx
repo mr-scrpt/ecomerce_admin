@@ -15,7 +15,6 @@ import { FC, HTMLAttributes, memo } from "react";
 interface BillboardTableListActionProps extends HTMLAttributes<HTMLDivElement> {
   data: BillboardColumn;
   onCopy: () => void;
-  // onUpdate: () => void;
   hrefUpdate: string;
   onDeletePopup: () => void;
 }

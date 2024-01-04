@@ -44,8 +44,6 @@ export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
     );
 
   const onSucces = useCallback(() => {
-    // revalidation category list
-    // getCategory(storeSlug);
     resetCategory();
     router.push(path);
     router.refresh();

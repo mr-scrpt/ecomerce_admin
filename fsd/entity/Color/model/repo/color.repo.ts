@@ -4,6 +4,7 @@ import { IColor, IColorWithRelations } from "../../type/entity.type";
 import {
   ICreateColorRepo,
   IGetColorByNameRepo,
+  IGetColorBySlugRepo,
   IIsOwnerRepo,
   IRemoveColorRepo,
   IUpdateColorRepo,
@@ -46,6 +47,17 @@ class ColorRepo {
     const res = await prismaDB.color.findUnique({
       include: { store: true },
       where: { storeId_name: data },
+    });
+    return res;
+  };
+
+  getColorBySlug = async (
+    data: IGetColorBySlugRepo,
+  ): Promise<IColor | null> => {
+    const { storeId, colorSlug } = data;
+    const res = await prismaDB.color.findUnique({
+      include: { store: true },
+      where: { storeId_slug: { storeId, slug: colorSlug } },
     });
     return res;
   };

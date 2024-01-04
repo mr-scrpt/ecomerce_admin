@@ -17,6 +17,11 @@ export interface IGetColorPayload {
   storeId: string;
 }
 
+export interface IGetColorBySlugPayload {
+  colorSlug: string;
+  storeSlug: string;
+}
+
 export interface IGetColorByNamePayload {
   name: string;
   storeId: string;

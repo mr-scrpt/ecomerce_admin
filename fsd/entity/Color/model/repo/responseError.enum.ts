@@ -1,4 +1,4 @@
-export enum colorResponseErrorEnum {
+export enum ColorResponseErrorEnum {
   COLOR_NOT_EXIST = "color has not been exist",
   COLOR_NOT_UNIQUE = "color has not been unique name",
   COLOR_NOT_FOUND = "color has not been found",
