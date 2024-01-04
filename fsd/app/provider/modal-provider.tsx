@@ -73,6 +73,7 @@ export const ModalProvider = () => {
       >
         <StoreCreateModal onClose={onCloseStoreCreate} />
       </Modal>
+
       <Modal
         isOpen={isOpenStoreRemove}
         onClose={onCloseStoreRemove}
@@ -81,6 +82,7 @@ export const ModalProvider = () => {
       >
         <StoreRemoveModal onClose={onCloseStoreRemove} />
       </Modal>
+
       <Modal
         isOpen={isOpenBillboardRemove}
         onClose={onCloseBillboardRemove}
@@ -89,6 +91,7 @@ export const ModalProvider = () => {
       >
         <BillboardRemoveModal onClose={onCloseBillboardRemove} />
       </Modal>
+
       <Modal
         isOpen={isOpenCategoryRemove}
         onClose={onCloseCategoryRemove}
@@ -97,6 +100,7 @@ export const ModalProvider = () => {
       >
         <CategoryRemoveModal onClose={onCloseCategoryRemove} />
       </Modal>
+
       <Modal
         isOpen={isOpenSizeRemove}
         onClose={onCloseSizeRemove}
