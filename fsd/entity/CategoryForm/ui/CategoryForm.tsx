@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
+import { FC, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/fsd/shared/ui/button";
@@ -26,13 +26,17 @@ import {
   categoryFormSchema,
 } from "../type/schema.type";
 
-export const CategoryForm: FC<CategoryFormProps> = (props) => {
+export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
   const { onAction, defaultValues, actionName, billboardList, loading } = props;
 
   const form = useForm<CategoryFormTypeSchema>({
     resolver: zodResolver(categoryFormSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   return (
     <div className="space-x-4 pt-2 pb-4">
@@ -96,4 +100,4 @@ export const CategoryForm: FC<CategoryFormProps> = (props) => {
       </Form>
     </div>
   );
-};
+});

@@ -4,12 +4,9 @@ import { IStoreBillboardTableItem } from "../../../entity/Billboard/type/store.t
 
 export const buildBillboardRow = (
   item: IBillboard,
-): IStoreBillboardTableItem => {
-  console.log("item =>>>", item);
-  return {
-    id: item.id,
-    name: item.name,
-    slug: item.slug,
-    createdAt: buildDate(item.createdAt),
-  };
-};
+): IStoreBillboardTableItem => ({
+  id: item.id,
+  name: item.name,
+  slug: item.slug,
+  createdAt: buildDate(item.createdAt),
+});

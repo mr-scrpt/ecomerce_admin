@@ -1,7 +1,7 @@
 "use client";
 import { categoryAction } from "@/fsd/entity/Category";
 import { Button } from "@/fsd/shared/ui/button";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 interface CategoryRemoveProps extends HTMLAttributes<HTMLDivElement> {
@@ -10,11 +10,11 @@ interface CategoryRemoveProps extends HTMLAttributes<HTMLDivElement> {
   onCancel: () => void;
 }
 
-export const CategoryRemove: FC<CategoryRemoveProps> = (props) => {
+export const CategoryRemove: FC<CategoryRemoveProps> = memo((props) => {
   const { categoryId, onSuccess, onCancel } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const onDelete = async () => {
+  const onDelete = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data, error } = await categoryAction.removeCategory(categoryId);
@@ -32,7 +32,7 @@ export const CategoryRemove: FC<CategoryRemoveProps> = (props) => {
       setIsLoading(false);
       onCancel();
     }
-  };
+  }, [categoryId, onSuccess, onCancel]);
 
   return (
     <div className="pt-6 space-x-2 flex items-center justify-end w-full">
@@ -44,4 +44,4 @@ export const CategoryRemove: FC<CategoryRemoveProps> = (props) => {
       </Button>
     </div>
   );
-};
+});

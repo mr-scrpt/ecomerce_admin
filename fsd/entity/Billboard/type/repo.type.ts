@@ -1,7 +1,6 @@
 import {
   ICreateBillboardPayload,
   IGetBillboardByNamePayload,
-  IGetBillboardBySlugPayload,
   IGetBillboardPayload,
   IIsOwnerPayload,
   IUpdateBillboardPayload,
@@ -12,7 +11,9 @@ export interface ICreateBillboardRepo extends ICreateBillboardPayload {
 }
 
 export interface IUpdateBillboardRepo
-  extends Omit<IUpdateBillboardPayload, "storeId"> {}
+  extends Omit<IUpdateBillboardPayload, "storeId"> {
+  newSlug: string;
+}
 
 export interface IRemoveBillboardRepo {
   billboardId: string;

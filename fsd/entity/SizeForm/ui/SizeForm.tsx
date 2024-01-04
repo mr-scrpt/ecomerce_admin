@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
+import { FC, memo } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/fsd/shared/ui/button";
@@ -16,7 +16,7 @@ import { Input } from "@/fsd/shared/ui/input";
 import { SizeFormProps } from "../type/props.type";
 import { SizeFormTypeSchema, sizeFormSchema } from "../type/schema.type";
 
-export const SizeForm: FC<SizeFormProps> = (props) => {
+export const SizeForm: FC<SizeFormProps> = memo((props) => {
   const { onAction, defaultValues, actionName, loading } = props;
 
   const form = useForm<SizeFormTypeSchema>({
@@ -71,4 +71,4 @@ export const SizeForm: FC<SizeFormProps> = (props) => {
       </Form>
     </div>
   );
-};
+});

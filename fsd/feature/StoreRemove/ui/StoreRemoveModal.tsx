@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useCallback } from "react";
+import { FC, HTMLAttributes, memo, useCallback } from "react";
 import { StoreRemove } from "./StoreRemove";
 import { useOrigin } from "@/fsd/shared/hook/useOrigin";
 import { useStoreData } from "@/fsd/entity/Store";
@@ -8,14 +8,15 @@ interface StoreRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
 }
 
-export const StoreRemoveModal: FC<StoreRemoveModalProps> = (props) => {
+export const StoreRemoveModal: FC<StoreRemoveModalProps> = memo((props) => {
   const { onClose } = props;
   const originUrl = useOrigin();
   const router = useRouter();
+
   const onSuccess = useCallback(() => {
     onClose();
     router.replace(originUrl);
-  }, [originUrl, onClose]);
+  }, [router, originUrl, onClose]);
 
   const { storeCurrent } = useStoreData(({ storeCurrent }) => ({
     storeCurrent,
@@ -32,4 +33,4 @@ export const StoreRemoveModal: FC<StoreRemoveModalProps> = (props) => {
       )}
     </>
   );
-};
+});

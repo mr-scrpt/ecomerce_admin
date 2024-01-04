@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
@@ -20,10 +20,10 @@ import { StoreCreateTypeSchema, storeCreateSchema } from "../type/schema.type";
 
 interface StoreCreateProps extends HTMLAttributes<HTMLDivElement> {
   onCancel: () => void;
-  onSuccess?: (path: string) => void;
+  onSuccess: (path: string) => void;
 }
 
-export const StoreCreate: FC<StoreCreateProps> = (props) => {
+export const StoreCreate: FC<StoreCreateProps> = memo((props) => {
   const { onCancel, onSuccess } = props;
   const [loading, setLoading] = useState(false);
 
@@ -34,26 +34,26 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
     },
   });
 
-  const onSubmit = async (form: StoreCreateTypeSchema) => {
-    setLoading(true);
-    const validation = storeCreateValidate(form);
-    if (validation?.errors) {
-      return toast.error("Incorrect data from the form");
-    }
-    const { data, error } = await storeAction.createStore(form.name);
-    if (error) {
-      toast.error(error);
-    }
-    if (data) {
-      const { slug } = data;
-      console.log(" =>>> func", onSuccess);
-      onSuccess?.(`/${slug}`);
-      toast.success(`Store has been created by name ${name}`);
-
-      // window.location.assign(`/${data.slug}`);
-    }
-    setLoading(false);
-  };
+  const onSubmit = useCallback(
+    async (form: StoreCreateTypeSchema) => {
+      setLoading(true);
+      const validation = storeCreateValidate(form);
+      if (validation?.errors) {
+        return toast.error("Incorrect data from the form");
+      }
+      const { data, error } = await storeAction.createStore(form.name);
+      if (error) {
+        toast.error(error);
+      }
+      if (data) {
+        const { slug } = data;
+        onSuccess(slug);
+        toast.success(`Store has been created by name ${name}`);
+      }
+      setLoading(false);
+    },
+    [onSuccess],
+  );
 
   return (
     <div className="space-x-4 pt-2 pb-4">
@@ -93,4 +93,4 @@ export const StoreCreate: FC<StoreCreateProps> = (props) => {
       </Form>
     </div>
   );
-};
+});

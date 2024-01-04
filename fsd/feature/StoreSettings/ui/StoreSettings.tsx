@@ -12,7 +12,14 @@ import { Input } from "@/fsd/shared/ui/input";
 
 import { storeAction } from "@/fsd/entity/Store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, HTMLAttributes, memo, useEffect, useState } from "react";
+import {
+  FC,
+  HTMLAttributes,
+  memo,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { storeSettingsValidate } from "../action/validation.action";
@@ -48,34 +55,37 @@ export const StoreSettings: FC<StoreSettingsProps> = memo((props) => {
     }
   }, [form, storeName]);
 
-  const onSubmit = async (form: StoreSettingTypeSchema) => {
-    if (storeName) {
-      try {
-        setIsLoading(true);
-        const validation = storeSettingsValidate(form);
-        if (validation?.errors) {
-          return toast.error("Incorrect data from the form");
-        }
-        const { data, error } = await storeAction.renameStore({
-          currentStoreName: storeName,
-          newStoreName: form.name,
-        });
+  const onSubmit = useCallback(
+    async (form: StoreSettingTypeSchema) => {
+      if (storeName) {
+        try {
+          setIsLoading(true);
+          const validation = storeSettingsValidate(form);
+          if (validation?.errors) {
+            return toast.error("Incorrect data from the form");
+          }
+          const { data, error } = await storeAction.renameStore({
+            currentStoreName: storeName,
+            newStoreName: form.name,
+          });
 
-        if (error) {
-          toast.error(error);
-        }
+          if (error) {
+            toast.error(error);
+          }
 
-        if (data) {
-          toast.success("Store updated.");
-          onSuccess?.(data.slug);
+          if (data) {
+            toast.success("Store updated.");
+            onSuccess?.(data.slug);
+          }
+        } catch (error) {
+          toast.error("Something went wrong.");
+        } finally {
+          setIsLoading(false);
         }
-      } catch (error) {
-        toast.error("Something went wrong.");
-      } finally {
-        setIsLoading(false);
       }
-    }
-  };
+    },
+    [storeName, onSuccess],
+  );
 
   return (
     <div className="space-x-4 pt-2 pb-4">

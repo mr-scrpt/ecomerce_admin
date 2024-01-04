@@ -13,8 +13,6 @@ interface CategoryUpdatePageProps extends HTMLAttributes<HTMLDivElement> {
 const CategoryUpdatePage: FC<CategoryUpdatePageProps> = (props) => {
   const { params } = props;
   const { storeSlug } = params;
-  // const _headers = headers();
-  // const currentUrl = _headers.get("x-url");
 
   return (
     <main className="flex flex-col gap-3">
@@ -24,7 +22,7 @@ const CategoryUpdatePage: FC<CategoryUpdatePageProps> = (props) => {
           description={PageDescriptionEnum.CATEGORY_UPDATE}
         />
       </div>
-      <CategoryUpdateWidget storeSlug={storeSlug} />;
+      <CategoryUpdateWidget storeSlug={storeSlug} />
     </main>
   );
 };

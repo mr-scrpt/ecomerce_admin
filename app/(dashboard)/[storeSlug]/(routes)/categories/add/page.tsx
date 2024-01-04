@@ -25,7 +25,7 @@ const CategoryNewPage: FC<BillboardNewPageProps> = (props) => {
           description={PageDescriptionEnum.CATEGORY_ADD}
         />
       </div>
-      <CategoryCreateWidget slug={storeSlug} />;
+      <CategoryCreateWidget slug={storeSlug} />
     </main>
   );
 };

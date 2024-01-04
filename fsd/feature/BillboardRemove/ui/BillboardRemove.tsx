@@ -1,7 +1,7 @@
 "use client";
 import { billboardAction } from "@/fsd/entity/Billboard";
 import { Button } from "@/fsd/shared/ui/button";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 interface BillboardRemoveProps extends HTMLAttributes<HTMLDivElement> {
@@ -10,11 +10,11 @@ interface BillboardRemoveProps extends HTMLAttributes<HTMLDivElement> {
   onCancel: () => void;
 }
 
-export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
+export const BillboardRemove: FC<BillboardRemoveProps> = memo((props) => {
   const { billboardId, onSuccess, onCancel } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const onDelete = async () => {
+  const onDelete = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data, error } =
@@ -33,7 +33,7 @@ export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
       setIsLoading(false);
       onCancel();
     }
-  };
+  }, [billboardId, onSuccess, onCancel]);
 
   return (
     <div className="pt-6 space-x-2 flex items-center justify-end w-full">
@@ -45,4 +45,4 @@ export const BillboardRemove: FC<BillboardRemoveProps> = (props) => {
       </Button>
     </div>
   );
-};
+});

@@ -1,59 +1,51 @@
 "use client";
-import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
-import { useRouter } from "next/navigation";
-import { FC, HTMLAttributes, useCallback, useEffect } from "react";
-import { useShallow } from "zustand/react/shallow";
+import { useBillboardList } from "@/fsd/entity/Billboard";
 import { useStoreData } from "@/fsd/entity/Store";
 import { CategoryCreate } from "@/fsd/feature/CategoryCreate";
-import { useCategoryTableData } from "@/fsd/feature/CategoryTableList";
-import { useBillboardList } from "@/fsd/entity/Billboard";
+import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
+import { useRouter } from "next/navigation";
+import { FC, HTMLAttributes, memo, useCallback, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 interface CategoryCreateWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
 }
 
-export const CategoryCreateWidget: FC<CategoryCreateWidgetProps> = (props) => {
-  const { slug } = props;
+export const CategoryCreateWidget: FC<CategoryCreateWidgetProps> = memo(
+  (props) => {
+    const { slug } = props;
 
-  const router = useRouter();
-  const path = `/${slug}${RoutePathEnum.CATEGORIES}`;
+    const router = useRouter();
+    const path = `/${slug}${RoutePathEnum.CATEGORIES}`;
 
-  // const { getCategoryList: getCategory } = useCategoryTableData(
-  //   useShallow((state) => ({
-  //     getCategoryList: state.fetchCategoryListByStoreSlug,
-  //   })),
-  // );
+    const { billboardList, fetchBillboardList } = useBillboardList(
+      useShallow((state) => ({
+        billboardList: state.billboardList,
+        fetchBillboardList: state.fetchBillboardList,
+      })),
+    );
 
-  const { billboardList, fetchBillboardList } = useBillboardList(
-    useShallow((state) => ({
-      billboardList: state.billboardList,
-      fetchBillboardList: state.fetchBillboardList,
-    })),
-  );
+    const { storeId } = useStoreData(
+      useShallow((state) => ({ storeId: state.storeCurrent?.id })),
+    );
 
-  const { storeId } = useStoreData(
-    useShallow((state) => ({ storeId: state.storeCurrent?.id })),
-  );
+    useEffect(() => {
+      if (slug) {
+        fetchBillboardList(slug);
+      }
+    }, [slug, fetchBillboardList]);
 
-  const onSucces = useCallback(() => {
-    // revalidation category list
-    // getCategory(slug);
-    router.replace(path);
-    router.refresh();
-  }, []);
+    const onSucces = useCallback(() => {
+      router.replace(path);
+      router.refresh();
+    }, [router, path]);
 
-  useEffect(() => {
-    if (slug) {
-      console.log("slug =>>>", slug);
-      fetchBillboardList(slug);
-    }
-  }, [slug, fetchBillboardList]);
-
-  return (
-    <CategoryCreate
-      onSuccess={onSucces}
-      storeId={storeId}
-      billboardList={billboardList}
-    />
-  );
-};
+    return (
+      <CategoryCreate
+        onSuccess={onSucces}
+        storeId={storeId}
+        billboardList={billboardList}
+      />
+    );
+  },
+);

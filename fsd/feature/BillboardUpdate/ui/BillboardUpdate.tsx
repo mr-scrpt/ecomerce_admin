@@ -1,5 +1,5 @@
 "use client";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { IBillboard, billboardAction } from "@/fsd/entity/Billboard";
@@ -15,45 +15,50 @@ interface BillboardUpdateProps extends HTMLAttributes<HTMLDivElement> {
   billboard: IBillboard;
 }
 
-export const BillboardUpdate: FC<BillboardUpdateProps> = (props) => {
+export const BillboardUpdate: FC<BillboardUpdateProps> = memo((props) => {
   const { onSuccess, storeId, billboard } = props;
   const { id } = billboard;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: BillboardFormTypeSchema) => {
-    try {
-      setLoading(true);
+  const onSubmit = useCallback(
+    async (form: BillboardFormTypeSchema) => {
+      try {
+        setLoading(true);
 
-      if (!storeId) {
-        return toast.error("Store Not Found");
-      }
+        if (!storeId) {
+          return toast.error("Store Not Found");
+        }
 
-      const validation = billboardUpdateValidate(form);
+        const validation = billboardUpdateValidate(form);
 
-      if (validation?.errors) {
-        return toast.error("Incorrect data from the form");
-      }
+        if (validation?.errors) {
+          return toast.error("Incorrect data from the form");
+        }
 
-      const { name, imgUrl } = form;
-      const { data, error } = await billboardAction.updateBillboard({
-        name,
-        imgUrl,
-        storeId,
-        billboardId: id,
-      });
-      if (error) {
-        toast.error(error);
+        const { name, imgUrl } = form;
+
+        const { data, error } = await billboardAction.updateBillboard({
+          name,
+          imgUrl,
+          storeId,
+          billboardId: id,
+        });
+
+        if (error) {
+          toast.error(error);
+        }
+        if (data) {
+          toast.success(`Billboard has been updated by name ${name}`);
+          onSuccess?.();
+        }
+      } catch (e) {
+        toast.error("Something went wrong.");
+      } finally {
+        setLoading(false);
       }
-      if (data) {
-        toast.success(`Billboard has been updated by name ${name}`);
-        onSuccess?.();
-      }
-    } catch (e) {
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [storeId, id, onSuccess],
+  );
 
   return (
     <BillboardForm
@@ -63,4 +68,4 @@ export const BillboardUpdate: FC<BillboardUpdateProps> = (props) => {
       loading={loading}
     />
   );
-};
+});

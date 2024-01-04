@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
+import { FC, memo, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { ImgUploader } from "@/fsd/shared/ui/ImgUploader/ui/ImgUploader";
@@ -20,13 +20,17 @@ import {
   billboardFormSchema,
 } from "../type/schema.type";
 
-export const BillboardForm: FC<BillboardFormProps> = (props) => {
+export const BillboardForm: FC<BillboardFormProps> = memo((props) => {
   const { onAction, defaultValues, actionName, loading } = props;
 
   const form = useForm<BillboardFormTypeSchema>({
     resolver: zodResolver(billboardFormSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   return (
     <div className="space-x-4 pt-2 pb-4">
@@ -75,4 +79,4 @@ export const BillboardForm: FC<BillboardFormProps> = (props) => {
       </Form>
     </div>
   );
-};
+});

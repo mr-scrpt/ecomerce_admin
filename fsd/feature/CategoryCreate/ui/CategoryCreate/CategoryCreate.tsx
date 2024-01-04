@@ -1,5 +1,5 @@
 "use client";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { categoryAction } from "@/fsd/entity/Category";
@@ -16,11 +16,11 @@ interface CategoryCreateProps extends HTMLAttributes<HTMLDivElement> {
   billboardList: IBillboard[];
 }
 
-export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
+export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
   const { onSuccess, storeId, billboardList } = props;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: CategoryFormTypeSchema) => {
+  const onSubmit = useCallback(async (form: CategoryFormTypeSchema) => {
     try {
       setLoading(true);
 
@@ -40,7 +40,6 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
         billboardId,
         storeId,
       });
-      console.log("success data =>>>", data, error);
 
       if (error) {
         toast.error(error);
@@ -54,7 +53,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const defaultValues = { name: "", billboardId: "" };
 
@@ -67,4 +66,4 @@ export const CategoryCreate: FC<CategoryCreateProps> = (props) => {
       billboardList={billboardList}
     />
   );
-};
+});

@@ -1,5 +1,5 @@
 "use client";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 
 import { sizeAction } from "@/fsd/entity/Size";
@@ -12,45 +12,47 @@ interface SizeCreateProps extends HTMLAttributes<HTMLDivElement> {
   // value: string;
 }
 
-export const SizeCreate: FC<SizeCreateProps> = (props) => {
+export const SizeCreate: FC<SizeCreateProps> = memo((props) => {
   const { onSuccess, storeId } = props;
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (form: SizeFormTypeSchema) => {
-    try {
-      setLoading(true);
+  const onSubmit = useCallback(
+    async (form: SizeFormTypeSchema) => {
+      try {
+        setLoading(true);
 
-      if (!storeId) {
-        return toast.error("Store Not Found");
+        if (!storeId) {
+          return toast.error("Store Not Found");
+        }
+
+        const validation = sizeCreateValidate(form);
+
+        if (validation?.errors) {
+          return toast.error("Incorrect data from the form");
+        }
+
+        const { name, value } = form;
+        const { data, error } = await sizeAction.createSize({
+          name,
+          value,
+          storeId,
+        });
+
+        if (error) {
+          toast.error(error);
+        }
+        if (data) {
+          toast.success(`Size has been created by name ${name}`);
+          onSuccess?.();
+        }
+      } catch (e) {
+        toast.error("Something went wrong.");
+      } finally {
+        setLoading(false);
       }
-
-      const validation = sizeCreateValidate(form);
-
-      if (validation?.errors) {
-        return toast.error("Incorrect data from the form");
-      }
-
-      const { name, value } = form;
-      const { data, error } = await sizeAction.createSize({
-        name,
-        value,
-        storeId,
-      });
-      console.log("success data =>>>", data, error);
-
-      if (error) {
-        toast.error(error);
-      }
-      if (data) {
-        toast.success(`Size has been created by name ${name}`);
-        onSuccess?.();
-      }
-    } catch (e) {
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [storeId, onSuccess],
+  );
 
   const defaultValues = { name: "", value: "" };
 
@@ -62,4 +64,4 @@ export const SizeCreate: FC<SizeCreateProps> = (props) => {
       loading={loading}
     />
   );
-};
+});

@@ -1,7 +1,7 @@
 "use client";
 import { sizeAction } from "@/fsd/entity/Size";
 import { Button } from "@/fsd/shared/ui/button";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 interface SizeRemoveProps extends HTMLAttributes<HTMLDivElement> {
@@ -10,11 +10,11 @@ interface SizeRemoveProps extends HTMLAttributes<HTMLDivElement> {
   onCancel: () => void;
 }
 
-export const SizeRemove: FC<SizeRemoveProps> = (props) => {
+export const SizeRemove: FC<SizeRemoveProps> = memo((props) => {
   const { sizeId, onSuccess, onCancel } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const onDelete = async () => {
+  const onDelete = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data, error } = await sizeAction.removeSize(sizeId);
@@ -32,7 +32,7 @@ export const SizeRemove: FC<SizeRemoveProps> = (props) => {
       setIsLoading(false);
       onCancel();
     }
-  };
+  }, [sizeId, onSuccess, onCancel]);
 
   return (
     <div className="pt-6 space-x-2 flex items-center justify-end w-full">
@@ -44,4 +44,4 @@ export const SizeRemove: FC<SizeRemoveProps> = (props) => {
       </Button>
     </div>
   );
-};
+});

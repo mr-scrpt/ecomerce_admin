@@ -1,22 +1,20 @@
 "use client";
 import { storeAction } from "@/fsd/entity/Store";
 import { Button } from "@/fsd/shared/ui/button";
-import { useRouter } from "next/navigation";
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 interface StoreRemoveProps extends HTMLAttributes<HTMLDivElement> {
   storeId: string;
   onSuccess?: () => void;
   onCancel: () => void;
-  // onSuccesUrlRedirect: string;
 }
 
-export const StoreRemove: FC<StoreRemoveProps> = (props) => {
+export const StoreRemove: FC<StoreRemoveProps> = memo((props) => {
   const { onSuccess, onCancel, storeId } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const onDelete = async () => {
+  const onDelete = useCallback(async () => {
     try {
       setIsLoading(true);
       const { data, error } = await storeAction.removeStore(storeId);
@@ -33,7 +31,7 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [storeId, onSuccess]);
 
   return (
     <div className="pt-6 space-x-2 flex items-center justify-end w-full">
@@ -45,4 +43,4 @@ export const StoreRemove: FC<StoreRemoveProps> = (props) => {
       </Button>
     </div>
   );
-};
+});

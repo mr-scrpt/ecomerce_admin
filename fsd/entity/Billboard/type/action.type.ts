@@ -8,7 +8,7 @@ export interface IUpdateBillboardPayload {
   storeId: string;
   billboardId: string;
   name: string;
-  newSlug: string;
+  // newSlug: string;
   imgUrl: string;
 }
 
