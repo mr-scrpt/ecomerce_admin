@@ -19,8 +19,9 @@ interface ColorTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
 export const ColorTableWidget: FC<ColorTableWidgetProps> = (props) => {
   const { slug } = props;
 
-  const { colorList, fetchColorList } = useColorList(
+  const { colorList, fetchColorList, isLoading } = useColorList(
     useShallow((state) => ({
+      isLoading: state.loading,
       colorList: state.colorList,
       fetchColorList: state.fetchColorList,
     })),
@@ -82,6 +83,7 @@ export const ColorTableWidget: FC<ColorTableWidgetProps> = (props) => {
       columns={colorCollumnsWithAction}
       data={listFormated}
       filterKey="name"
+      isLoading={isLoading}
     />
   );
 };

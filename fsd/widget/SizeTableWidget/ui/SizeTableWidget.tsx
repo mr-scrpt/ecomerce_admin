@@ -13,6 +13,7 @@ import { SizeColumn } from "../type/table.type";
 import { SizeTableAction } from "./SizeTableAction";
 import { useSizeRemoveModal } from "@/fsd/feature/ModalManager";
 import { useSizeUpdate } from "@/fsd/feature/SizeUpdate";
+import { Spinner } from "@/fsd/shared/ui/Spinner/Spinner";
 
 interface SizeTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -21,8 +22,9 @@ interface SizeTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
 export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
   const { slug } = props;
 
-  const { sizeList, fetchSizeList } = useSizeList(
+  const { sizeList, fetchSizeList, isLoading } = useSizeList(
     useShallow((state) => ({
+      isLoading: state.loading,
       sizeList: state.sizeList,
       fetchSizeList: state.fetchSizeList,
     })),
@@ -30,19 +32,11 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
 
   useEffect(() => {
     fetchSizeList(slug);
-  }, []);
-
-  const router = useRouter();
+  }, [slug, fetchSizeList]);
 
   const { onOpen } = useSizeRemoveModal(
     useShallow((state) => ({
       onOpen: state.onOpen,
-    })),
-  );
-
-  const { setIdToUpdate } = useSizeUpdate(
-    useShallow((state) => ({
-      setIdToUpdate: state.setId,
     })),
   );
 
@@ -92,6 +86,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
       columns={sizeCollumnsWithAction}
       data={listFormated}
       filterKey="name"
+      isLoading={isLoading}
     />
   );
 };

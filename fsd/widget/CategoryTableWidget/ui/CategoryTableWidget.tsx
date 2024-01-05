@@ -19,8 +19,9 @@ interface CategoryTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
 export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
   const { slug } = props;
 
-  const { categoryList, fetchCategoryList } = useCategoryList(
+  const { categoryList, fetchCategoryList, isLoading } = useCategoryList(
     useShallow((state) => ({
+      isLoading: state.loading,
       categoryList: state.categoryList,
       fetchCategoryList: state.fetchCategoryList,
     })),
@@ -87,6 +88,7 @@ export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
       columns={categoryCollumnsWithAction}
       data={listFormated}
       filterKey="name"
+      isLoading={isLoading}
     />
   );
 };

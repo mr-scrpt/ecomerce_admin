@@ -21,11 +21,12 @@ import { ITableDataProps } from "../type/props.type";
 import { Button } from "@/fsd/shared/ui/button";
 import { Input } from "@/fsd/shared/ui/input";
 import { useState } from "react";
+import { Spinner } from "../../Spinner/Spinner";
 
 export const TableData = <TData, TValue>(
   props: ITableDataProps<TData, TValue>,
 ) => {
-  const { columns, data, filterKey } = props;
+  const { columns, data, filterKey, isLoading } = props;
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -74,7 +75,16 @@ export const TableData = <TData, TValue>(
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <Spinner />
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

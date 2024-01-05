@@ -27,8 +27,9 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
   (props) => {
     const { slug } = props;
 
-    const { billboardList, fetchBillboardList } = useBillboardList(
+    const { billboardList, fetchBillboardList, isLoading } = useBillboardList(
       useShallow((state) => ({
+        isLoading: state.loading,
         billboardList: state.billboardList,
         fetchBillboardList: state.fetchBillboardList,
       })),
@@ -93,6 +94,7 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
         columns={billboardCollumnsWithAction}
         data={listFormated}
         filterKey="name"
+        isLoading={isLoading}
       />
     );
   },

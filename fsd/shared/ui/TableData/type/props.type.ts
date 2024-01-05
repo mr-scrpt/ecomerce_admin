@@ -4,4 +4,5 @@ export interface ITableDataProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
+  isLoading: boolean;
 }
