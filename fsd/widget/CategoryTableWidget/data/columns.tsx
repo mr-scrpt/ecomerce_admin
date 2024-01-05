@@ -8,11 +8,11 @@ export const categoryCollumns: ColumnDef<CategoryColumn>[] = [
     accessorKey: "name",
     header: "Name",
   },
-  {
-    accessorKey: "billboard",
-    header: "Billboard",
-    cell: ({ row }) => row.original.billboardName,
-  },
+  // {
+  //   accessorKey: "billboard",
+  //   header: "Billboard",
+  //   cell: ({ row }) => row.original.billboardName,
+  // },
   {
     accessorKey: "createdAt",
     header: "Date",

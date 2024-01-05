@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { SizeColumn } from "../type/table.type";
 
-export const sizeCollumns: ColumnDef<SizeColumn>[] = [
+export const sizeColumns: ColumnDef<SizeColumn>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -11,7 +11,7 @@ export const sizeCollumns: ColumnDef<SizeColumn>[] = [
   {
     accessorKey: "value",
     header: "value",
-    cell: ({ row }) => row.original.value,
+    // cell: ({ row }) => row.original.value,
   },
   {
     accessorKey: "createdAt",

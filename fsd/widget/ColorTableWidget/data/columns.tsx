@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ColorColumn } from "../type/table.type";
 import { cn } from "@/fsd/shared/lib/utils";
 
-export const colorCollumns: ColumnDef<ColorColumn>[] = [
+export const colorColumns: ColumnDef<ColorColumn>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -15,7 +15,7 @@ export const colorCollumns: ColumnDef<ColorColumn>[] = [
     cell: ({ row }) => (
       <div className="flex flex-row gap-2 items-center">
         <span
-          className="w-4 h-4 border-2"
+          className="w-6 h-6 border-2"
           style={{ backgroundColor: `#${row.original.value}` }}
         ></span>
         <span>{row.original.value}</span>

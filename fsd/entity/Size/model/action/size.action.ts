@@ -97,7 +97,7 @@ export const getSizeBySlug = cache(
       const storeResponse = await storeAction.getStoreBySlug(storeSlug);
 
       if (storeResponse.error) {
-        throw new Error(storeResponse.error);
+        throw new HttpException(storeResponse.error);
       }
 
       const store = storeResponse.data;

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
-import { sizeCollumns } from "../data/columns";
+import { sizeColumns } from "../data/columns";
 import { buildSizeRow } from "../lib/buildSizeRow";
 import { SizeColumn } from "../type/table.type";
 import { SizeTableAction } from "./SizeTableAction";
@@ -68,7 +68,7 @@ export const SizeTableWidget: FC<SizeTableWidgetProps> = (props) => {
   }, []);
 
   const sizeCollumnsWithAction: ColumnDef<SizeColumn>[] = [
-    ...sizeCollumns,
+    ...sizeColumns,
     {
       header: "Actions",
       id: "actions",

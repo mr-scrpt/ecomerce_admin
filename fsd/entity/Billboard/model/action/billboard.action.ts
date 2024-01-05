@@ -103,7 +103,7 @@ export const getBillboardBySlug = cache(
       const storeResponse = await storeAction.getStoreBySlug(storeSlug);
 
       if (storeResponse.error) {
-        throw new Error(storeResponse.error);
+        throw new HttpException(storeResponse.error);
       }
 
       const store = storeResponse.data;
@@ -169,7 +169,7 @@ export const updateBillboard = cache(
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
-        throw new Error(storeResponse.error);
+        throw new HttpException(storeResponse.error);
       }
 
       const isExistResponse = await isExist(billboardId);

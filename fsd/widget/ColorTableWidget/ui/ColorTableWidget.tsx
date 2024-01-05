@@ -4,11 +4,10 @@ import { useColorRemoveModal } from "@/fsd/feature/ModalManager";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
 import { FC, HTMLAttributes, useCallback, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
-import { colorCollumns } from "../data/columns";
+import { colorColumns } from "../data/columns";
 import { buildColorRow } from "../lib/buildColorRow";
 import { ColorColumn } from "../type/table.type";
 import { ColorTableAction } from "./ColorTableAction";
@@ -59,7 +58,7 @@ export const ColorTableWidget: FC<ColorTableWidgetProps> = (props) => {
   }, []);
 
   const colorCollumnsWithAction: ColumnDef<ColorColumn>[] = [
-    ...colorCollumns,
+    ...colorColumns,
     {
       header: "Actions",
       id: "actions",

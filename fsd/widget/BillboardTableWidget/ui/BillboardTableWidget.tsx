@@ -15,7 +15,7 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
-import { billboardCollumns } from "../data/columns";
+import { billboardColumns } from "../data/columns";
 import { buildBillboardRow } from "../lib/buildBillboardRow";
 import { BillboardTableAction } from "./BillboardTableAction";
 
@@ -69,7 +69,7 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
     }, []);
 
     const billboardCollumnsWithAction: ColumnDef<BillboardColumn>[] = [
-      ...billboardCollumns,
+      ...billboardColumns,
       {
         header: "Actions",
         id: "actions",
