@@ -31,7 +31,10 @@ export const SizeForm: FC<SizeFormProps> = memo((props) => {
   return (
     <div className="space-x-4 pt-2 pb-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onAction)}>
+        <form
+          onSubmit={form.handleSubmit(onAction)}
+          className="grid grid-cols-3 gap-8"
+        >
           <FormField
             control={form.control}
             name="name"

@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ColorColumn } from "../type/table.type";
-import { cn } from "@/fsd/shared/lib/utils";
 
 export const colorColumns: ColumnDef<ColorColumn>[] = [
   {
@@ -17,7 +16,7 @@ export const colorColumns: ColumnDef<ColorColumn>[] = [
         <span
           className="w-6 h-6 border-2"
           style={{ backgroundColor: `#${row.original.value}` }}
-        ></span>
+        />
         <span>{row.original.value}</span>
       </div>
     ),

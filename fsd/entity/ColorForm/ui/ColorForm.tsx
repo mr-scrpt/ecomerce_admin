@@ -27,7 +27,10 @@ export const ColorForm: FC<ColorFormProps> = memo((props) => {
   return (
     <div className="space-x-4 pt-2 pb-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onAction)}>
+        <form
+          onSubmit={form.handleSubmit(onAction)}
+          className="grid grid-cols-3 gap-8"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -52,11 +55,19 @@ export const ColorForm: FC<ColorFormProps> = memo((props) => {
               <FormItem>
                 <FormLabel>Value</FormLabel>
                 <FormControl>
-                  <Input
-                    disabled={loading}
-                    placeholder="Enter value to color..."
-                    {...field}
-                  />
+                  <div className="flex flex-row gap-4 items-center">
+                    <Input
+                      disabled={loading}
+                      placeholder="Enter value to color..."
+                      {...field}
+                    />
+                    {field.value && (
+                      <div
+                        className="border-2 h-8 w-8"
+                        style={{ backgroundColor: `#${field.value}` }}
+                      />
+                    )}
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
