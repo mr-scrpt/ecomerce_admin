@@ -2,6 +2,7 @@ import {
   ICreateOptionItemPayload,
   ICreateOptionPayload,
   IGetOptionByNamePayload,
+  IGetOptionItemByNamePayload,
   IGetOptionPayload,
   IIsOwnerPayload,
   IUpdateOptionItemPayload,
@@ -47,7 +48,7 @@ export interface ICreateOptionItemRepo extends ICreateOptionItemPayload {
   slug: string;
 }
 // export interface IGetOptionRepo extends IGetOptionPayload {}
-export interface IGetOptionItemByNameRepo extends IGetOptionByNamePayload {}
+export interface IGetOptionItemByNameRepo extends IGetOptionItemByNamePayload {}
 //
 // export interface IGetOptionBySlugRepo {
 //   optionSlug: string;
