@@ -17,6 +17,10 @@ export enum PageTitleEnum {
   COLOR = "Colors",
   COLOR_ADD = "Color create",
   COLOR_UPDATE = "Color update",
+
+  OPTION = "Options",
+  OPTION_ADD = "Option create",
+  OPTION_UPDATE = "Option update",
 }
 
 export enum PageDescriptionEnum {
@@ -37,4 +41,8 @@ export enum PageDescriptionEnum {
   COLOR = "Manage color for your store",
   COLOR_ADD = "Add new color",
   COLOR_UPDATE = "Update color",
+
+  OPTION = "Manage option for your store",
+  OPTION_ADD = "Add new option",
+  OPTION_UPDATE = "Update option",
 }

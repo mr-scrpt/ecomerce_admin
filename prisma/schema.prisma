@@ -27,6 +27,7 @@ model Store {
   color           Color[]     @relation("StoreToColor")
   categories      Category[] @relation("StoreToCategory")
   option          Option[] @relation("StoreToOption")
+  optionItem      OptionItem[] @relation("StoreToOptionItem")
 
   @@index([userId, name])
   @@unique([userId,name])
@@ -78,15 +79,42 @@ model Category {
 model Option {
   id          String      @id @default(uuid())
   name        String
+  datatype    String
+  value       OptionItem[] @relation("OptionItemToOption")
   slug        String
 
   storeId     String      // Foreign Key to Store
   store       Store       @relation("StoreToOption", fields: [storeId], references: [id])
 
   categoryList  Category[] @relation("CategoryToOption")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
 
-  @@index([storeId, name])
+  @@index([storeId,name])
+  @@unique([storeId,name])
+  @@unique([storeId,slug])
+}
+
+model OptionItem {
+
+  id          String      @id @default(uuid())
+  name        String
+  value       String
+  slug        String
+
+  storeId     String      // Foreign Key to Store
+  store       Store       @relation("StoreToOptionItem", fields: [storeId], references: [id])
+
+  option      Option      @relation("OptionItemToOption", fields: [optionId], references: [id])
+  optionId    String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([storeId,name])
+  @@index([optionId,name])
+  @@unique([optionId,name])
+
 }
 
 model Size {

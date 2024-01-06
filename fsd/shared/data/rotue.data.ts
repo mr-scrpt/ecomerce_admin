@@ -10,10 +10,6 @@ export const routeData = (currentStore: string) => [
     label: RouteNameEnum.BILLBOARDS,
   },
   {
-    href: `/${currentStore}${RoutePathEnum.SETTINGS}`,
-    label: RouteNameEnum.SETTINGS,
-  },
-  {
     href: `/${currentStore}${RoutePathEnum.CATEGORIES}`,
     label: RouteNameEnum.CATEGORIES,
   },
@@ -24,5 +20,13 @@ export const routeData = (currentStore: string) => [
   {
     href: `/${currentStore}${RoutePathEnum.COLORS}`,
     label: RouteNameEnum.COLORS,
+  },
+  {
+    href: `/${currentStore}${RoutePathEnum.OPTIONS}`,
+    label: RouteNameEnum.OPTIONS,
+  },
+  {
+    href: `/${currentStore}${RoutePathEnum.SETTINGS}`,
+    label: RouteNameEnum.SETTINGS,
   },
 ];

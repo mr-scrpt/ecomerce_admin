@@ -18,6 +18,10 @@ export enum RoutePathEnum {
   COLOR_ADD = "colors/add",
   COLOR_EDIT = "colors/edit",
 
+  OPTIONS = "/options",
+  OPTION_ADD = "options/add",
+  OPTION_EDIT = "options/edit",
+
   SIGN_UP = "/sign-up",
   SIGN_IN = "/sign-in",
 }
@@ -29,6 +33,7 @@ export enum RouteNameEnum {
   CATEGORIES = "Categories",
   SIZES = "Sizes",
   COLORS = "Colors",
+  OPTIONS = "Options",
   SIGN_UP = "Sign up",
   SIGN_IN = "Sign-in",
 }
