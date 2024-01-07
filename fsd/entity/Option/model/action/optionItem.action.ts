@@ -25,6 +25,7 @@ import { commonArray } from "@/fsd/shared/lib/commonArray";
 import { longestArray } from "@/fsd/shared/lib/longestArray";
 import { updateOption } from "./option.action";
 import { isArrayUniqueFields } from "@/fsd/shared/lib/isArrayUniqueFields";
+import { findInObject } from "@/fsd/shared/lib/findInObject";
 
 export const createOrGetOptionItemWithOutCheckUser = cache(
   async (
@@ -117,7 +118,19 @@ export const CURListOption = async (
       optionListExist,
       "id",
     );
-    const toUpdateItemList = commonArray(optionListOld, optionListExist, "id");
+    const toUpdateItemPrepereList = commonArray(
+      optionListOld,
+      optionListExist,
+      "id",
+    );
+    const toUpdateItemList = toUpdateItemPrepereList.map((item) => {
+      const option = findInObject(list, "name", item.name);
+      if (option) {
+        return { ...item, value: option.value };
+      }
+    });
+    // console.log("list =>>>", list);
+    console.log("toUpdateItemList =>>>", toUpdateItemList);
 
     const toCreateItemList = findDiffArray(list, optionListOld, "name");
 
@@ -133,21 +146,23 @@ export const CURListOption = async (
     }
 
     for await (const item of toUpdateItemList) {
-      const itemToUpdate = {
-        ...item,
-        newSlug: slugGenerator(item.name),
-      };
+      if (item) {
+        const itemToUpdate = {
+          ...item,
+          newSlug: slugGenerator(item.name),
+        };
 
-      const updateItem = await optionItemRepo.updateOptionItem(itemToUpdate);
+        const updateItem = await optionItemRepo.updateOptionItem(itemToUpdate);
 
-      if (!updateItem) {
-        throw new HttpException(
-          OptionItemResponseErrorEnum.OPTION_ITEM_NOT_UPDATED,
-          HTTPStatusEnum.BAD_REQUEST,
-        );
+        if (!updateItem) {
+          throw new HttpException(
+            OptionItemResponseErrorEnum.OPTION_ITEM_NOT_UPDATED,
+            HTTPStatusEnum.BAD_REQUEST,
+          );
+        }
+
+        resultList.push(updateItem);
       }
-
-      resultList.push(updateItem);
     }
 
     for await (const item of toCreateItemList) {

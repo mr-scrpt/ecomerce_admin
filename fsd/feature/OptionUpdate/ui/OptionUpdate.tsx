@@ -50,7 +50,8 @@ export const OptionUpdate: FC<OptionUpdateProps> = memo((props) => {
         }
         if (data) {
           toast.success(`Option has been created by name ${name}`);
-          onSuccess?.();
+          window.location.reload();
+          // onSuccess?.();
         }
       } catch (e) {
         toast.error("Something went wrong.");
