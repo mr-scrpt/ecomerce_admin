@@ -1,5 +1,6 @@
 import { HTMLAttributes } from "react";
 import { OptionFormTypeSchema } from "./schema.type";
+import { SelectDataTypeEnum } from "../../Option/type/select.enum";
 
 export interface OptionFormProps extends HTMLAttributes<HTMLDivElement> {
   onAction: (form: OptionFormTypeSchema) => void;
@@ -11,7 +12,7 @@ export interface OptionFormProps extends HTMLAttributes<HTMLDivElement> {
 
 interface IInitialFormData {
   name: string;
-  datatype: string;
+  datatype: SelectDataTypeEnum;
   value: IInitialItemFormData[];
 }
 

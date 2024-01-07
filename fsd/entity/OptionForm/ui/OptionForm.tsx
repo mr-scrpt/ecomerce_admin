@@ -14,19 +14,17 @@ import {
   FormMessage,
 } from "@/fsd/shared/ui/form";
 import { Input } from "@/fsd/shared/ui/input";
-import { OptionFormProps } from "../type/props.type";
-import { OptionFormTypeSchema, optionFormSchema } from "../type/schema.type";
-import { MinusIcon, PlusIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/fsd/shared/ui/select";
+import { MinusIcon, PlusIcon } from "lucide-react";
 import { selectDataType } from "../../Option";
+import { OptionFormProps } from "../type/props.type";
+import { OptionFormTypeSchema, optionFormSchema } from "../type/schema.type";
 
 export const OptionForm: FC<OptionFormProps> = memo((props) => {
   const { onAction, defaultValues, actionName, loading } = props;
@@ -96,16 +94,14 @@ export const OptionForm: FC<OptionFormProps> = memo((props) => {
                 </FormItem>
               )}
             />
-            {/* <div className="pt-6 space-x-2 flex items-center justify-end w-full"> */}
             <Button disabled={loading} type="submit">
               {actionName}
             </Button>
-            {/* </div> */}
           </div>
           <div className="flex flex-col gap-4 col-span-2">
             {fields.map((item, idx) => {
               return (
-                <div key={idx} className="flex gap-4 w-full">
+                <div key={item.id} className="flex gap-4 w-full">
                   <FormField
                     control={form.control}
                     name={`value.${idx}.name`}
@@ -140,13 +136,13 @@ export const OptionForm: FC<OptionFormProps> = memo((props) => {
                       </FormItem>
                     )}
                   ></FormField>
-
                   {idx > 0 ? (
                     <Button
                       type="button"
-                      onClick={() => remove(idx)}
+                      // onClick={() => }
                       className="mb-0 mt-auto"
                       variant="destructive"
+                      onClick={() => remove(idx)}
                     >
                       <MinusIcon size="10" />
                     </Button>
@@ -154,7 +150,6 @@ export const OptionForm: FC<OptionFormProps> = memo((props) => {
                     <Button
                       type="button"
                       disabled
-                      onClick={() => remove(idx)}
                       className="mb-0 mt-auto"
                       variant="destructive"
                     >

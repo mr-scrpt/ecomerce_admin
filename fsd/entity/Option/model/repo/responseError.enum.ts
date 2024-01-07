@@ -13,7 +13,7 @@ export enum OptionItemResponseErrorEnum {
   OPTION_ITEM_NOT_UNIQUE = "Option item has not been unique name",
   // OPTION_ITEM_NOT_FOUND = "Option item has not been found",
   OPTION_ITEM_NOT_CREATED = "Option item has not been created",
-  // OPTION_ITEM_NOT_UPDATED = "Option item has not been updated",
-  // OPTION_ITEM_NOT_REMOVED = "Option item has not been removed",
+  OPTION_ITEM_NOT_UPDATED = "Option item has not been updated",
+  OPTION_ITEM_NOT_REMOVED = "Option item has not been removed",
   // OPTION_ITEM_NO_OWNER = "You are not owner this item option",
 }

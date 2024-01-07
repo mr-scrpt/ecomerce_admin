@@ -10,14 +10,24 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
 import {
   ICreateOptionPayload,
+  IGetOptionBySlugPayload,
   IIsCurrentOptionPayload,
   IIsOwnerPayload,
   IIsUniqueOptionPayload,
+  IUpdateOptionPayload,
 } from "../../type/action.type";
 import { IOption, IOptionListWithRelations } from "../../type/entity.type";
 import { optionRepo } from "../repo/option.repo";
-import { OptionResponseErrorEnum } from "../repo/responseError.enum";
-import { createOptionItemList } from "./optionItem.action";
+import {
+  OptionItemResponseErrorEnum,
+  OptionResponseErrorEnum,
+} from "../repo/responseError.enum";
+import {
+  CURListOption,
+  calculateListOption,
+  createOptionItemList,
+  updateOptionItemList,
+} from "./optionItem.action";
 
 export const createOption = cache(
   async (
@@ -71,16 +81,16 @@ export const createOption = cache(
         optionId: option.id,
       }));
 
-      const createdListResponse =
+      const { data: createListItem, error: createListError } =
         await createOptionItemList(optionListFormated);
 
-      if (error) {
-        throw new HttpException(error, status);
+      if (createListError) {
+        throw new HttpException(createListError);
       }
 
       const optionFormated = {
         ...option,
-        value: createdListResponse.data ? createdListResponse.data : [],
+        value: createListItem ? createListItem : [],
       };
 
       return buildResponse(optionFormated);
@@ -91,37 +101,40 @@ export const createOption = cache(
   },
 );
 
-// export const getOptionBySlug = cache(
-//   async (
-//     data: IGetOptionBySlugPayload,
-//   ): Promise<ResponseDataAction<IOption | null>> => {
-//     try {
-//       const { storeSlug, optionSlug } = data;
-//
-//       const storeResponse = await storeAction.getStoreBySlug(storeSlug);
-//
-//       if (storeResponse.error) {
-//         throw new HttpException(storeResponse.error);
-//       }
-//
-//       const store = storeResponse.data;
-//       const option = await optionRepo.getOptionBySlug({
-//         optionSlug,
-//         storeId: store!.id,
-//       });
-//       if (!option) {
-//         throw new HttpException(
-//           OptionResponseErrorEnum.OPTION_NOT_FOUND,
-//           HTTPStatusEnum.NOT_FOUND,
-//         );
-//       }
-//       return buildResponse(option);
-//     } catch (e) {
-//       const { error, status } = buildError(e);
-//       return buildResponse(null, error, status);
-//     }
-//   },
-// );
+export const getOptionBySlug = cache(
+  async (
+    data: IGetOptionBySlugPayload,
+  ): Promise<ResponseDataAction<IOptionListWithRelations | null>> => {
+    try {
+      const { storeSlug, optionSlug } = data;
+
+      const storeResponse = await storeAction.getStoreBySlug(storeSlug);
+
+      if (storeResponse.error) {
+        throw new HttpException(storeResponse.error);
+      }
+
+      const store = storeResponse.data;
+
+      const option = await optionRepo.getOptionBySlug({
+        optionSlug,
+        storeId: store!.id,
+      });
+
+      if (!option) {
+        throw new HttpException(
+          OptionResponseErrorEnum.OPTION_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+
+      return buildResponse(option);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
 
 export const getOption = cache(
   async (optionId: string): Promise<ResponseDataAction<IOption | null>> => {
@@ -154,9 +167,7 @@ export const getOptionListByStoreId = cache(
 );
 
 export const getOptionListByStoreSlug = cache(
-  async (
-    storeSlug: string,
-  ): Promise<ResponseDataAction<IOptionListWithRelations[] | null>> => {
+  async (storeSlug: string): Promise<ResponseDataAction<IOption[] | null>> => {
     try {
       const optionList = await optionRepo.getOptionListByStoreSlug(storeSlug);
 
@@ -182,67 +193,90 @@ export const getOptionListByCategory = cache(
   },
 );
 
-// export const updateOption = cache(
-//   async (
-//     data: IUpdateOptionPayload,
-//   ): Promise<ResponseDataAction<IOption | null>> => {
-//     try {
-//       const { error, status } = await authAction.getAuthUser();
-//       if (error) {
-//         throw new HttpException(error, status);
-//       }
-//
-//       const { storeId, optionId, name, value } = data;
-//
-//       const storeResponse = await storeAction.getStore(storeId);
-//       if (storeResponse.error) {
-//         throw new HttpException(storeResponse.error);
-//       }
-//
-//       const isExistResponse = await isExist(optionId);
-//
-//       if (!isExistResponse) {
-//         throw new HttpException(
-//           OptionResponseErrorEnum.OPTION_NOT_EXIST,
-//           HTTPStatusEnum.NOT_FOUND,
-//         );
-//       }
-//
-//       const isCurrentResponse = await isCurrent({ name, optionId });
-//
-//       if (!isCurrentResponse) {
-//         const isUniqueResponse = await isUnique({ name, storeId });
-//
-//         if (!isUniqueResponse) {
-//           throw new HttpException(
-//             OptionResponseErrorEnum.OPTION_NOT_UNIQUE,
-//             HTTPStatusEnum.BAD_REQUEST,
-//           );
-//         }
-//       }
-//
-//       const newSlug = slugGenerator(name);
-//
-//       const option = await optionRepo.updateOption({
-//         optionId,
-//         name,
-//         newSlug,
-//         value,
-//       });
-//
-//       if (!option) {
-//         throw new HttpException(
-//           OptionResponseErrorEnum.OPTION_NOT_UPDATED,
-//           HTTPStatusEnum.BAD_REQUEST,
-//         );
-//       }
-//       return buildResponse(option);
-//     } catch (e) {
-//       const { error, status } = buildError(e);
-//       return buildResponse(null, error, status);
-//     }
-//   },
-// );
+export const updateOption = cache(
+  async (
+    data: IUpdateOptionPayload,
+  ): Promise<ResponseDataAction<IOption | null>> => {
+    try {
+      const { error, status } = await authAction.getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
+      }
+
+      const { storeId, optionId, name, datatype, value } = data;
+
+      const storeResponse = await storeAction.getStore(storeId);
+      if (storeResponse.error) {
+        throw new HttpException(storeResponse.error);
+      }
+
+      const isExistResponse = await isExist(optionId);
+
+      if (!isExistResponse) {
+        throw new HttpException(
+          OptionResponseErrorEnum.OPTION_NOT_EXIST,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+
+      const isCurrentResponse = await isCurrent({ name, optionId });
+
+      if (!isCurrentResponse) {
+        const isUniqueResponse = await isUnique({ name, storeId });
+
+        if (!isUniqueResponse) {
+          throw new HttpException(
+            OptionResponseErrorEnum.OPTION_NOT_UNIQUE,
+            HTTPStatusEnum.BAD_REQUEST,
+          );
+        }
+      }
+
+      const newSlug = slugGenerator(name);
+
+      const option = await optionRepo.updateOption({
+        optionId,
+        name,
+        newSlug,
+        datatype,
+      });
+
+      if (!option) {
+        throw new HttpException(
+          OptionResponseErrorEnum.OPTION_NOT_UPDATED,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+      //TODO CREATE NEW OPTION ITEM IF NOT EXIST
+      //TODO UPDATE NEW OPTION ITEM IF NOT EXIST
+      //TODO DELETE IF NOT USE IN POSITION NEW OPTION ITEM IF NOT EXIST
+      const { data: updatedItemList, error: updateListError } =
+        await CURListOption({ optionId, storeId, list: value });
+
+      if (updateListError) {
+        throw new HttpException(updateListError);
+      }
+
+      // const optionListFormated = updatedItemList!.map((item) => ({
+      //   ...item,
+      //   storeId,
+      //   optionId,
+      //   optionIdItem: item.id,
+      // }));
+
+      const optionFormated = {
+        ...option,
+        value: updatedItemList ? updatedItemList : [],
+      };
+
+      return buildResponse(optionFormated);
+    } catch (e) {
+      console.log("error on update =>>>", e);
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
 
 export const removeOption = cache(
   async (optionId: string): Promise<ResponseDataAction<IOption | null>> => {

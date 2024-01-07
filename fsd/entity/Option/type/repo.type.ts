@@ -8,9 +8,10 @@ import {
   IUpdateOptionItemPayload,
   IUpdateOptionPayload,
 } from "./action.type";
+import { IOptionItem } from "./entity.type";
 
 export interface IUpdateOptionRepo
-  extends Omit<IUpdateOptionPayload, "storeId"> {
+  extends Omit<IUpdateOptionPayload, "storeId" | "value"> {
   newSlug: string;
 }
 
@@ -33,8 +34,14 @@ export interface IGetOptionBySlugRepo {
 
 // OptionItem
 //
-export interface IUpdateOptionItemRepo
-  extends Omit<IUpdateOptionItemPayload, "value"> {
+// export interface IUpdateOptionItemRepo
+//   extends Omit<IUpdateOptionItemPayload, "value"> {
+//   newSlug: string;
+// }
+// export interface IUpdateOptionItemRepo extends IUpdateOptionItemPayload {
+//   newSlug: string;
+// }
+export interface IUpdateOptionItemRepo extends IOptionItem {
   newSlug: string;
 }
 
@@ -49,9 +56,12 @@ export interface ICreateOptionItemRepo extends ICreateOptionItemPayload {
 }
 // export interface IGetOptionRepo extends IGetOptionPayload {}
 export interface IGetOptionItemByNameRepo extends IGetOptionItemByNamePayload {}
+export interface IRemoveOptionItemByName {
+  optionId: string;
+  name: string;
+}
 //
-// export interface IGetOptionBySlugRepo {
-//   optionSlug: string;
-//   storeId: string;
-// }
-//
+export interface IGetOptionBySlugRepo {
+  optionSlug: string;
+  storeId: string;
+}

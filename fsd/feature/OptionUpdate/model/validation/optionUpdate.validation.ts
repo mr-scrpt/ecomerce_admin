@@ -4,9 +4,10 @@ import {
 } from "@/fsd/entity/OptionForm";
 
 export const optionUpdateValidate = (data: OptionFormTypeSchema) => {
-  const { name, value } = data;
+  const { name, value, datatype } = data;
   const validateFields = optionFormSchema.safeParse({
     name,
+    datatype,
     value,
   });
 

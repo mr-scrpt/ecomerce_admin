@@ -1,13 +1,12 @@
 import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
-import { IOptionItem } from "../../type/entity.type";
+import { IOption, IOptionItem } from "../../type/entity.type";
 import {
   ICreateOptionItemRepo,
   IGetOptionItemByNameRepo,
-  IGetOptionItemBySlugRepo,
-  IIsOwnerRepo,
-  IRemoveOptionItemRepo,
+  IRemoveOptionItemByName,
   IUpdateOptionItemRepo,
+  IUpdateOptionRepo,
 } from "../../type/repo.type";
 
 class OptionItemRepo {
@@ -18,14 +17,17 @@ class OptionItemRepo {
   //   });
   // };
   //
-  // getOptionItemList = cache(async (storeId: string): Promise<IOption[]> => {
-  //   return await prismaDB.OptionItem.findMany({
-  //     include: { store: true },
-  //     where: {
-  //       storeId: storeId,
-  //     },
-  //   });
-  // });
+  getOptionListItemList = cache(
+    async (optionId: string): Promise<IOptionItem[]> => {
+      const res = await prismaDB.optionItem.findMany({
+        // include: { store: true },
+        where: {
+          optionId,
+        },
+      });
+      return res;
+    },
+  );
 
   // getOptionItemListByStoreSlug = cache(
   //   async (storeSlug: string): Promise<IOptionItemWithRelations[]> => {
@@ -93,32 +95,41 @@ class OptionItemRepo {
       // include: { store: true },
     });
   };
-  //
-  // updateOptionItem = cache(async (data: IUpdateOptionRepo): Promise<IOption> => {
-  //   const { OptionItemId, name, newSlug, value } = data;
-  //   const store = await prismaDB.OptionItem.update({
-  //     where: {
-  //       id: OptionItemId,
-  //     },
-  //     data: {
-  //       name,
-  //       value,
-  //       slug: newSlug,
-  //     },
-  //   });
-  //   return store;
-  // });
 
-  // removeOptionItem = cache(
-  //   async (data: IRemoveOptionRepo): Promise<IOption> => {
-  //     const { optionItemId } = data;
-  //     return await prismaDB.OptionItem.delete({
-  //       where: {
-  //         id: optionItemId,
-  //       },
-  //     });
-  //   },
-  // );
+  updateOptionItem = cache(
+    async (data: IUpdateOptionItemRepo): Promise<IOptionItem> => {
+      const { id, name, newSlug, value } = data;
+      const option = await prismaDB.optionItem.update({
+        where: {
+          id,
+        },
+        data: {
+          name,
+          value,
+          slug: newSlug,
+        },
+      });
+      return option;
+    },
+  );
+
+  removeOptionItem = cache(async (optionId: string): Promise<IOptionItem> => {
+    return await prismaDB.optionItem.delete({
+      where: {
+        id: optionId,
+      },
+    });
+  });
+
+  removeOptionItemByName = cache(
+    async (data: IRemoveOptionItemByName): Promise<IOptionItem> => {
+      return await prismaDB.optionItem.delete({
+        where: {
+          optionId_name: data,
+        },
+      });
+    },
+  );
 }
 
 export const optionItemRepo = new OptionItemRepo();

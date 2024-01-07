@@ -11,7 +11,8 @@ export interface IUpdateOptionPayload {
   storeId: string;
   optionId: string;
   name: string;
-  value: string;
+  datatype: SelectDataTypeEnum;
+  value: IUpdateOptionItemPayload[];
   // imgUrl: string;
 }
 
@@ -58,6 +59,24 @@ export interface ICreateOptionItemFromOptionPayload {
   value: string;
 }
 
+export interface IOptionItemPayload {
+  // optionId: string;
+  name: string;
+  value: string;
+}
+
+export interface IOptionItemListPayload {
+  optionId: string;
+  storeId: string;
+  list: IOptionItemPayload[];
+}
+
+export interface ICUDOptionItemList {
+  toCreate: IOptionItemPayload[];
+  toUpdate: IOptionItemPayload[];
+  toRemove: IOptionItemPayload[];
+}
+
 export interface ICreateOptionItemPayload {
   storeId: string;
   optionId: string;
@@ -66,9 +85,11 @@ export interface ICreateOptionItemPayload {
 }
 
 export interface IUpdateOptionItemPayload {
-  optionId: string;
-  optionItem: string;
+  // optionId: string;
+  // optionIdItem: string;
+  // storeId: string;
   name: string;
+  // slug: string;
   value: string;
 }
 //
@@ -82,10 +103,10 @@ export interface IUpdateOptionItemPayload {
 //   storeSlug: string;
 // }
 //
-// export interface IGetOptionItemByNamePayload {
-//   name: string;
-//   optionId: string;
-// }
+export interface IGetOptionItemByNamePayload {
+  name: string;
+  optionId: string;
+}
 //
 // // export interface IIsOwnerPayload {
 // //   optionItemId: string;

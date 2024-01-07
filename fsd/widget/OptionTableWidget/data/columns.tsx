@@ -16,7 +16,7 @@ export const optionColumns: ColumnDef<OptionColumn>[] = [
         {row.original.value &&
           row.original.value
             .slice(0, 3)
-            .map((item) => <div key={item.value}>{item.value}</div>)}
+            .map((item) => <div key={item.name}>{item.value}</div>)}
       </div>
     ),
   },
