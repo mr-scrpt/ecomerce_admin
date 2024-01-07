@@ -24,6 +24,7 @@ import { findDiffArray } from "@/fsd/shared/lib/diffArray";
 import { commonArray } from "@/fsd/shared/lib/commonArray";
 import { longestArray } from "@/fsd/shared/lib/longestArray";
 import { updateOption } from "./option.action";
+import { isArrayUniqueFields } from "@/fsd/shared/lib/isArrayUniqueFields";
 
 export const createOrGetOptionItemWithOutCheckUser = cache(
   async (
@@ -96,6 +97,15 @@ export const CURListOption = async (
 ): Promise<ResponseDataAction<IOptionItem[] | null>> => {
   try {
     const { optionId, storeId, list } = data;
+
+    const isUniqueArray = isArrayUniqueFields(list, "name");
+
+    if (!isUniqueArray) {
+      throw new HttpException(
+        OptionItemResponseErrorEnum.OPTION_ITEM_NOT_UNIQUE,
+        HTTPStatusEnum.BAD_REQUEST,
+      );
+    }
 
     const resultList = [];
 
