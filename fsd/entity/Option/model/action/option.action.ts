@@ -18,16 +18,8 @@ import {
 } from "../../type/action.type";
 import { IOption, IOptionListWithRelations } from "../../type/entity.type";
 import { optionRepo } from "../repo/option.repo";
-import {
-  OptionItemResponseErrorEnum,
-  OptionResponseErrorEnum,
-} from "../repo/responseError.enum";
-import {
-  CURListOption,
-  calculateListOption,
-  createOptionItemList,
-  updateOptionItemList,
-} from "./optionItem.action";
+import { OptionResponseErrorEnum } from "../repo/responseError.enum";
+import { CURListOption, createOptionItemList } from "./optionItem.action";
 
 export const createOption = cache(
   async (
@@ -82,7 +74,7 @@ export const createOption = cache(
       }));
 
       const { data: createListItem, error: createListError } =
-        await createOptionItemList(optionListFormated);
+        await createOptionItemList(optionListFormated, false);
 
       if (createListError) {
         throw new HttpException(createListError);
@@ -95,6 +87,7 @@ export const createOption = cache(
 
       return buildResponse(optionFormated);
     } catch (e) {
+      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -251,7 +244,7 @@ export const updateOption = cache(
       //TODO UPDATE NEW OPTION ITEM IF NOT EXIST
       //TODO DELETE IF NOT USE IN POSITION NEW OPTION ITEM IF NOT EXIST
       const { data: updatedItemList, error: updateListError } =
-        await CURListOption({ optionId, storeId, list: value });
+        await CURListOption({ optionId, storeId, list: value }, false);
 
       if (updateListError) {
         throw new HttpException(updateListError);

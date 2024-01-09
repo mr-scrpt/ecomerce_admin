@@ -46,10 +46,14 @@ class OptionItemRepo {
   getOptionItemByName = async (
     data: IGetOptionItemByNameRepo,
   ): Promise<IOptionItem | null> => {
-    const res = await prismaDB.optionItem.findUnique({
-      where: { optionId_name: data },
-    });
-    return res;
+    //!! Not findUnique, becouse if not found throw error
+    try {
+      return await prismaDB.optionItem.findUnique({
+        where: { optionId_name: data },
+      });
+    } catch (e) {
+      return null;
+    }
   };
 
   // getOptionItemBySlug = async (
@@ -83,17 +87,23 @@ class OptionItemRepo {
   createOptionItem = async (
     data: ICreateOptionItemRepo,
   ): Promise<IOptionItem> => {
-    const { name, value, storeId, slug, optionId } = data;
-    return await prismaDB.optionItem.create({
-      data: {
-        name,
-        optionId,
-        value,
-        slug,
-        storeId,
-      },
-      // include: { store: true },
-    });
+    try {
+      const { name, value, slug, optionId } = data;
+      console.log("data in repo =>>>", data);
+      const res = await prismaDB.optionItem.create({
+        data: {
+          name,
+          optionId,
+          value,
+          slug,
+        },
+        // include: { store: true },
+      });
+      console.log("res in repo =========++++++ =>>>", res);
+      return res;
+    } catch (e) {
+      console.log("erororrroroororor =>>>", e);
+    }
   };
 
   updateOptionItem = cache(

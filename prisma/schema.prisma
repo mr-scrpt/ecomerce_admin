@@ -27,7 +27,7 @@ model Store {
   color           Color[]     @relation("StoreToColor")
   categories      Category[] @relation("StoreToCategory")
   option          Option[] @relation("StoreToOption")
-  optionItem      OptionItem[] @relation("StoreToOptionItem")
+  // optionItem      OptionItem[] @relation("StoreToOptionItem")
 
   @@index([userId, name])
   @@unique([userId,name])
@@ -103,15 +103,11 @@ model OptionItem {
   value       String
   slug        String
 
-  storeId     String      // Foreign Key to Store
-  store       Store       @relation("StoreToOptionItem", fields: [storeId], references: [id])
-
   option      Option      @relation("OptionItemToOption", fields: [optionId], references: [id])
   optionId    String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  @@index([storeId,name])
   @@index([optionId,name])
   @@unique([optionId,name])
 

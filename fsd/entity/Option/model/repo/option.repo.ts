@@ -9,6 +9,7 @@ import {
   IRemoveOptionRepo,
   IUpdateOptionRepo,
 } from "../../type/repo.type";
+import { SelectDataTypeEnum } from "../../type/select.enum";
 // import { IOptionWithRelations } from "../..";
 
 class OptionRepo {
@@ -60,8 +61,15 @@ class OptionRepo {
       include: { store: true, value: true },
       where: { storeId_slug: { storeId, slug: optionSlug } },
     });
-    console.log("res =>>>", res);
-    return res;
+
+    if (res) {
+      const datatype = res.datatype as SelectDataTypeEnum;
+      const obj = { ...res, datatype };
+      obj.datatype;
+
+      return obj;
+    }
+    return null;
   };
 
   getOptionIsOwner = cache(
