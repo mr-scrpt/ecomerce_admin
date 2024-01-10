@@ -11,7 +11,8 @@ export enum OptionResponseErrorEnum {
 export enum OptionItemResponseErrorEnum {
   // OPTION_ITEM_NOT_EXIST = "Option item has not been exist",
   OPTION_ITEM_NOT_UNIQUE = "Option item has not been unique name",
-  // OPTION_ITEM_NOT_FOUND = "Option item has not been found",
+  OPTION_ITEM_NOT_FOUND = "Option item has not been found",
+  OPTION_ITEM_LIST_NOT_FOUND = "Option items has not been found",
   OPTION_ITEM_NOT_CREATED = "Option item has not been created",
   OPTION_ITEM_NOT_UPDATED = "Option item has not been updated",
   OPTION_ITEM_NOT_REMOVED = "Option item has not been removed",

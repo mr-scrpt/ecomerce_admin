@@ -4,7 +4,7 @@ import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
+import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -24,7 +24,6 @@ import {
   createOptionItemList,
   removeOptionItemByOption,
 } from "./optionItem.action";
-import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createOption = cache(
   async (
@@ -240,22 +239,12 @@ export const updateOption = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      //TODO CREATE NEW OPTION ITEM IF NOT EXIST
-      //TODO UPDATE NEW OPTION ITEM IF NOT EXIST
-      //TODO DELETE IF NOT USE IN POSITION NEW OPTION ITEM IF NOT EXIST
       const { data: updatedItemList, error: updateListError } =
         await CURListOption({ optionId, storeId, list: value }, false);
 
       if (updateListError) {
         throw new HttpException(updateListError);
       }
-
-      // const optionListFormated = updatedItemList!.map((item) => ({
-      //   ...item,
-      //   storeId,
-      //   optionId,
-      //   optionIdItem: item.id,
-      // }));
 
       const optionFormated = {
         ...option,

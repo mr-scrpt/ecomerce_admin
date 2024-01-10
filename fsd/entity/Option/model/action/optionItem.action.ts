@@ -7,7 +7,6 @@ import { HttpException } from "@/fsd/shared/lib/httpException";
 import { isArrayUniqueFields } from "@/fsd/shared/lib/isArrayUniqueFields";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
 import { checkAuthUser } from "@/fsd/shared/model/action/auth.action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
@@ -100,54 +99,78 @@ export const createOptionItemList = cache(
 
 export const getOptionItemByName = async (
   data: IGetOptionItemByNamePayload,
-): Promise<IOptionItem | null> => {
-  return await optionItemRepo.getOptionItemByName(data);
+): Promise<ResponseDataAction<IOptionItem | null>> => {
+  try {
+    const res = await optionItemRepo.getOptionItemByName(data);
+    return buildResponse(res);
+  } catch (e) {
+    const { error, status } = buildError(e);
+    return buildResponse(null, error, status);
+  }
 };
 
 export const getOptionItemListByList = async (
   data: IGetOptionItemListPayload,
-): Promise<IOptionItem[]> => {
-  const { list, optionId } = data;
+): Promise<ResponseDataAction<IOptionItem[] | null>> => {
+  try {
+    const { list, optionId } = data;
 
-  const res = [];
-  for await (const item of list) {
-    const option = await getOptionItemByName({ optionId, name: item.name });
-    if (option) {
-      res.push(option);
+    const res = [];
+
+    for await (const item of list) {
+      const { data, error } = await getOptionItemByName({
+        optionId,
+        name: item.name,
+      });
+      if (error) {
+        throw new HttpException(
+          OptionItemResponseErrorEnum.OPTION_ITEM_NOT_FOUND,
+          HTTPStatusEnum.NOT_FOUND,
+        );
+      }
+      res.push(data!);
     }
+    return buildResponse(res);
+  } catch (e) {
+    const { error, status } = buildError(e);
+    return buildResponse(null, error, status);
   }
-  return res;
 };
 
 export const createOptionItemByList = async (
   data: ICreateOptionItemByListPaylod,
   checkAuth: boolean = true,
-): Promise<IOptionItem[]> => {
-  const { list, optionId } = data;
+): Promise<ResponseDataAction<IOptionItem[] | null>> => {
+  try {
+    const { list, optionId } = data;
 
-  await checkAuthUser(checkAuth);
+    await checkAuthUser(checkAuth);
 
-  const resultList: IOptionItem[] = [];
+    const resultList: IOptionItem[] = [];
 
-  for await (const item of list) {
-    const itemToCreate = {
-      ...item,
-      optionId,
-      slug: slugGenerator(item.name),
-    };
+    for await (const item of list) {
+      const itemToCreate = {
+        ...item,
+        optionId,
+        slug: slugGenerator(item.name),
+      };
 
-    const createItem = await optionItemRepo.createOptionItem(itemToCreate);
+      const createItem = await optionItemRepo.createOptionItem(itemToCreate);
 
-    if (!createItem) {
-      throw new HttpException(
-        OptionItemResponseErrorEnum.OPTION_ITEM_NOT_CREATED,
-        HTTPStatusEnum.BAD_REQUEST,
-      );
+      if (!createItem) {
+        throw new HttpException(
+          OptionItemResponseErrorEnum.OPTION_ITEM_NOT_CREATED,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
+      resultList.push(createItem);
     }
-    resultList.push(createItem);
-  }
 
-  return resultList;
+    return buildResponse(resultList);
+  } catch (e) {
+    const { error, status } = buildError(e);
+    return buildResponse(null, error, status);
+  }
 };
 
 export const removeOptionItemByOption = async (
@@ -168,49 +191,61 @@ export const removeOptionItemByOption = async (
 export const removeOptionItemByList = async (
   list: IOptionItem[],
   checkAuth: boolean = true,
-): Promise<void> => {
-  await checkAuthUser(checkAuth);
+): Promise<ResponseDataAction<null>> => {
+  try {
+    await checkAuthUser(checkAuth);
 
-  for await (const item of list) {
-    const removedItem = await optionItemRepo.removeOptionItem(item.id);
+    for await (const item of list) {
+      const removedItem = await optionItemRepo.removeOptionItem(item.id);
 
-    if (!removedItem) {
-      throw new HttpException(
-        OptionItemResponseErrorEnum.OPTION_ITEM_NOT_REMOVED,
-        HTTPStatusEnum.BAD_REQUEST,
-      );
+      if (!removedItem) {
+        throw new HttpException(
+          OptionItemResponseErrorEnum.OPTION_ITEM_NOT_REMOVED,
+          HTTPStatusEnum.BAD_REQUEST,
+        );
+      }
     }
+    return buildResponse(null);
+  } catch (e) {
+    const { error, status } = buildError(e);
+    return buildResponse(null, error, status);
   }
 };
 
 export const updateOptionItemByList = async (
   list: IOptionItem[],
   checkAuth: boolean = true,
-): Promise<IOptionItem[]> => {
-  await checkAuthUser(checkAuth);
+): Promise<ResponseDataAction<IOptionItem[] | null>> => {
+  try {
+    await checkAuthUser(checkAuth);
 
-  const resultList: IOptionItem[] = [];
-  for await (const item of list) {
-    if (item) {
-      const itemToUpdate = {
-        ...item,
-        newSlug: slugGenerator(item.name),
-      };
+    const resultList: IOptionItem[] = [];
+    for await (const item of list) {
+      if (item) {
+        const itemToUpdate = {
+          ...item,
+          newSlug: slugGenerator(item.name),
+        };
 
-      const updateItem = await optionItemRepo.updateOptionItem(itemToUpdate);
+        const updateItem = await optionItemRepo.updateOptionItem(itemToUpdate);
 
-      if (!updateItem) {
-        throw new HttpException(
-          OptionItemResponseErrorEnum.OPTION_ITEM_NOT_UPDATED,
-          HTTPStatusEnum.BAD_REQUEST,
-        );
+        if (!updateItem) {
+          throw new HttpException(
+            OptionItemResponseErrorEnum.OPTION_ITEM_NOT_UPDATED,
+            HTTPStatusEnum.BAD_REQUEST,
+          );
+        }
+
+        resultList.push(updateItem);
       }
-
-      resultList.push(updateItem);
     }
-  }
 
-  return resultList;
+    const res = buildResponse(resultList);
+    return res;
+  } catch (e) {
+    const { error, status } = buildError(e);
+    return buildResponse(null, error, status);
+  }
 };
 
 export const CURListOption = async (
@@ -234,13 +269,25 @@ export const CURListOption = async (
     const resultList = [];
 
     const optionListOld = await optionItemRepo.getOptionListItemList(optionId);
-    const optionListExist = await getOptionItemListByList(data);
+    if (!optionListOld) {
+      throw new HttpException(
+        OptionItemResponseErrorEnum.OPTION_ITEM_LIST_NOT_FOUND,
+        HTTPStatusEnum.NOT_FOUND,
+      );
+    }
+
+    const { data: optionListExist, error: optionListError } =
+      await getOptionItemListByList(data);
+
+    if (optionListError) {
+      throw new HttpException(optionListError, HTTPStatusEnum.BAD_REQUEST);
+    }
 
     const toCreateItemList = findDiffArray(list, optionListOld, "name");
 
     const toRemoveItemList = findDiffArray(
       optionListOld,
-      optionListExist,
+      optionListExist!,
       "id",
     );
 
@@ -248,7 +295,7 @@ export const CURListOption = async (
 
     const toUpdateItemPrepereList = commonArray(
       optionListOld,
-      optionListExist,
+      optionListExist!,
       "id",
     );
 
@@ -262,14 +309,22 @@ export const CURListOption = async (
       }
     }
 
-    resultList.push(...(await updateOptionItemByList(toUpdateItemList, false)));
+    const { data: updatedOptionList, error: updatedOptionError } =
+      await updateOptionItemByList(toUpdateItemList, false);
 
-    resultList.push(
-      ...(await createOptionItemByList(
-        { list: toCreateItemList, optionId },
-        false,
-      )),
-    );
+    if (updatedOptionError) {
+      throw new HttpException(updatedOptionError, HTTPStatusEnum.BAD_REQUEST);
+    }
+
+    resultList.push(...updatedOptionList!);
+
+    const { data: createdOptionList, error: createdOptionError } =
+      await createOptionItemByList({ list: toCreateItemList, optionId }, false);
+    if (createdOptionError) {
+      throw new HttpException(createdOptionError, HTTPStatusEnum.BAD_REQUEST);
+    }
+
+    resultList.push(...createdOptionList!);
 
     return buildResponse(resultList);
   } catch (e) {
