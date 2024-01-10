@@ -103,7 +103,7 @@ model OptionItem {
   value       String
   slug        String
 
-  option      Option      @relation("OptionItemToOption", fields: [optionId], references: [id])
+  option      Option      @relation("OptionItemToOption", fields: [optionId], references: [id], onDelete: Cascade)
   optionId    String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt

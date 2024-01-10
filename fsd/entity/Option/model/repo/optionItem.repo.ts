@@ -1,12 +1,11 @@
 import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
-import { IOption, IOptionItem } from "../../type/entity.type";
+import { IOptionItem } from "../../type/entity.type";
 import {
   ICreateOptionItemRepo,
   IGetOptionItemByNameRepo,
   IRemoveOptionItemByName,
   IUpdateOptionItemRepo,
-  IUpdateOptionRepo,
 } from "../../type/repo.type";
 
 class OptionItemRepo {
@@ -87,23 +86,17 @@ class OptionItemRepo {
   createOptionItem = async (
     data: ICreateOptionItemRepo,
   ): Promise<IOptionItem> => {
-    try {
-      const { name, value, slug, optionId } = data;
-      console.log("data in repo =>>>", data);
-      const res = await prismaDB.optionItem.create({
-        data: {
-          name,
-          optionId,
-          value,
-          slug,
-        },
-        // include: { store: true },
-      });
-      console.log("res in repo =========++++++ =>>>", res);
-      return res;
-    } catch (e) {
-      console.log("erororrroroororor =>>>", e);
-    }
+    const { name, value, slug, optionId } = data;
+    const res = await prismaDB.optionItem.create({
+      data: {
+        name,
+        optionId,
+        value,
+        slug,
+      },
+      // include: { option: true },
+    });
+    return res;
   };
 
   updateOptionItem = cache(
@@ -127,6 +120,14 @@ class OptionItemRepo {
     return await prismaDB.optionItem.delete({
       where: {
         id: optionId,
+      },
+    });
+  });
+
+  removeOptionItemByOption = cache(async (optionId: string): Promise<void> => {
+    await prismaDB.optionItem.deleteMany({
+      where: {
+        optionId,
       },
     });
   });

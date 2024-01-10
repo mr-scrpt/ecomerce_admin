@@ -1,6 +1,6 @@
-import { IOptionWithRelations } from "@/fsd/entity/Option/type/entity.type";
 import { buildDate } from "@/fsd/shared/lib/formatDate";
 import { IStoreOptionTableItem } from "../type/store.type";
+import { IOptionWithRelations } from "@/fsd/entity/Option";
 
 export const buildOptionRow = (
   item: IOptionWithRelations,

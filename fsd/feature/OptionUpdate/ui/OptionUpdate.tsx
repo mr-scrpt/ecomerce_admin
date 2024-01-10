@@ -1,9 +1,9 @@
-import { IOption, optionAction } from "@/fsd/entity/Option";
+import { optionAction } from "@/fsd/entity/Option";
+import { IOptionListWithRelations } from "@/fsd/entity/Option/type/entity.type";
 import { OptionForm, OptionFormTypeSchema } from "@/fsd/entity/OptionForm";
 import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { optionUpdateValidate } from "../model/validation/optionUpdate.validation";
-import { IOptionListWithRelations } from "@/fsd/entity/Option/type/entity.type";
 
 interface OptionUpdateProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "option"> {
@@ -17,7 +17,6 @@ export const OptionUpdate: FC<OptionUpdateProps> = memo((props) => {
   const { id } = option;
   const [loading, setLoading] = useState(false);
 
-  console.log("option =>>>", option);
   const onSubmit = useCallback(
     async (form: OptionFormTypeSchema) => {
       try {
@@ -27,11 +26,9 @@ export const OptionUpdate: FC<OptionUpdateProps> = memo((props) => {
           return toast.error("Store Not Found");
         }
 
-        console.log("form =>>>", form);
         const validation = optionUpdateValidate(form);
 
         if (validation?.errors) {
-          console.log(" =>>>", validation.errors);
           return toast.error("Incorrect data from the form");
         }
 
@@ -50,8 +47,8 @@ export const OptionUpdate: FC<OptionUpdateProps> = memo((props) => {
         }
         if (data) {
           toast.success(`Option has been created by name ${name}`);
-          window.location.reload();
-          // onSuccess?.();
+          console.log(" =>>> success !!!");
+          onSuccess?.();
         }
       } catch (e) {
         toast.error("Something went wrong.");

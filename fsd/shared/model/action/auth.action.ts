@@ -36,3 +36,16 @@ export const getAuthUser = cache(
     }
   },
 );
+
+export const checkAuthUser = cache(
+  async (checkAuth: boolean): Promise<IUserClerk | null> => {
+    if (checkAuth) {
+      const { data, error, status } = await getAuthUser();
+      if (error) {
+        throw new HttpException(error, status);
+      }
+      return data;
+    }
+    return null;
+  },
+);

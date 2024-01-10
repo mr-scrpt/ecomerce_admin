@@ -12,11 +12,12 @@ export const optionColumns: ColumnDef<OptionColumn>[] = [
     accessorKey: "value",
     header: "value",
     cell: ({ row }) => (
-      <div className="flex flex-row gap-2 items-center">
+      <div className="flex flex-col gap-2">
         {row.original.value &&
           row.original.value
             .slice(0, 3)
             .map((item) => <div key={item.name}>{item.value}</div>)}
+        {row.original.value.length > 3 && <div>...</div>}
       </div>
     ),
   },

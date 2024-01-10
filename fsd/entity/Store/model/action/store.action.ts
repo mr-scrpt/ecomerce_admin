@@ -3,7 +3,7 @@ import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/modle/action";
+import { authAction } from "@/fsd/shared/model/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";

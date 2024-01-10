@@ -4,6 +4,7 @@ import { CategoryRemoveModal } from "@/fsd/feature/CategoryRemove";
 import { ColorRemoveModal } from "@/fsd/feature/ColorRemove";
 import {
   useColorRemoveModal,
+  useOptionRemoveModal,
   useSizeRemoveModal,
   useStoreModal,
 } from "@/fsd/feature/ModalManager";
@@ -12,6 +13,7 @@ import {
   useCategoryRemoveModal,
   useStoreRemoveModal,
 } from "@/fsd/feature/ModalManager";
+import { OptionRemoveModal } from "@/fsd/feature/OptionRemove";
 import { SizeRemoveModal } from "@/fsd/feature/SizeRemove";
 import { StoreCreateModal } from "@/fsd/feature/StoreCreate";
 import { StoreRemoveModal } from "@/fsd/feature/StoreRemove";
@@ -60,6 +62,13 @@ export const ModalProvider = () => {
     useShallow((state) => ({
       isOpenColorRemove: state.isOpen,
       onCloseColorRemove: state.onClose,
+    })),
+  );
+
+  const { isOpenOptionRemove, onCloseOptionRemove } = useOptionRemoveModal(
+    useShallow((state) => ({
+      isOpenOptionRemove: state.isOpen,
+      onCloseOptionRemove: state.onClose,
     })),
   );
 
@@ -117,6 +126,14 @@ export const ModalProvider = () => {
         description="This action cannot be undone."
       >
         <ColorRemoveModal onClose={onCloseColorRemove} />
+      </Modal>
+      <Modal
+        isOpen={isOpenOptionRemove}
+        onClose={onCloseOptionRemove}
+        title="Are you sure remove option?"
+        description="This action cannot be undone."
+      >
+        <OptionRemoveModal onClose={onCloseOptionRemove} />
       </Modal>
     </>
   );

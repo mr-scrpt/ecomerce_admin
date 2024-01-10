@@ -4,7 +4,7 @@ import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/modle/action";
+import { authAction } from "@/fsd/shared/model/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -19,19 +19,22 @@ import {
 import { IOption, IOptionListWithRelations } from "../../type/entity.type";
 import { optionRepo } from "../repo/option.repo";
 import { OptionResponseErrorEnum } from "../repo/responseError.enum";
-import { CURListOption, createOptionItemList } from "./optionItem.action";
+import {
+  CURListOption,
+  createOptionItemList,
+  removeOptionItemByOption,
+} from "./optionItem.action";
+import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createOption = cache(
   async (
     data: ICreateOptionPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IOption | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, name, datatype, value } = data;
+
+      await checkAuthUser(checkAuth);
 
       const isUniqueResponse = await isUnique({
         name,
@@ -87,7 +90,6 @@ export const createOption = cache(
 
       return buildResponse(optionFormated);
     } catch (e) {
-      console.log(" =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -189,14 +191,12 @@ export const getOptionListByCategory = cache(
 export const updateOption = cache(
   async (
     data: IUpdateOptionPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IOption | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, optionId, name, datatype, value } = data;
+
+      await checkAuthUser(checkAuth);
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
@@ -264,7 +264,6 @@ export const updateOption = cache(
 
       return buildResponse(optionFormated);
     } catch (e) {
-      console.log("error on update =>>>", e);
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);
     }
@@ -272,12 +271,12 @@ export const updateOption = cache(
 );
 
 export const removeOption = cache(
-  async (optionId: string): Promise<ResponseDataAction<IOption | null>> => {
+  async (
+    optionId: string,
+    checkAuth: boolean,
+  ): Promise<ResponseDataAction<IOption | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const option = await getOption(optionId);
       const { data } = option;
@@ -301,18 +300,30 @@ export const removeOption = cache(
         );
       }
 
-      const optionRemover = await optionRepo.removeOption({
+      const optionRemoveItemResponse = await removeOptionItemByOption(
+        optionId,
+        false,
+      );
+
+      if (optionRemoveItemResponse.error) {
+        throw new HttpException(
+          optionRemoveItemResponse.error,
+          optionRemoveItemResponse.status,
+        );
+      }
+
+      const optionRemoveResponse = await optionRepo.removeOption({
         optionId,
       });
 
-      if (!optionRemover) {
+      if (!optionRemoveResponse) {
         throw new HttpException(
           OptionResponseErrorEnum.OPTION_NOT_REMOVED,
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
 
-      return buildResponse(optionRemover);
+      return buildResponse(optionRemoveResponse);
     } catch (e) {
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);

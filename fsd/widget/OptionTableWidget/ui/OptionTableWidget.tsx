@@ -43,9 +43,9 @@ export const OptionTableWidget: FC<OptionTableWidgetProps> = (props) => {
     })),
   );
 
-  const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id);
-    toast.success("Option value copied to clipboard.");
+  const onCopy = (name: string) => {
+    navigator.clipboard.writeText(name);
+    toast.success("Option name copied to clipboard.");
   };
 
   const onDeletePopup = (optionId: string) => {

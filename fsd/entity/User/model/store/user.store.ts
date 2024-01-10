@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IUser } from "../type/store.type";
 import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
-import { authAction } from "@/fsd/shared/modle/action";
+import { authAction } from "@/fsd/shared/model/action";
 
 export const useUserData = create<IUser>()(
   devtools(

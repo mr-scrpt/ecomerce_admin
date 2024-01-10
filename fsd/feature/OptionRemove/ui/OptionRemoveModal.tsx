@@ -25,6 +25,7 @@ export const OptionRemoveModal: FC<OptionRemoveModalProps> = memo((props) => {
       getOption: state.fetchOptionList,
     })),
   );
+
   const { slug } = useStoreData(
     useShallow((state) => ({ slug: state.storeCurrent?.slug })),
   );
