@@ -1,8 +1,10 @@
 "use server";
+import { storeAction } from "@/fsd/entity/Store";
+import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
+import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -17,20 +19,15 @@ import {
 import { ISize, ISizeWithRelations } from "../../type/entity.type";
 import { SizeResponseErrorEnum } from "../repo/responseError.enum";
 import { sizeRepo } from "../repo/size.repo";
-import { storeAction } from "@/fsd/entity/Store";
-import { buildError } from "@/fsd/shared/lib/buildError";
 
 export const createSize = cache(
   async (
     data: ICreateSizePayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<ISize | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, name } = data;
+      await checkAuthUser(checkAuth);
 
       const isUniqueResponse = await isUnique({
         name,
@@ -161,14 +158,11 @@ export const getSizeListByCategory = cache(
 export const updateSize = cache(
   async (
     data: IUpdateSizePayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<ISize | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, sizeId, name, value } = data;
+      await checkAuthUser(checkAuth);
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
@@ -221,12 +215,12 @@ export const updateSize = cache(
 );
 
 export const removeSize = cache(
-  async (sizeId: string): Promise<ResponseDataAction<ISize | null>> => {
+  async (
+    sizeId: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<ISize | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const size = await getSize(sizeId);
       const { data } = size;
