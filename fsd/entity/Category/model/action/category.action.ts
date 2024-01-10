@@ -20,18 +20,17 @@ import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import { categoryRepo } from "../repo/category.repo";
 import { CategoryResponseErrorEnum } from "../repo/responseError.enum";
 import { billboardAction } from "@/fsd/entity/Billboard";
+import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createCategory = cache(
   async (
     data: ICreateCategoryPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<ICategory | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, name } = data;
+
+      await checkAuthUser(checkAuth);
 
       const isUniqueResponse = await isUnique({
         name,
@@ -166,12 +165,10 @@ export const getCategoryListByBillboard = cache(
 export const updateCategory = cache(
   async (
     data: IUpdateCategoryPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<ICategory | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      await checkAuthUser(checkAuth);
 
       const { storeId, categoryId, name, billboardId } = data;
 
@@ -231,12 +228,12 @@ export const updateCategory = cache(
 );
 
 export const removeCategory = cache(
-  async (categoryId: string): Promise<ResponseDataAction<ICategory | null>> => {
+  async (
+    categoryId: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<ICategory | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const category = await getCategory(categoryId);
       const { data } = category;
