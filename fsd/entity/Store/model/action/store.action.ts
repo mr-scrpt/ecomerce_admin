@@ -1,9 +1,10 @@
 "use server";
+import { categoryAction } from "@/fsd/entity/Category";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
+import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -12,18 +13,17 @@ import {
   IIsUniqueStorePayload,
   IRenameStorePayload,
 } from "../../type/action.type";
+import { IStore } from "../../type/entity.type";
 import { StoreResponseErrorEnum } from "../../type/responseError.enum";
 import { storeRepo } from "../repo";
-import { IStore } from "../../type/entity.type";
-import { categoryAction } from "@/fsd/entity/Category";
 
 export const createStore = cache(
-  async (name: string): Promise<ResponseDataAction<IStore | null>> => {
+  async (
+    name: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const userId = udata!.id as string;
       const isUniqueResponse = await isUnique({
@@ -59,12 +59,12 @@ export const createStore = cache(
 );
 
 export const getStore = cache(
-  async (storeId: string): Promise<ResponseDataAction<IStore | null>> => {
+  async (
+    storeId: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      await checkAuthUser(checkAuth);
 
       const store = await storeRepo.getStore(storeId);
       if (!store) {
@@ -82,7 +82,10 @@ export const getStore = cache(
 );
 
 export const getStoreBySlug = cache(
-  async (slug?: string): Promise<ResponseDataAction<IStore | null>> => {
+  async (
+    slug?: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<IStore | null>> => {
     try {
       if (!slug) {
         throw new HttpException(
@@ -90,10 +93,8 @@ export const getStoreBySlug = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
+
       const userId = udata!.id as string;
 
       const store = await storeRepo.getStoreBySlug({
@@ -116,12 +117,11 @@ export const getStoreBySlug = cache(
 );
 
 export const getStoreStoreFirst = cache(
-  async (): Promise<ResponseDataAction<IStore | null>> => {
+  async (
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const userId = udata!.id;
 
@@ -155,13 +155,11 @@ export const getStoreListByUserId = cache(
 export const renameStore = cache(
   async (
     data: IRenameStorePayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IStore | null>> => {
     const { currentStoreName, newStoreName } = data;
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const userId = udata!.id;
 
@@ -207,12 +205,12 @@ export const renameStore = cache(
 );
 
 export const removeStore = cache(
-  async (storeId: string): Promise<ResponseDataAction<IStore | null>> => {
+  async (
+    storeId: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<IStore | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const userId = udata!.id;
       const isOwnerResponse = await isOwner({
