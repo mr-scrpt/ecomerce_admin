@@ -4,6 +4,7 @@ import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { authAction } from "@/fsd/shared/model/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
@@ -19,20 +20,16 @@ import {
 import { IBillboard } from "../../type/entity.type";
 import { billboardRepo } from "../repo/billboard.repo";
 import { BillboardResponseErrorEnum } from "../repo/responseError.enum";
-import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { IGetBillboardBySlugRepo } from "../../type/repo.type";
+import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createBillboard = cache(
   async (
     data: ICreateBillboardPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, name } = data;
+      await checkAuthUser(checkAuth);
 
       const isUniqueResponse = await isUnique({
         name,
@@ -158,14 +155,11 @@ export const getBillboardListByStoreSlug = cache(
 export const updateBillboard = cache(
   async (
     data: IUpdateBillboardPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, billboardId, name, imgUrl } = data;
+      await checkAuthUser(checkAuth);
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
@@ -219,12 +213,10 @@ export const updateBillboard = cache(
 export const removeBillboard = cache(
   async (
     billboardId: string,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IBillboard | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
       const billboard = await getBillboard(billboardId);
       const { data } = billboard;
