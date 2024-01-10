@@ -19,19 +19,17 @@ import {
 import { IColor, IColorWithRelations } from "../../type/entity.type";
 import { colorRepo } from "../repo/color.repo";
 import { ColorResponseErrorEnum } from "../repo/responseError.enum";
-import { billboardAction } from "@/fsd/entity/Billboard";
+import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createColor = cache(
   async (
     data: ICreateColorPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IColor | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, name } = data;
+
+      await checkAuthUser(checkAuth);
 
       const isUniqueResponse = await isUnique({
         name,
@@ -161,14 +159,12 @@ export const getColorListByCategory = cache(
 export const updateColor = cache(
   async (
     data: IUpdateColorPayload,
+    checkAuth: boolean = true,
   ): Promise<ResponseDataAction<IColor | null>> => {
     try {
-      const { error, status } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
-
       const { storeId, colorId, name, value } = data;
+
+      await checkAuthUser(checkAuth);
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
@@ -221,17 +217,17 @@ export const updateColor = cache(
 );
 
 export const removeColor = cache(
-  async (colorId: string): Promise<ResponseDataAction<IColor | null>> => {
+  async (
+    colorId: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<IColor | null>> => {
     try {
-      const { error, status, data: udata } = await authAction.getAuthUser();
-      if (error) {
-        throw new HttpException(error, status);
-      }
+      const udata = await checkAuthUser(checkAuth);
 
-      const color = await getColor(colorId);
-      const { data } = color;
+      const { data: colorData } = await getColor(colorId);
+      // const { data } = color;
 
-      if (!data) {
+      if (!colorData) {
         throw new HttpException(
           ColorResponseErrorEnum.COLOR_NOT_FOUND,
           HTTPStatusEnum.NOT_FOUND,
@@ -240,7 +236,7 @@ export const removeColor = cache(
 
       const userId = udata!.id;
       const isOwnerResponse = await isOwner({
-        colorId: data.id,
+        colorId: colorData.id,
         userId,
       });
       if (!isOwnerResponse) {

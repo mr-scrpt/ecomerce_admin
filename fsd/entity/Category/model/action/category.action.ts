@@ -1,10 +1,11 @@
 "use server";
+import { billboardAction } from "@/fsd/entity/Billboard";
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
+import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -19,8 +20,6 @@ import {
 import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import { categoryRepo } from "../repo/category.repo";
 import { CategoryResponseErrorEnum } from "../repo/responseError.enum";
-import { billboardAction } from "@/fsd/entity/Billboard";
-import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createCategory = cache(
   async (
