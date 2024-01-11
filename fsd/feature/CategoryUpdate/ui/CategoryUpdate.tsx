@@ -1,4 +1,4 @@
-import { IBillboard } from "@/fsd/entity/Billboard";
+import { IBillboard, billboardListBuilder } from "@/fsd/entity/Billboard";
 import { ICategory, categoryAction } from "@/fsd/entity/Category";
 import {
   CategoryForm,
@@ -85,6 +85,11 @@ export const CategoryUpdate: FC<CategoryUpdateProps> = memo((props) => {
     [optionList],
   );
 
+  const billboardListBuild = useMemo(
+    () => billboardListBuilder(billboardList),
+    [billboardList],
+  );
+
   const defaultValues = { ...category, optionListId: optionListSeletedBuild };
 
   return (
@@ -93,9 +98,8 @@ export const CategoryUpdate: FC<CategoryUpdateProps> = memo((props) => {
       actionName="Update"
       defaultValues={defaultValues}
       loading={loading}
-      billboardList={billboardList}
+      billboardList={billboardListBuild}
       optionList={optionListBuild}
-      optionListSelected={optionListSeletedBuild}
     />
   );
 });

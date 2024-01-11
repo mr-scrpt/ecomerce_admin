@@ -34,9 +34,10 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
     actionName,
     billboardList,
     optionList,
-    optionListSelected,
     loading,
   } = props;
+
+  console.log("=====88888 =>>>", billboardList);
 
   const form = useForm<CategoryFormTypeSchema>({
     resolver: zodResolver(categoryFormSchema),
@@ -93,8 +94,8 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
                   </FormControl>
                   <SelectContent>
                     {billboardList.map((billboard) => (
-                      <SelectItem key={billboard.id} value={billboard.id}>
-                        {billboard.name}
+                      <SelectItem key={billboard.value} value={billboard.value}>
+                        {billboard.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

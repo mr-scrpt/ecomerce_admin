@@ -1,5 +1,12 @@
 "use client";
-import { FC, HTMLAttributes, memo, useCallback, useState } from "react";
+import {
+  FC,
+  HTMLAttributes,
+  memo,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { toast } from "react-hot-toast";
 
 import { categoryAction } from "@/fsd/entity/Category";
@@ -8,8 +15,8 @@ import {
   CategoryFormTypeSchema,
 } from "@/fsd/entity/CategoryForm";
 import { categoryCreateValidate } from "../../model/validation/categoryCreate.validation";
-import { IBillboard } from "@/fsd/entity/Billboard";
-import { IOption } from "@/fsd/entity/Option";
+import { IBillboard, billboardListBuilder } from "@/fsd/entity/Billboard";
+import { IOption, optionListBuilder } from "@/fsd/entity/Option";
 import { optionListIdBuilder } from "../../lib/optionListBuilder";
 
 interface CategoryCreateProps extends HTMLAttributes<HTMLDivElement> {
@@ -37,9 +44,10 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
         return toast.error("Incorrect data from the form");
       }
 
-      console.log("form =>>>", form);
       const { name, billboardId, optionListId } = form;
+
       const optionListIdBuild = optionListIdBuilder(optionListId);
+
       const { data, error } = await categoryAction.createCategory({
         name,
         billboardId,
@@ -61,6 +69,15 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
     }
   }, []);
 
+  const optionListBuild = useMemo(
+    () => optionListBuilder(optionList),
+    [optionList],
+  );
+
+  const billboardListBuild = useMemo(
+    () => billboardListBuilder(billboardList),
+    [billboardList],
+  );
   const defaultValues = { name: "", billboardId: "", optionList: [] };
 
   return (
@@ -69,8 +86,8 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
       actionName="Create"
       defaultValues={defaultValues}
       loading={loading}
-      billboardList={billboardList}
-      optionList={optionList}
+      billboardList={billboardListBuild}
+      optionList={optionListBuild}
     />
   );
 });
