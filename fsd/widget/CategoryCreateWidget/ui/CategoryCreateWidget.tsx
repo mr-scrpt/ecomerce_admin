@@ -1,5 +1,6 @@
 "use client";
 import { useBillboardList } from "@/fsd/entity/Billboard";
+import { useOptionList } from "@/fsd/entity/Option";
 import { useStoreData } from "@/fsd/entity/Store";
 import { CategoryCreate } from "@/fsd/feature/CategoryCreate";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
@@ -25,15 +26,27 @@ export const CategoryCreateWidget: FC<CategoryCreateWidgetProps> = memo(
       })),
     );
 
+    const { optionList, fetchOptionList } = useOptionList(
+      useShallow((state) => ({
+        optionList: state.optionList,
+        fetchOptionList: state.fetchOptionList,
+      })),
+    );
+
     const { storeId } = useStoreData(
       useShallow((state) => ({ storeId: state.storeCurrent?.id })),
     );
 
+    // useEffect(() => {
+    //   if (slug) {
+    //     fetchBillboardList(slug);
+    //   }
+    // }, [slug, fetchBillboardList]);
     useEffect(() => {
-      if (slug) {
-        fetchBillboardList(slug);
+      if (storeId) {
+        fetchBillboardList(storeId);
       }
-    }, [slug, fetchBillboardList]);
+    }, [storeId, fetchBillboardList]);
 
     const onSucces = useCallback(() => {
       router.replace(path);

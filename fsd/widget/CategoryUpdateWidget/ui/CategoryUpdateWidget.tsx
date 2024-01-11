@@ -53,11 +53,17 @@ export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
     getCategoryCurrent({ categorySlug, storeSlug });
   }, [getCategoryCurrent, categorySlug, storeSlug]);
 
+  // useEffect(() => {
+  //   if (storeSlug) {
+  //     fetchBillboardList(storeSlug);
+  //   }
+  // }, [storeSlug, fetchBillboardList]);
+
   useEffect(() => {
-    if (storeSlug) {
-      fetchBillboardList(storeSlug);
+    if (storeId) {
+      fetchBillboardList(storeId);
     }
-  }, [storeSlug, fetchBillboardList]);
+  }, [storeId, fetchBillboardList]);
 
   return (
     <>

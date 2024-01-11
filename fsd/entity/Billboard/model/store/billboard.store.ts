@@ -2,7 +2,10 @@ import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IStoreBillboardList } from "../../type/store.type";
-import { getBillboardListByStoreSlug } from "../action/billboard.action";
+import {
+  getBillboardListByStoreId,
+  getBillboardListByStoreSlug,
+} from "../action/billboard.action";
 
 export const useBillboardList = create<IStoreBillboardList>()(
   devtools(
@@ -13,7 +16,8 @@ export const useBillboardList = create<IStoreBillboardList>()(
       fetchBillboardList: async (storeId: string) => {
         try {
           set({ loading: true }, false, "set_billboard_loading");
-          const { data, error } = await getBillboardListByStoreSlug(storeId);
+          // const { data, error } = await getBillboardListByStoreSlug(storeId);
+          const { data, error } = await getBillboardListByStoreId(storeId);
           if (error) {
             set({ error, billboardList: [] }, false, "set_billboard_error");
             return;
