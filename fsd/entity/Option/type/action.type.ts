@@ -59,6 +59,11 @@ export interface ICreateOptionItemPayload extends IOptionItemPayload {
   optionId: string;
 }
 
+export interface ICreateOptionItemByListPaylod {
+  list: IOptionItemPayload[];
+  optionId: string;
+}
+
 export interface ICreateOptionItemFromOptionPayload
   extends IOptionItemPayload {}
 

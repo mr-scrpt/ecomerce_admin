@@ -1,14 +1,15 @@
+import { IMultipleSelectorOption } from "@/fsd/shared/ui/MultipleSelector/MultipleSelector";
 import { HTMLAttributes } from "react";
-import { CategoryFormTypeSchema } from "./schema.type";
 import { IBillboard } from "../../Billboard";
-import { IOption } from "../../Option";
+import { CategoryFormTypeSchema } from "./schema.type";
 
 export interface CategoryFormProps extends HTMLAttributes<HTMLDivElement> {
   onAction: (form: CategoryFormTypeSchema) => void;
   actionName: string;
   defaultValues: IInitialFormData;
   billboardList: IBillboard[];
-  optionList: IOption[];
+  optionList: IMultipleSelectorOption[];
+  optionListSelected?: IMultipleSelectorOption[];
   loading: boolean;
 }
 

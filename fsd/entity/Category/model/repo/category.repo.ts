@@ -2,6 +2,7 @@ import prismaDB from "@/fsd/shared/lib/driverDB";
 import { cache } from "react";
 import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
 import {
+  IAddOptionRepo,
   ICreateCategoryRepo,
   IGetCategoryByNameRepo,
   IGetCategoryBySlugRepo,
@@ -91,7 +92,17 @@ class CategoryRepo {
       // include: { billboard: true },
     });
   };
-  //
+  addOptionListToCategory = async (data: IAddOptionRepo): Promise<void> => {
+    await prismaDB.category.update({
+      where: { id: data.categoryId },
+      data: {
+        Option: {
+          connect: { id: data.optionId },
+        },
+      },
+    });
+  };
+
   updateCategory = cache(
     async (data: IUpdateCategoryRepo): Promise<ICategory> => {
       const { categoryId, name, newSlug, billboardId } = data;

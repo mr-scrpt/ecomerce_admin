@@ -1,6 +1,6 @@
 "use client";
 import { useBillboardList } from "@/fsd/entity/Billboard";
-import { useOptionList } from "@/fsd/entity/Option";
+import { useOptionListStore } from "@/fsd/entity/Option";
 import { useStoreData } from "@/fsd/entity/Store";
 import { CategoryCreate } from "@/fsd/feature/CategoryCreate";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
@@ -26,10 +26,10 @@ export const CategoryCreateWidget: FC<CategoryCreateWidgetProps> = memo(
       })),
     );
 
-    const { optionList, fetchOptionList } = useOptionList(
+    const { optionList, fetchOptionList } = useOptionListStore(
       useShallow((state) => ({
         optionList: state.optionList,
-        fetchOptionList: state.fetchOptionList,
+        fetchOptionList: state.fetchOptionListByStoreId,
       })),
     );
 
@@ -58,9 +58,6 @@ export const CategoryCreateWidget: FC<CategoryCreateWidgetProps> = memo(
       router.replace(path);
       router.refresh();
     }, [router, path]);
-
-    console.log("optionList =>>>", optionList);
-    console.log("billboardList =>>>", billboardList);
 
     return (
       <CategoryCreate

@@ -20,6 +20,12 @@ export interface IIsOwnerRepo extends IIsOwnerPayload {}
 export interface ICreateCategoryRepo extends ICreateCategoryPayload {
   slug: string;
 }
+
+export interface IAddOptionRepo {
+  categoryId: string;
+  optionId: string;
+}
+
 export interface IGetCategoryRepo extends IGetCategoryPayload {}
 export interface IGetCategoryByNameRepo extends IGetCategoryByNamePayload {}
 

@@ -10,6 +10,7 @@ import {
 import { categoryCreateValidate } from "../../model/validation/categoryCreate.validation";
 import { IBillboard } from "@/fsd/entity/Billboard";
 import { IOption } from "@/fsd/entity/Option";
+import { optionListIdBuilder } from "../../lib/optionListBuilder";
 
 interface CategoryCreateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;
@@ -36,10 +37,13 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
         return toast.error("Incorrect data from the form");
       }
 
-      const { name, billboardId } = form;
+      console.log("form =>>>", form);
+      const { name, billboardId, optionListId } = form;
+      const optionListIdBuild = optionListIdBuilder(optionListId);
       const { data, error } = await categoryAction.createCategory({
         name,
         billboardId,
+        optionListId: optionListIdBuild,
         storeId,
       });
 
@@ -57,7 +61,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
     }
   }, []);
 
-  const defaultValues = { name: "", billboardId: "", optionId: "" };
+  const defaultValues = { name: "", billboardId: "", optionList: [] };
 
   return (
     <CategoryForm

@@ -1,35 +1,35 @@
 import { ResponseDataAction } from "../type/response.type";
 
-export const buildResponse = <T>(
-  data: T,
-  error: string | null = null,
-  status?: number,
-): ResponseDataAction<T> => {
-  if (error) {
-    return {
-      data: null,
-      error,
-      status,
-    };
-  } else {
-    return {
-      data,
-      error,
-      status,
-    };
-  }
-};
 // export const buildResponse = <T>(
 //   data: T,
 //   error: string | null = null,
 //   status?: number,
 // ): ResponseDataAction<T> => {
-//   return {
-//     data: error === null ? data : null,
-//     error,
-//     status,
-//   };
+//   if (error) {
+//     return {
+//       data: null,
+//       error,
+//       status,
+//     };
+//   } else {
+//     return {
+//       data,
+//       error,
+//       status,
+//     };
+//   }
 // };
+export const buildResponse = <T>(
+  data: T,
+  error: string | null = null,
+  status?: number,
+): ResponseDataAction<T> => {
+  return {
+    data: error === null ? data : null,
+    error,
+    status,
+  };
+};
 
 // export const buildResponse = <T>(
 //   data: T,

@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+import MultipleSelector from "@/fsd/shared/ui/MultipleSelector/MultipleSelector";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
@@ -33,11 +34,10 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
     actionName,
     billboardList,
     optionList,
+    optionListSelected,
     loading,
   } = props;
 
-  console.log("optionList =>>>", optionList);
-  console.log("billboardList =>>>", billboardList);
   const form = useForm<CategoryFormTypeSchema>({
     resolver: zodResolver(categoryFormSchema),
     defaultValues,
@@ -105,35 +105,35 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
           />
           <FormField
             control={form.control}
-            name="optionId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Option</FormLabel>
-                <Select
-                  disabled={loading}
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  defaultValue={field.value}
-                >
+            name="optionListId"
+            render={({ field }) => {
+              console.log("field =>>>", field);
+              return (
+                <FormItem>
+                  <FormLabel>Option</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        defaultValue={field.value}
-                        placeholder="Select a billboard"
-                      />
-                    </SelectTrigger>
+                    <MultipleSelector
+                      value={field.value}
+                      // value={[
+                      //   {
+                      //     value: "5abc0db3-a00b-4db8-a4c8-894ad98506a4",
+                      //     label: "t",
+                      //   },
+                      // ]}
+                      onChange={field.onChange}
+                      options={optionList}
+                      placeholder="Select option to category"
+                      emptyIndicator={
+                        <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                          no results found.
+                        </p>
+                      }
+                    />
                   </FormControl>
-                  <SelectContent>
-                    {optionList.map((option) => (
-                      <SelectItem key={option.id} value={option.id}>
-                        {option.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
           <div className="pt-6 space-x-2 flex items-center justify-end w-full">
             <Button disabled={loading} type="submit">

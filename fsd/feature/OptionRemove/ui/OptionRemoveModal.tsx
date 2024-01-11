@@ -3,7 +3,7 @@ import { FC, HTMLAttributes, memo, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { OptionRemove } from "./OptionRemove";
 import { useRouter } from "next/navigation";
-import { useOptionList, useOptionRemove } from "@/fsd/entity/Option";
+import { useOptionListStore, useOptionRemove } from "@/fsd/entity/Option";
 
 interface OptionRemoveModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
@@ -20,9 +20,9 @@ export const OptionRemoveModal: FC<OptionRemoveModalProps> = memo((props) => {
     })),
   );
 
-  const { getOption } = useOptionList(
+  const { getOption } = useOptionListStore(
     useShallow((state) => ({
-      getOption: state.fetchOptionList,
+      getOption: state.fetchOptionListByStoreId,
     })),
   );
 

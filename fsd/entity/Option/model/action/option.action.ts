@@ -151,7 +151,19 @@ export const getOption = cache(
 export const getOptionListByStoreId = cache(
   async (storeId: string): Promise<ResponseDataAction<IOption[] | null>> => {
     try {
-      const optionList = await optionRepo.getOptionList(storeId);
+      const optionList = await optionRepo.getOptionListByStoreId(storeId);
+      return buildResponse(optionList);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const getOptionListByCategoryId = cache(
+  async (categoryId: string): Promise<ResponseDataAction<IOption[] | null>> => {
+    try {
+      const optionList = await optionRepo.getOptionListByCategoryId(categoryId);
       return buildResponse(optionList);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -162,6 +174,7 @@ export const getOptionListByStoreId = cache(
 
 export const getOptionListByStoreSlug = cache(
   async (storeSlug: string): Promise<ResponseDataAction<IOption[] | null>> => {
+    console.log("storeSlug show =>>>", storeSlug);
     try {
       const optionList = await optionRepo.getOptionListByStoreSlug(storeSlug);
 

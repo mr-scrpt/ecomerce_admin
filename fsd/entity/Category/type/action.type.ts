@@ -2,6 +2,11 @@ export interface ICreateCategoryPayload {
   storeId: string;
   name: string;
   billboardId: string;
+  optionListId?: string[];
+}
+export interface IAddCategoryOptionPayload {
+  categoryId: string;
+  optionListId: string[];
 }
 
 export interface IUpdateCategoryPayload {

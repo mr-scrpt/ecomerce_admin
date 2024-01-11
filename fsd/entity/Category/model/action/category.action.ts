@@ -10,6 +10,7 @@ import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
 import {
+  IAddCategoryOptionPayload,
   ICreateCategoryPayload,
   IGetCategoryBySlugPayload,
   IIsCurrentCategoryPayload,
@@ -27,7 +28,7 @@ export const createCategory = cache(
     checkAuth: boolean = true,
   ): Promise<ResponseDataAction<ICategory | null>> => {
     try {
-      const { storeId, name } = data;
+      const { storeId, name, optionListId } = data;
 
       await checkAuthUser(checkAuth);
 
@@ -59,7 +60,37 @@ export const createCategory = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
+
+      if (optionListId) {
+        await addOptionListToCategory({
+          categoryId: category.id,
+          optionListId,
+        });
+      }
+
       return buildResponse(category);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const addOptionListToCategory = cache(
+  async (
+    data: IAddCategoryOptionPayload,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<null>> => {
+    try {
+      const { categoryId, optionListId } = data;
+      await checkAuthUser(checkAuth);
+      for await (const optionId of optionListId) {
+        categoryRepo.addOptionListToCategory({
+          optionId,
+          categoryId,
+        });
+      }
+      return buildResponse(null);
     } catch (e) {
       const { error, status } = buildError(e);
       return buildResponse(null, error, status);

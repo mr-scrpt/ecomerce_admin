@@ -20,14 +20,16 @@ class OptionRepo {
     });
   };
 
-  getOptionList = cache(async (storeId: string): Promise<IOption[]> => {
-    return await prismaDB.option.findMany({
-      include: { store: true },
-      where: {
-        storeId: storeId,
-      },
-    });
-  });
+  getOptionListByStoreId = cache(
+    async (storeId: string): Promise<IOption[]> => {
+      return await prismaDB.option.findMany({
+        include: { store: true },
+        where: {
+          storeId: storeId,
+        },
+      });
+    },
+  );
 
   getOptionListByStoreSlug = cache(
     async (storeSlug: string): Promise<IOption[]> => {
@@ -40,6 +42,16 @@ class OptionRepo {
         },
       });
       return res;
+    },
+  );
+
+  getOptionListByCategoryId = cache(
+    async (categoryId: string): Promise<IOption[]> => {
+      const res = await prismaDB.category.findUnique({
+        where: { id: categoryId },
+        include: { Option: true },
+      });
+      return res?.Option || [];
     },
   );
 

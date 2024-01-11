@@ -1,5 +1,5 @@
 "use client";
-import { useOptionList, useOptionRemove } from "@/fsd/entity/Option";
+import { useOptionListStore, useOptionRemove } from "@/fsd/entity/Option";
 import { useOptionRemoveModal } from "@/fsd/feature/ModalManager";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
 import { TableData } from "@/fsd/shared/ui/TableData/ui/TableData";
@@ -19,17 +19,19 @@ interface OptionTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
 export const OptionTableWidget: FC<OptionTableWidgetProps> = (props) => {
   const { slug } = props;
 
-  const { optionList, fetchOptionList, isLoading } = useOptionList(
+  const { optionList, fetchOptionList, isLoading } = useOptionListStore(
     useShallow((state) => ({
       isLoading: state.loading,
       optionList: state.optionList,
-      fetchOptionList: state.fetchOptionList,
+      fetchOptionList: state.fetchOptionListByStoreSlug,
     })),
   );
 
   useEffect(() => {
-    fetchOptionList(slug);
-  }, []);
+    if (slug) {
+      fetchOptionList(slug);
+    }
+  }, [slug, fetchOptionList]);
 
   const { onOpen } = useOptionRemoveModal(
     useShallow((state) => ({

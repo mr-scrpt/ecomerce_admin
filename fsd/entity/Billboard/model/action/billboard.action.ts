@@ -5,7 +5,7 @@ import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
+import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -20,7 +20,6 @@ import {
 import { IBillboard } from "../../type/entity.type";
 import { billboardRepo } from "../repo/billboard.repo";
 import { BillboardResponseErrorEnum } from "../repo/responseError.enum";
-import { checkAuthUser } from "@/fsd/shared/model";
 
 export const createBillboard = cache(
   async (

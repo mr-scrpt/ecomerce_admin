@@ -1,10 +1,12 @@
-import { IOptionWithRelations } from "./entity.type";
+import { IOption, IOptionListWithRelations } from "./entity.type";
 
 export interface IStoreOptionList {
-  optionList: IOptionWithRelations[];
+  // optionList: IOptionListWithRelations[];
+  optionList: IOption[];
   loading: boolean;
   error: string | null;
-  fetchOptionList: (storeId: string) => void;
+  fetchOptionListByStoreId: (storeId: string) => void;
+  fetchOptionListByStoreSlug: (storeSlug: string) => void;
 }
 
 export interface IStoreOptionRemove {

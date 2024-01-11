@@ -1,6 +1,6 @@
 "use client";
 import { useBillboardList } from "@/fsd/entity/Billboard";
-import { useCategoryList } from "@/fsd/entity/Category";
+import { useOptionListCategory, useOptionListStore } from "@/fsd/entity/Option";
 import { useStoreData } from "@/fsd/entity/Store";
 import {
   CategoryUpdate,
@@ -29,6 +29,20 @@ export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
     })),
   );
 
+  const { optionListCategory, fetchOptionListCategory } = useOptionListCategory(
+    useShallow((state) => ({
+      optionListCategory: state.optionList,
+      fetchOptionListCategory: state.fetchOptionListByStoreId,
+    })),
+  );
+
+  const { optionListStore, fetchOptionListStore } = useOptionListStore(
+    useShallow((state) => ({
+      optionListStore: state.optionList,
+      fetchOptionListStore: state.fetchOptionListByStoreId,
+    })),
+  );
+
   const { storeId } = useStoreData(
     useShallow((state) => ({ storeId: state.storeCurrent?.id })),
   );
@@ -53,17 +67,23 @@ export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
     getCategoryCurrent({ categorySlug, storeSlug });
   }, [getCategoryCurrent, categorySlug, storeSlug]);
 
-  // useEffect(() => {
-  //   if (storeSlug) {
-  //     fetchBillboardList(storeSlug);
-  //   }
-  // }, [storeSlug, fetchBillboardList]);
-
   useEffect(() => {
     if (storeId) {
       fetchBillboardList(storeId);
     }
   }, [storeId, fetchBillboardList]);
+
+  useEffect(() => {
+    if (category?.id) {
+      fetchOptionListCategory(category.id);
+    }
+  }, [category?.id, fetchOptionListCategory]);
+
+  useEffect(() => {
+    if (storeId) {
+      fetchOptionListStore(storeId);
+    }
+  }, [storeId, fetchOptionListStore]);
 
   return (
     <>
@@ -73,6 +93,8 @@ export const CategoryUpdateWidget: FC<CategoryUpdateWidgetProps> = (props) => {
           storeId={storeId}
           category={category}
           billboardList={billboardList}
+          optionList={optionListStore}
+          optionListSelected={optionListCategory}
         />
       )}
     </>
