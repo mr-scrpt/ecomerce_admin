@@ -48,16 +48,26 @@ export const CategoryCreateWidget: FC<CategoryCreateWidgetProps> = memo(
       }
     }, [storeId, fetchBillboardList]);
 
+    useEffect(() => {
+      if (storeId) {
+        fetchOptionList(storeId);
+      }
+    }, [storeId, fetchOptionList]);
+
     const onSucces = useCallback(() => {
       router.replace(path);
       router.refresh();
     }, [router, path]);
+
+    console.log("optionList =>>>", optionList);
+    console.log("billboardList =>>>", billboardList);
 
     return (
       <CategoryCreate
         onSuccess={onSucces}
         storeId={storeId}
         billboardList={billboardList}
+        optionList={optionList}
       />
     );
   },

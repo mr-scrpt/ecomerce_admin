@@ -9,15 +9,17 @@ import {
 } from "@/fsd/entity/CategoryForm";
 import { categoryCreateValidate } from "../../model/validation/categoryCreate.validation";
 import { IBillboard } from "@/fsd/entity/Billboard";
+import { IOption } from "@/fsd/entity/Option";
 
 interface CategoryCreateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;
   storeId?: string;
   billboardList: IBillboard[];
+  optionList: IOption[];
 }
 
 export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
-  const { onSuccess, storeId, billboardList } = props;
+  const { onSuccess, storeId, billboardList, optionList } = props;
   const [loading, setLoading] = useState(false);
 
   const onSubmit = useCallback(async (form: CategoryFormTypeSchema) => {
@@ -55,7 +57,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
     }
   }, []);
 
-  const defaultValues = { name: "", billboardId: "" };
+  const defaultValues = { name: "", billboardId: "", optionId: "" };
 
   return (
     <CategoryForm
@@ -64,6 +66,7 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
       defaultValues={defaultValues}
       loading={loading}
       billboardList={billboardList}
+      optionList={optionList}
     />
   );
 });

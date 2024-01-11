@@ -27,8 +27,17 @@ import {
 } from "../type/schema.type";
 
 export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
-  const { onAction, defaultValues, actionName, billboardList, loading } = props;
+  const {
+    onAction,
+    defaultValues,
+    actionName,
+    billboardList,
+    optionList,
+    loading,
+  } = props;
 
+  console.log("optionList =>>>", optionList);
+  console.log("billboardList =>>>", billboardList);
   const form = useForm<CategoryFormTypeSchema>({
     resolver: zodResolver(categoryFormSchema),
     defaultValues,
@@ -86,6 +95,38 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
                     {billboardList.map((billboard) => (
                       <SelectItem key={billboard.id} value={billboard.id}>
                         {billboard.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="optionId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Option</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Select a billboard"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {optionList.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

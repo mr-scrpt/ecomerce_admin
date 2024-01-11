@@ -2,7 +2,7 @@ import { HTTPErrorMessage } from "@/fsd/shared/type/httpErrorMessage";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { IStoreOptionList, IStoreOptionRemove } from "../../type/store.type";
-import { getOptionListByStoreSlug } from "../action/option.action";
+import { getOptionListByStoreId } from "../action/option.action";
 
 export const useOptionList = create<IStoreOptionList>()(
   devtools(
@@ -10,10 +10,10 @@ export const useOptionList = create<IStoreOptionList>()(
       optionList: [],
       loading: false,
       error: null,
-      fetchOptionList: async (storeSlug) => {
+      fetchOptionList: async (storeId) => {
         try {
           set({ loading: true }, false, "set_fetch_option_loading");
-          const { data, error } = await getOptionListByStoreSlug(storeSlug);
+          const { data, error } = await getOptionListByStoreId(storeId);
 
           if (error) {
             set({ error }, false, "set_fetch_option_error");
