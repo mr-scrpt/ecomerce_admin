@@ -9,6 +9,7 @@ import {
   IIsOwnerRepo,
   IRemoveCategoryRepo,
   IUpdateCategoryRepo,
+  IUpdateOptionRepo,
 } from "../../type/repo.type";
 
 class CategoryRepo {
@@ -92,7 +93,7 @@ class CategoryRepo {
       // include: { billboard: true },
     });
   };
-  addOptionListToCategory = async (data: IAddOptionRepo): Promise<void> => {
+  addOptionToCategory = async (data: IAddOptionRepo): Promise<void> => {
     await prismaDB.category.update({
       where: { id: data.categoryId },
       data: {
@@ -102,6 +103,39 @@ class CategoryRepo {
       },
     });
   };
+
+  deleteCategoryOptionList = cache(
+    async (categoryId: string): Promise<ICategory> => {
+      const category = await prismaDB.category.update({
+        where: {
+          id: categoryId,
+        },
+        data: {
+          Option: {
+            set: [],
+          },
+        },
+      });
+      return category;
+    },
+  );
+
+  updateCategoryOptionList = cache(
+    async (data: IUpdateOptionRepo): Promise<ICategory> => {
+      const { categoryId, optionListId } = data;
+      const category = await prismaDB.category.update({
+        where: {
+          id: categoryId,
+        },
+        data: {
+          Option: {
+            set: optionListId.map((item) => ({ id: item })),
+          },
+        },
+      });
+      return category;
+    },
+  );
 
   updateCategory = cache(
     async (data: IUpdateCategoryRepo): Promise<ICategory> => {

@@ -4,16 +4,20 @@ export interface ICreateCategoryPayload {
   billboardId: string;
   optionListId?: string[];
 }
-export interface IAddCategoryOptionPayload {
+export interface ICategoryOptionPayload {
   categoryId: string;
   optionListId: string[];
 }
+
+export interface IAddCategoryOptionPayload extends ICategoryOptionPayload {}
+export interface IUpdateCategoryOptionPayload extends ICategoryOptionPayload {}
 
 export interface IUpdateCategoryPayload {
   storeId: string;
   categoryId: string;
   name: string;
   billboardId: string;
+  optionListId: string[];
   // imgUrl: string;
 }
 

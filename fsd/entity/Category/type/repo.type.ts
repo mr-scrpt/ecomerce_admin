@@ -3,11 +3,12 @@ import {
   IGetCategoryByNamePayload,
   IGetCategoryPayload,
   IIsOwnerPayload,
+  IUpdateCategoryOptionPayload,
   IUpdateCategoryPayload,
 } from "./action.type";
 
 export interface IUpdateCategoryRepo
-  extends Omit<IUpdateCategoryPayload, "storeId"> {
+  extends Omit<IUpdateCategoryPayload, "storeId" | "optionListId"> {
   newSlug: string;
 }
 
@@ -25,6 +26,7 @@ export interface IAddOptionRepo {
   categoryId: string;
   optionId: string;
 }
+export interface IUpdateOptionRepo extends IUpdateCategoryOptionPayload {}
 
 export interface IGetCategoryRepo extends IGetCategoryPayload {}
 export interface IGetCategoryByNameRepo extends IGetCategoryByNamePayload {}

@@ -37,8 +37,6 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
     loading,
   } = props;
 
-  console.log("=====88888 =>>>", billboardList);
-
   const form = useForm<CategoryFormTypeSchema>({
     resolver: zodResolver(categoryFormSchema),
     defaultValues,
@@ -46,7 +44,7 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
 
   useEffect(() => {
     form.reset(defaultValues);
-  }, [defaultValues, form]);
+  }, [defaultValues, optionList, form]);
 
   return (
     <div className="space-x-4 pt-2 pb-4">
@@ -106,21 +104,15 @@ export const CategoryForm: FC<CategoryFormProps> = memo((props) => {
           />
           <FormField
             control={form.control}
-            name="optionListId"
+            name="optionList"
             render={({ field }) => {
-              console.log("field =>>>", field);
+              console.log("field***** =>>>", field);
               return (
                 <FormItem>
                   <FormLabel>Option</FormLabel>
                   <FormControl>
                     <MultipleSelector
                       value={field.value}
-                      // value={[
-                      //   {
-                      //     value: "5abc0db3-a00b-4db8-a4c8-894ad98506a4",
-                      //     label: "t",
-                      //   },
-                      // ]}
                       onChange={field.onChange}
                       options={optionList}
                       placeholder="Select option to category"

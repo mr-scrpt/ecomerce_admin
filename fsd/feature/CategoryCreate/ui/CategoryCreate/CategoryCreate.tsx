@@ -44,9 +44,9 @@ export const CategoryCreate: FC<CategoryCreateProps> = memo((props) => {
         return toast.error("Incorrect data from the form");
       }
 
-      const { name, billboardId, optionListId } = form;
+      const { name, billboardId, optionList } = form;
 
-      const optionListIdBuild = optionListIdBuilder(optionListId);
+      const optionListIdBuild = optionListIdBuilder(optionList);
 
       const { data, error } = await categoryAction.createCategory({
         name,

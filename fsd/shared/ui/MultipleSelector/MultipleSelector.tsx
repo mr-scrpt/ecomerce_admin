@@ -155,7 +155,6 @@ const MultipleSelector = React.forwardRef<
     }: MultipleSelectorProps,
     ref: React.Ref<MultipleSelectorRef>,
   ) => {
-    console.log("options start =>>>", arrayOptions);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [open, setOpen] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
@@ -163,6 +162,7 @@ const MultipleSelector = React.forwardRef<
     const [selected, setSelected] = React.useState<IMultipleSelectorOption[]>(
       value || [],
     );
+
     const [options, setOptions] = React.useState<GroupOption>(
       transToGroupOption(arrayOptions, groupBy),
     );
@@ -226,12 +226,6 @@ const MultipleSelector = React.forwardRef<
     useEffect(() => {
       setOptions(transToGroupOption(arrayOptions, groupBy));
     }, [arrayOptions, groupBy]);
-
-    // useEffect(() => {
-    //   if (value) {
-    //     setSelected(value);
-    //   }
-    // }, [value, setSelected]);
 
     const CreatableItem = () => {
       if (!creatable) return undefined;

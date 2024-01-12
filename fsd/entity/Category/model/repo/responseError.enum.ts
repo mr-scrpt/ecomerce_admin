@@ -7,6 +7,8 @@ export enum CategoryResponseErrorEnum {
   CATEGORY_NOT_UPDATED = "Category has not been updated",
   CATEGORY_NOT_REMOVED = "Category has not been removed",
   CATEGORY_NO_OWNER = "You are not owner this Category",
+
+  CATEGORY_OPTION_ERROR = "Category option list error",
   //
   // CATEGORY_SLUG_EMPTY = "Slug not must be empty",
   // CATEGORY_LIST_NOT_FOUND = "Store list has not been found",

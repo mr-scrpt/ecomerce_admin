@@ -16,6 +16,7 @@ import {
   IIsCurrentCategoryPayload,
   IIsOwnerPayload,
   IIsUniqueCategoryPayload,
+  IUpdateCategoryOptionPayload,
   IUpdateCategoryPayload,
 } from "../../type/action.type";
 import { ICategory, ICategoryWithRelations } from "../../type/entity.type";
@@ -76,6 +77,38 @@ export const createCategory = cache(
   },
 );
 
+export const updateOptionListToCategory = cache(
+  async (
+    data: IUpdateCategoryOptionPayload,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+      await categoryRepo.updateCategoryOptionList(data);
+      return buildResponse(null);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
+
+export const deleteOptionListToCategory = cache(
+  async (
+    categoryId: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+      await categoryRepo.deleteCategoryOptionList(categoryId);
+      return buildResponse(null);
+    } catch (e) {
+      console.log(" error=>>>", e);
+      const { error, status } = buildError(e);
+      return buildResponse(null, error, status);
+    }
+  },
+);
 export const addOptionListToCategory = cache(
   async (
     data: IAddCategoryOptionPayload,
@@ -85,7 +118,7 @@ export const addOptionListToCategory = cache(
       const { categoryId, optionListId } = data;
       await checkAuthUser(checkAuth);
       for await (const optionId of optionListId) {
-        categoryRepo.addOptionListToCategory({
+        categoryRepo.addOptionToCategory({
           optionId,
           categoryId,
         });
@@ -198,9 +231,8 @@ export const updateCategory = cache(
     checkAuth: boolean = true,
   ): Promise<ResponseDataAction<ICategory | null>> => {
     try {
+      const { storeId, categoryId, name, billboardId, optionListId } = data;
       await checkAuthUser(checkAuth);
-
-      const { storeId, categoryId, name, billboardId } = data;
 
       const storeResponse = await storeAction.getStore(storeId);
       if (storeResponse.error) {
@@ -249,6 +281,19 @@ export const updateCategory = cache(
           HTTPStatusEnum.BAD_REQUEST,
         );
       }
+
+      if (optionListId) {
+        const { error } = await updateOptionListToCategory(
+          {
+            categoryId: category.id,
+            optionListId,
+          },
+          false,
+        );
+        if (error) {
+          throw new HttpException(error, HTTPStatusEnum.BAD_REQUEST);
+        }
+      }
       return buildResponse(category);
     } catch (e) {
       const { error, status } = buildError(e);
@@ -285,6 +330,12 @@ export const removeCategory = cache(
           CategoryResponseErrorEnum.CATEGORY_NO_OWNER,
           HTTPStatusEnum.FORBIDDEN,
         );
+      }
+
+      const { error } = await deleteOptionListToCategory(categoryId);
+
+      if (error) {
+        throw new HttpException(error, HTTPStatusEnum.BAD_REQUEST);
       }
 
       const categoryRemover = await categoryRepo.removeCategory({

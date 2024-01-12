@@ -15,6 +15,7 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import { categoryUpdateValidate } from "../model/validation/categoryUpdate.validation";
+import { optionListIdBuilder } from "../../CategoryCreate/lib/optionListBuilder";
 
 interface CategoryUpdateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;
@@ -52,10 +53,12 @@ export const CategoryUpdate: FC<CategoryUpdateProps> = memo((props) => {
           return toast.error("Incorrect data from the form");
         }
 
-        const { name, billboardId } = form;
+        const { name, billboardId, optionList } = form;
+        const optionListIdBuild = optionListIdBuilder(optionList);
         const { data, error } = await categoryAction.updateCategory({
           name,
           billboardId,
+          optionListId: optionListIdBuild,
           storeId,
           categoryId: id,
         });
@@ -90,7 +93,7 @@ export const CategoryUpdate: FC<CategoryUpdateProps> = memo((props) => {
     [billboardList],
   );
 
-  const defaultValues = { ...category, optionListId: optionListSeletedBuild };
+  const defaultValues = { ...category, optionList: optionListSeletedBuild };
 
   return (
     <CategoryForm
