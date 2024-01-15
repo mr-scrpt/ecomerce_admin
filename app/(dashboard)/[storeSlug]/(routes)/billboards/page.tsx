@@ -1,4 +1,5 @@
-import { BillboardAdd, billboardAction } from "@/fsd/entity/Billboard";
+import { BillboardAdd } from "@/fsd/entity/Billboard";
+import { UploaderFileForm } from "@/fsd/entity/FileUploader";
 import {
   PageDescriptionEnum,
   PageTitleEnum,
@@ -29,6 +30,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         <BillboardAdd />
       </div>
       <BillboardTableWidget slug={storeSlug} />
+      <UploaderFileForm></UploaderFileForm>
       {/* {billboardList.data && ( */}
       {/*   <BillboardTableList billboardList={billboardList.data} /> */}
       {/* )} */}
