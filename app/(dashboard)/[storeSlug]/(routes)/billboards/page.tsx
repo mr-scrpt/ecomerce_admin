@@ -16,10 +16,7 @@ interface BillboardPageProps extends HTMLAttributes<HTMLDivElement> {
 const BillboardPage: FC<BillboardPageProps> = async (props) => {
   const { params } = props;
   const { storeSlug } = params;
-  // const billboardList =
-  //   await billboardAction.getBillboardListByStoreSlug(storeSlug);
 
-  // const billboardCount = billboardList.data?.length || 0;
   return (
     <main className="flex flex-col gap-3">
       <div className="flex items-center justify-between border-b pb-3">
@@ -30,7 +27,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         <BillboardAdd />
       </div>
       <BillboardTableWidget slug={storeSlug} />
-      <UploaderFileForm></UploaderFileForm>
+      <UploaderFileForm />
       {/* {billboardList.data && ( */}
       {/*   <BillboardTableList billboardList={billboardList.data} /> */}
       {/* )} */}

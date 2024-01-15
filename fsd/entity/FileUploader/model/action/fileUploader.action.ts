@@ -14,6 +14,7 @@ export const fileUploader = async (
 ): Promise<ResponseDataAction<string[] | null>> => {
   try {
     const { fileList, pathToUpload } = data;
+    console.log("output_log:  =>>>", data);
     // const files: FileList | null = formData.getAll(
     //   "file",
     // ) as unknown as FileList;
@@ -27,7 +28,8 @@ export const fileUploader = async (
 
     const paths: string[] = [];
 
-    // Итерируем по каждому файлу в FileList
+    console.log("output_log:  =>>> before cicle");
+    // // Итерируем по каждому файлу в FileList
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
       const bytes = await file.arrayBuffer();
@@ -35,6 +37,7 @@ export const fileUploader = async (
 
       const path = join(pathToUpload, file.name);
       await writeFile(path, buffer);
+      console.log("output_log:  =>>> writed", paths);
 
       paths.push(path);
     }
