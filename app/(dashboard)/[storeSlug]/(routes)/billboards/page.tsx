@@ -4,6 +4,7 @@ import {
   PageDescriptionEnum,
   PageTitleEnum,
 } from "@/fsd/shared/data/page.title";
+import { PathUploadEnum } from "@/fsd/shared/data/pathUpload.enum";
 import { Heading } from "@/fsd/shared/ui/Heading";
 import { NoticeApi } from "@/fsd/shared/ui/NoticeApi";
 import { BillboardTableWidget } from "@/fsd/widget/BillboardTableWidget";
@@ -27,7 +28,11 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         <BillboardAdd />
       </div>
       <BillboardTableWidget slug={storeSlug} />
-      <UploaderFileForm />
+      <UploaderFileForm
+        entity={PathUploadEnum.BILLBOARD}
+        name="new file test"
+        isMultiple={true}
+      />
       {/* {billboardList.data && ( */}
       {/*   <BillboardTableList billboardList={billboardList.data} /> */}
       {/* )} */}
