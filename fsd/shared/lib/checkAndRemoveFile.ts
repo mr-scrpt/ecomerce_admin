@@ -5,7 +5,9 @@ export const checkAndRemoveFile = async (
 ): Promise<void> => {
   try {
     await access(pathToCreate);
-  } catch (error) {
     await unlink(pathToCreate);
+    console.log("output_log:  =>>> file has been removed");
+  } catch (error) {
+    console.log("output_log:  =>>> file not exist");
   }
 };

@@ -52,7 +52,6 @@ export async function POST(req: Request) {
 
     if (entity && nameToFile) {
       const slug = slugGenerator(nameToFile);
-      console.log("output_log: slug =>>>", slug);
       uploadPath = join(rootPath, PathServerEnum.UPLOAD, entity, slug);
     } else {
       uploadPath = join(rootPath, PathServerEnum.GARBAGE);
@@ -61,18 +60,18 @@ export async function POST(req: Request) {
     await checkAndCreatePath(uploadPath);
 
     let idx = 1;
-    for (const value of formDataEntryValues) {
+    for await (const value of formDataEntryValues) {
       if (checkFormDataIsBuffer(value)) {
-        console.log("output_log: value =>>>", value);
-        // const file = value as unknown as File;
-        // const fileExtension = file.name.split(".").pop();
-        //
-        // const buffer = Buffer.from(await file.arrayBuffer());
-        //
-        // const slug = slugGenerator(`${nameToFile}_${idx}.${fileExtension}`);
-        // const filePath = join(uploadPath, slug);
-        // await checkAndRemoveFile(filePath);
-        // await writeFile(filePath, buffer);
+        const file = value as unknown as File;
+        const fileExtension = file.name.split(".").pop();
+
+        const buffer = Buffer.from(await file.arrayBuffer());
+
+        const slug = slugGenerator(`${nameToFile}_${idx}.${fileExtension}`);
+        const filePath = join(uploadPath, slug);
+        console.log("output_log: filePath =>>>", filePath);
+        await checkAndRemoveFile(filePath);
+        await writeFile(filePath, buffer);
         idx++;
       }
     }
