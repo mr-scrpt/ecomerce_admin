@@ -1,5 +1,5 @@
 import { BillboardAdd } from "@/fsd/entity/Billboard";
-import { UploaderFileForm } from "@/fsd/entity/FileUploader";
+import { FileUploadEnum, UploaderFileForm } from "@/fsd/entity/FileUploader";
 import {
   PageDescriptionEnum,
   PageTitleEnum,
@@ -32,6 +32,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         entity={PathUploadEnum.BILLBOARD}
         name="new file test"
         isMultiple={true}
+        extension={FileUploadEnum.IMG}
       />
       {/* {billboardList.data && ( */}
       {/*   <BillboardTableList billboardList={billboardList.data} /> */}

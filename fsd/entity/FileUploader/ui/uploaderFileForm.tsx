@@ -21,16 +21,18 @@ import {
   UploadFilelFormTypeSchema,
   uploadFileFormSchema,
 } from "../type/schema.type";
+import { FileUploadEnum } from "..";
+import { FILE_IMG_UPLOAD_EXTENSION } from "../type/fileUploadExtension.const";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
   name: string;
   isMultiple?: boolean;
+  extension: FileUploadEnum;
 }
 
 export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
-  const { entity, name, isMultiple = false } = props;
-  // const [fileList, setFileList] = useState<FileList | null>();
+  const { entity, name, extension, isMultiple = false } = props;
 
   const router = useRouter();
   const form = useForm<UploadFilelFormTypeSchema>({
@@ -42,7 +44,6 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
       const { files } = data;
       const formData = new FormData();
       for (let i = 0; i < files!.length; i++) {
-        console.log("output_log:  =>>>", files![i]);
         formData.append("fileList", files![i]);
       }
       formData.append("entity", entity);
@@ -50,12 +51,9 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
       //
       const result = await axios.post(`/api/upload`, formData);
       if (result.status === 200) {
-        // setFileList(null);
         form.resetField("files");
-        // form.reset({ fileList: [] });
         router.refresh();
       }
-      console.log("output_log: result =>>>", result);
     } catch (e) {
       console.log("output_log:  =>>>", e);
     }
@@ -73,7 +71,7 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
                 <FormLabel>Team Photo</FormLabel>
                 <FormControl>
                   <Input
-                    accept=".jpg, .jpeg, .png, .svg, .gif, .mp4"
+                    accept={extension}
                     type="file"
                     multiple={isMultiple}
                     onChange={(e) =>
