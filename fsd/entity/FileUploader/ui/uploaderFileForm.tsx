@@ -18,8 +18,11 @@ import {
   uploadFileFormSchema,
 } from "../type/schema.type";
 import axios from "axios";
+import { BILLBOARD_PATH } from "../../Billboard";
 
-interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {}
+interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
+  // entity:
+}
 
 export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
   const [fileList, setFileList] = useState<FileList | null>();
@@ -30,6 +33,9 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
       for (let i = 0; i < fileList!.length; i++) {
         formData.append("fileList", fileList![i]);
       }
+
+      formData.append("entity", BILLBOARD_PATH);
+      formData.append("nameToFile", "my_new_file");
 
       await axios.post(`/api/upload`, formData);
     } catch (e) {

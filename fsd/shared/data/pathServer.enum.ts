@@ -1,5 +1,9 @@
+const PATH_PUBLIC = "public";
+
 export enum PathServerEnum {
-  UPLOAD = "/upload",
-  ASSETS = "/assets",
-  TEMP = "/tmp",
+  UPLOAD = `/${PATH_PUBLIC}/upload`,
+  GARBAGE = `/${PATH_PUBLIC}/garbage`,
+  // UPLOAD = "/upload",
+  // ASSETS = "/assets",
+  // TEMP = "/tmp",
 }

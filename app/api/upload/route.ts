@@ -25,6 +25,10 @@
 
 import { UploadPathEnum } from "@/fsd/entity/FileUploader/type/uploadPath.enum";
 import { PathServerEnum } from "@/fsd/shared/data/pathServer.enum";
+import { checkFormDataIsBuffer } from "@/fsd/shared/lib/chechFormDataIsBuffer";
+import { checkAndCreatePath } from "@/fsd/shared/lib/checkAndCreatePath";
+import { getFormDataValue } from "@/fsd/shared/lib/getFormDataValue";
+import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { NextResponse } from "next/server";
 import { access, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -34,46 +38,47 @@ import { join } from "node:path";
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
+    const entity = getFormDataValue(formData.get("entity"));
+
+    // const pathToFile = getFormDataValue(formData.get("pathToFile"));
+    const nameToFile = getFormDataValue(formData.get("nameToFile"));
+
     const formDataEntryValues = Array.from(formData.values());
 
-    // Определяем корневую папку проекта
     const rootPath = process.cwd();
 
-    // Определяем путь для сохранения файлов
-    const uploadPath = join(
-      rootPath,
-      PathServerEnum.UPLOAD,
-      UploadPathEnum.PRODUCTS,
-    );
+    let uploadPath: string;
 
-    // Проверяем существование каталога
-    try {
-      await access(uploadPath);
-    } catch (error) {
-      // Каталог не существует, создаем его
-      await mkdir(uploadPath, { recursive: true });
+    if (entity && nameToFile) {
+      uploadPath = join(rootPath, PathServerEnum.UPLOAD, entity, nameToFile);
+    } else {
+      uploadPath = join(rootPath, PathServerEnum.GARBAGE);
     }
 
-    for (const formDataEntryValue of formDataEntryValues) {
-      if (
-        typeof formDataEntryValue === "object" &&
-        "arrayBuffer" in formDataEntryValue
-      ) {
-        const file = formDataEntryValue as unknown as File;
+    await checkAndCreatePath(uploadPath);
+
+    let idx = 1;
+    for (const value of formDataEntryValues) {
+      if (checkFormDataIsBuffer(value)) {
+        const file = value as unknown as File;
+        const fileExtension = file.name.split(".").pop();
+
         const buffer = Buffer.from(await file.arrayBuffer());
 
-        // Используем writeFile только для создания файлов в директории
-        const filePath = join(uploadPath, file.name);
+        const filePath = join(
+          uploadPath,
+          `${nameToFile}_${idx}.${fileExtension}`,
+        );
         await writeFile(filePath, buffer);
+        idx++;
       }
     }
 
     return NextResponse.json({ success: true });
   } catch (e) {
-    console.error("output_log:  =>>>", e);
     return NextResponse.json({
       success: false,
-      error: "Internal Server Error",
+      error: HTTPStatusEnum.INTERNAL_SERVER_ERROR,
     });
   }
 }

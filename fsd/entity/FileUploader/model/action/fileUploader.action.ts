@@ -14,10 +14,6 @@ export const fileUploader = async (
 ): Promise<ResponseDataAction<string[] | null>> => {
   try {
     const { fileList, pathToUpload } = data;
-    console.log("output_log:  =>>>", data);
-    // const files: FileList | null = formData.getAll(
-    //   "file",
-    // ) as unknown as FileList;
 
     if (!fileList || fileList.length === 0) {
       throw new HttpException(
@@ -28,7 +24,6 @@ export const fileUploader = async (
 
     const paths: string[] = [];
 
-    console.log("output_log:  =>>> before cicle");
     // // Итерируем по каждому файлу в FileList
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
