@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/fsd/shared/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, HTMLAttributes, useCallback } from "react";
+import { FC, HTMLAttributes, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { PathUploadEnum } from "@/fsd/shared/data/pathUpload.enum";
@@ -30,7 +30,12 @@ interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   extension: Accept;
 }
 
+interface AxiosResponse<T> {
+  response: T;
+}
+
 export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
+  const [loadedImgList, setLoadedImgList] = useState<string[]>([]);
   const { entity, name, extension, isMultiple = false } = props;
 
   const router = useRouter();
@@ -38,11 +43,44 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
     resolver: zodResolver(uploadFileFormSchema),
   });
 
+  const loadFileList = useCallback(
+    async (
+      files: FileList,
+      entity: PathUploadEnum,
+      name: string,
+    ): Promise<string[]> => {
+      try {
+        const formData = new FormData();
+        for (let i = 0; i < files!.length; i++) {
+          formData.append("fileList", files![i]);
+        }
+        formData.append("entity", entity);
+        formData.append("nameToFile", name);
+        //
+        const { data, status } = await axios.post<AxiosResponse<string[]>>(
+          `/api/upload`,
+          formData,
+        );
+        console.log("output_log:  response =>>>", data.response);
+
+        if (status === 200) {
+          form.resetField("files");
+          router.refresh();
+        }
+
+        return data.response;
+      } catch (e) {
+        console.log("output_log:  =>>>", e);
+        return [];
+      }
+    },
+    [form, router],
+  );
+
   const onAction = async (data: UploadFilelFormTypeSchema) => {
     console.log("output_log:  =>>> SUBMIT");
     try {
       const { files } = data;
-      console.log("output_log:  files =>>>", files);
       const formData = new FormData();
       for (let i = 0; i < files!.length; i++) {
         formData.append("fileList", files![i]);
@@ -61,10 +99,13 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
   };
 
   const onDrop = useCallback(
-    (files: FileList): void => {
+    async (files: FileList): Promise<void> => {
+      const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
       form.setValue("files", files);
+      // console.log("output_log: before set =>>>", imgListPath);
+      setLoadedImgList(imgListPath);
     },
-    [form],
+    [form, name, loadFileList],
   );
 
   return (
@@ -85,6 +126,7 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
                     fieldState={fieldState}
                     onBlur={field.onBlur}
                     onChange={field.onChange}
+                    loadedImgList={loadedImgList}
                   />
                 </FormControl>
                 <FormMessage />

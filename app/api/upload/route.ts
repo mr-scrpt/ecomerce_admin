@@ -33,6 +33,7 @@ import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { NextResponse } from "next/server";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // };
 
@@ -49,17 +50,21 @@ export async function POST(req: Request) {
     const rootPath = process.cwd();
 
     let uploadPath: string;
+    let serverPath: string;
 
     if (entity && nameToFile) {
       const slug = slugGenerator(nameToFile);
       uploadPath = join(rootPath, PathServerEnum.UPLOAD, entity, slug);
+      serverPath = join("/upload/", entity, slug);
     } else {
       uploadPath = join(rootPath, PathServerEnum.GARBAGE);
+      serverPath = join("/upload/", PathServerEnum.GARBAGE);
     }
 
     await checkAndCreatePath(uploadPath);
 
     let idx = 1;
+    const loadedListPath = [];
     for await (const value of formDataEntryValues) {
       if (checkFormDataIsBuffer(value)) {
         const file = value as unknown as File;
@@ -69,14 +74,16 @@ export async function POST(req: Request) {
 
         const slug = slugGenerator(`${nameToFile}_${idx}.${fileExtension}`);
         const filePath = join(uploadPath, slug);
-        console.log("output_log: filePath =>>>", filePath);
+        const serverFilePath = join(serverPath, slug);
+        loadedListPath.push(serverFilePath);
         await checkAndRemoveFile(filePath);
         await writeFile(filePath, buffer);
         idx++;
       }
     }
+    console.log("output_log:  =>>>", loadedListPath);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ response: loadedListPath, success: true });
   } catch (e) {
     console.log("output_log:  =>>>", e);
     return NextResponse.json({

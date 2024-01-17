@@ -10,6 +10,7 @@ import {
 import { cn } from "../../lib/utils";
 import { Button } from "../button";
 import { UploadCloudIcon } from "lucide-react";
+import Image from "next/image";
 
 export const DropzoneInput: FC<{
   isMultiple?: boolean;
@@ -18,15 +19,18 @@ export const DropzoneInput: FC<{
   fieldState: ControllerFieldState;
   onBlur: () => void;
   onChange: () => void;
+  loadedImgList: string[];
 }> = ({
   isMultiple,
   extension,
+  loadedImgList,
   onBlur,
   onChange,
   fieldState,
   onDrop,
   ...rest
 }) => {
+  console.log("output_log:  img list=>>>", loadedImgList);
   return (
     <Dropzone
       noClick
@@ -71,7 +75,7 @@ export const DropzoneInput: FC<{
               />
               <p className="text-xl">Or drag and drop in this zone</p>
 
-              {acceptedFiles.length > 0 && (
+              {/* {acceptedFiles.length > 0 && (
                 <div className="text-sm">
                   <ul>
                     {acceptedFiles.slice(0, 3).map((item, idx) => (
@@ -80,6 +84,23 @@ export const DropzoneInput: FC<{
                         key={item.name}
                       >
                         {item.name}
+                      </li>
+                    ))}
+                    {acceptedFiles.length > 3 && <div>...</div>}
+                  </ul>
+                </div>
+              )} */}
+              {loadedImgList.length > 0 && (
+                <div className="text-sm">
+                  <ul className="flex gap-2 flex-wrap">
+                    {loadedImgList.slice(0, 3).map((item) => (
+                      <li className="max-w-[280px] truncate ..." key={item}>
+                        <Image
+                          src={item}
+                          alt="temp img"
+                          width={150}
+                          height={150}
+                        />
                       </li>
                     ))}
                     {acceptedFiles.length > 3 && <div>...</div>}
