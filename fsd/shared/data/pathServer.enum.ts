@@ -1,4 +1,4 @@
-const PATH_PUBLIC = "public";
+export const PATH_PUBLIC = "public";
 
 export enum PathServerEnum {
   UPLOAD = `/${PATH_PUBLIC}/upload`,

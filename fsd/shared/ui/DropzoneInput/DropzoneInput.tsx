@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 import { cn } from "../../lib/utils";
 import { Button } from "../button";
-import { UploadCloudIcon } from "lucide-react";
+import { TrashIcon, UploadCloudIcon, X } from "lucide-react";
 import Image from "next/image";
 
 export const DropzoneInput: FC<{
@@ -19,6 +19,7 @@ export const DropzoneInput: FC<{
   fieldState: ControllerFieldState;
   onBlur: () => void;
   onChange: () => void;
+  onDelete: (item: string) => void;
   loadedImgList: string[];
 }> = ({
   isMultiple,
@@ -28,9 +29,9 @@ export const DropzoneInput: FC<{
   onChange,
   fieldState,
   onDrop,
+  onDelete,
   ...rest
 }) => {
-  console.log("output_log:  img list=>>>", loadedImgList);
   return (
     <Dropzone
       noClick
@@ -94,13 +95,25 @@ export const DropzoneInput: FC<{
                 <div className="text-sm">
                   <ul className="flex gap-2 flex-wrap">
                     {loadedImgList.slice(0, 3).map((item) => (
-                      <li className="max-w-[280px] truncate ..." key={item}>
+                      <li
+                        className="p-2 relative max-w-[280px] truncate ..."
+                        key={item}
+                      >
                         <Image
                           src={item}
                           alt="temp img"
                           width={150}
                           height={150}
                         />
+                        <Button
+                          variant="destructive"
+                          className="absolute top-0 right-0"
+                          type="button"
+                          size="xs"
+                          onClick={onDelete.bind(null, item)}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
                       </li>
                     ))}
                     {acceptedFiles.length > 3 && <div>...</div>}
