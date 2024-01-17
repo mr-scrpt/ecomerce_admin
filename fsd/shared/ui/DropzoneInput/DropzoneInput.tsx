@@ -64,7 +64,11 @@ export const DropzoneInput: FC<{
               <Button variant="secondary" onClick={open}>
                 Browse
               </Button>
-              <UploadCloudIcon className="w-24 h-24 text-border" />
+              <UploadCloudIcon
+                className={cn("w-24 h-24 text-border", {
+                  "text-current": isDragActive,
+                })}
+              />
               <p className="text-xl">Or drag and drop in this zone</p>
 
               {acceptedFiles.length > 0 && (
