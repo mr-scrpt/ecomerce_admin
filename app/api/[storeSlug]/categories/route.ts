@@ -1,9 +1,11 @@
-import { categoryAction } from "@/fsd/entity/Category";
+import { ICategory, categoryAction } from "@/fsd/entity/Category";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
-import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
-import { ResponseErrorEnum } from "@/fsd/shared/type/responseError.enum";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
+import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { NextResponse } from "next/server";
 
 interface IMetaCategory {
@@ -11,7 +13,10 @@ interface IMetaCategory {
     storeSlug: string;
   };
 }
-export const GET = async (_: Request, meta: IMetaCategory) => {
+export const GET = async (
+  _: Request,
+  meta: IMetaCategory,
+): Promise<NextResponse<ResponseDataAction<ICategory[] | null>>> => {
   try {
     const { params } = meta;
     const { storeSlug } = params;
@@ -25,37 +30,7 @@ export const GET = async (_: Request, meta: IMetaCategory) => {
     return NextResponse.json(response);
   } catch (e) {
     const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
-  }
-};
-
-export const POST = async (req: Request, meta: IMetaCategory) => {
-  try {
-    const body = await req.json();
-    const { storeId, name, billboardId } = body;
-
-    if (!storeId || !name || !billboardId) {
-      throw new HttpException(
-        ResponseErrorEnum.BAD_DATA,
-        HTTPStatusEnum.BAD_REQUEST,
-      );
-    }
-
-    const { data, error, status } = await categoryAction.createCategory({
-      storeId,
-      name,
-      billboardId,
-    });
-
-    if (error) {
-      throw new HttpException(error, status);
-    }
-    const response = buildResponse(data);
-    return NextResponse.json(response);
-  } catch (e) {
-    const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
+    const errorResponse = buildErrorResponse(status, error);
+    return NextResponse.json(errorResponse);
   }
 };

@@ -1,7 +1,10 @@
 import { IColor, colorAction } from "@/fsd/entity/Color";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { NextResponse } from "next/server";
 
@@ -27,7 +30,7 @@ export const GET = async (
     return NextResponse.json(response);
   } catch (e) {
     const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
+    const errorResponse = buildErrorResponse(status, error);
+    return NextResponse.json(errorResponse);
   }
 };

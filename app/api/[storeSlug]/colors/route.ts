@@ -1,7 +1,11 @@
-import { colorAction } from "@/fsd/entity/Color";
+import { IColor, colorAction } from "@/fsd/entity/Color";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
+import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { NextResponse } from "next/server";
 
 interface IMetaColor {
@@ -9,7 +13,10 @@ interface IMetaColor {
     storeSlug: string;
   };
 }
-export const GET = async (_: Request, meta: IMetaColor) => {
+export const GET = async (
+  _: Request,
+  meta: IMetaColor,
+): Promise<NextResponse<ResponseDataAction<IColor[] | null>>> => {
   try {
     const { params } = meta;
     const { storeSlug } = params;
@@ -23,7 +30,7 @@ export const GET = async (_: Request, meta: IMetaColor) => {
     return NextResponse.json(response);
   } catch (e) {
     const { error, status } = buildError(e);
-    const errorResponse = buildResponse(null, error, status);
-    return NextResponse.json(errorResponse, { status });
+    const errorResponse = buildErrorResponse(status, error);
+    return NextResponse.json(errorResponse);
   }
 };
