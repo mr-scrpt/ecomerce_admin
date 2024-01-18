@@ -1,4 +1,4 @@
-export type CategoryColumn = {
+export type CategoryColumnType = {
   id: string;
   name: string;
   slug: string;

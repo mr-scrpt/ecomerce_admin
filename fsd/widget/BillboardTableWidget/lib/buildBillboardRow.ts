@@ -1,10 +1,8 @@
 import { IBillboard } from "@/fsd/entity/Billboard";
 import { buildDate } from "@/fsd/shared/lib/formatDate";
-import { IStoreBillboardTableItem } from "../../../entity/Billboard/type/store.type";
+import { IBillboardTableItem } from "../type/table.type";
 
-export const buildBillboardRow = (
-  item: IBillboard,
-): IStoreBillboardTableItem => ({
+export const buildBillboardRow = (item: IBillboard): IBillboardTableItem => ({
   id: item.id,
   name: item.name,
   slug: item.slug,

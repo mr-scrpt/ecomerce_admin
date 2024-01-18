@@ -1,5 +1,5 @@
 "use client";
-import { BillboardColumn, useBillboardList } from "@/fsd/entity/Billboard";
+import { useBillboardList } from "@/fsd/entity/Billboard";
 import { useBillboardRemove } from "@/fsd/feature/BillboardRemove";
 import { useBillboardRemoveModal } from "@/fsd/feature/ModalManager";
 import { RoutePathEnum } from "@/fsd/shared/data/route.enum";
@@ -18,6 +18,7 @@ import { useShallow } from "zustand/react/shallow";
 import { billboardColumns } from "../data/columns";
 import { buildBillboardRow } from "../lib/buildBillboardRow";
 import { BillboardTableAction } from "./BillboardTableAction";
+import { BillboardColumnType } from "../type/table.type";
 
 interface BillboardTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
   slug: string;
@@ -31,7 +32,7 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
       useShallow((state) => ({
         isLoading: state.loading,
         billboardList: state.billboardList,
-        fetchBillboardList: state.fetchBillboardList,
+        fetchBillboardList: state.fetchBillboardListByStoreSlug,
       })),
     );
 
@@ -69,7 +70,7 @@ export const BillboardTableWidget: FC<BillboardTableWidgetProps> = memo(
       return `${RoutePathEnum.BILLBOARD_EDIT}/${billboardSlug}`;
     }, []);
 
-    const billboardCollumnsWithAction: ColumnDef<BillboardColumn>[] = [
+    const billboardCollumnsWithAction: ColumnDef<BillboardColumnType>[] = [
       ...billboardColumns,
       {
         header: "Actions",

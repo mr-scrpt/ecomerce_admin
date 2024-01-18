@@ -1,3 +1,4 @@
+import { HTTPStatusEnum } from "../type/httpStatus.enum";
 import { ResponseDataAction } from "../type/response.type";
 
 // export const buildResponse = <T>(
@@ -25,7 +26,18 @@ export const buildResponse = <T>(
   error: string | null = null,
 ): ResponseDataAction<T> => {
   return {
-    data: error === null ? data : null,
+    data,
+    status: status ? status : HTTPStatusEnum.OK,
+    error,
+  };
+};
+
+export const buildErrorResponse = (
+  status?: number,
+  error: string | null = null,
+): ResponseDataAction<null> => {
+  return {
+    data: null,
     status,
     error,
   };

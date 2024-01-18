@@ -2,7 +2,10 @@
 import { categoryAction } from "@/fsd/entity/Category";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
@@ -53,7 +56,7 @@ export const createStore = cache(
       return buildResponse(store);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -76,7 +79,7 @@ export const getStore = cache(
       return buildResponse(store);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -111,7 +114,7 @@ export const getStoreBySlug = cache(
       return buildResponse(store);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -135,7 +138,7 @@ export const getStoreStoreFirst = cache(
       return buildResponse(store);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -147,7 +150,7 @@ export const getStoreListByUserId = cache(
       return buildResponse(storeList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -199,7 +202,7 @@ export const renameStore = cache(
       return buildResponse(store);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -244,7 +247,7 @@ export const removeStore = cache(
       return buildResponse(store);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );

@@ -3,7 +3,10 @@ import { billboardAction } from "@/fsd/entity/Billboard";
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
@@ -72,7 +75,7 @@ export const createCategory = cache(
       return buildResponse(category);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -88,7 +91,7 @@ export const updateOptionListToCategory = cache(
       return buildResponse(null);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -105,7 +108,7 @@ export const deleteOptionListToCategory = cache(
     } catch (e) {
       console.log(" error=>>>", e);
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -126,7 +129,7 @@ export const addOptionListToCategory = cache(
       return buildResponse(null);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -144,7 +147,7 @@ export const getCategory = cache(
       return buildResponse(category);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -177,7 +180,7 @@ export const getCategoryBySlug = cache(
       return buildResponse(category);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -189,7 +192,7 @@ export const getCategoryListByStoreId = cache(
       return buildResponse(categoryList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -205,7 +208,7 @@ export const getCategoryListByStoreSlug = cache(
       return buildResponse(categoryList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -220,7 +223,7 @@ export const getCategoryListByBillboard = cache(
       return buildResponse(categoryList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -297,7 +300,7 @@ export const updateCategory = cache(
       return buildResponse(category);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -352,7 +355,7 @@ export const removeCategory = cache(
       return buildResponse(categoryRemover);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );

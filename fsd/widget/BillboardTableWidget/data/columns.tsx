@@ -1,9 +1,9 @@
 "use client";
 
-import { BillboardColumn } from "@/fsd/entity/Billboard";
 import { ColumnDef } from "@tanstack/react-table";
+import { BillboardColumnType } from "../type/table.type";
 
-export const billboardColumns: ColumnDef<BillboardColumn>[] = [
+export const billboardColumns: ColumnDef<BillboardColumnType>[] = [
   {
     accessorKey: "name",
     header: "Name",

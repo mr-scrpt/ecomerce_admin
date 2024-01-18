@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { categoryCollumns } from "../data/columns";
 import { buildCategoryRow } from "../lib/buildCategoryRow";
-import { CategoryColumn } from "../type/table.type";
+import { CategoryColumnType } from "../type/table.type";
 import { CategoryTableAction } from "./CategoryTableAction";
 
 interface CategoryTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
@@ -63,7 +63,7 @@ export const CategoryTableWidget: FC<CategoryTableWidgetProps> = (props) => {
     return `${RoutePathEnum.CATEGORIES_EDIT}/${categorySlug}`;
   }, []);
 
-  const categoryCollumnsWithAction: ColumnDef<CategoryColumn>[] = [
+  const categoryCollumnsWithAction: ColumnDef<CategoryColumnType>[] = [
     ...categoryCollumns,
     {
       header: "Actions",

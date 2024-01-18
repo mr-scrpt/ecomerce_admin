@@ -1,9 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CategoryColumn } from "../type/table.type";
+import { CategoryColumnType } from "../type/table.type";
 
-export const categoryCollumns: ColumnDef<CategoryColumn>[] = [
+export const categoryCollumns: ColumnDef<CategoryColumnType>[] = [
   {
     accessorKey: "name",
     header: "Name",

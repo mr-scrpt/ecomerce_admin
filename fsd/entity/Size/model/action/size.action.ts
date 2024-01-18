@@ -2,7 +2,10 @@
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
@@ -60,7 +63,7 @@ export const createSize = cache(
       return buildResponse(size);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -78,7 +81,7 @@ export const getSize = cache(
       return buildResponse(size);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -111,7 +114,7 @@ export const getSizeBySlug = cache(
       return buildResponse(size);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -123,7 +126,7 @@ export const getSizeListByStoreId = cache(
       return buildResponse(sizeList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -138,7 +141,7 @@ export const getSizeListByStoreSlug = cache(
       return buildResponse(sizeList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -150,7 +153,7 @@ export const getSizeListByCategory = cache(
       return buildResponse(sizeList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -209,7 +212,7 @@ export const updateSize = cache(
       return buildResponse(size);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -258,7 +261,7 @@ export const removeSize = cache(
       return buildResponse(sizeRemover);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );

@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { optionColumns } from "../data/columns";
 import { buildOptionRow } from "../lib/buildOptionRow";
-import { OptionColumn } from "../type/table.type";
+import { OptionColumnType } from "../type/table.type";
 import { OptionTableAction } from "./OptionTableAction";
 
 interface OptionTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
@@ -60,7 +60,7 @@ export const OptionTableWidget: FC<OptionTableWidgetProps> = (props) => {
     return `${RoutePathEnum.OPTION_EDIT}/${optionSlug}`;
   }, []);
 
-  const optionCollumnsWithAction: ColumnDef<OptionColumn>[] = [
+  const optionCollumnsWithAction: ColumnDef<OptionColumnType>[] = [
     ...optionColumns,
     {
       header: "Actions",

@@ -9,11 +9,11 @@ import {
 } from "@/fsd/shared/ui/dropdown-menu";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
-import { CategoryColumn } from "../type/table.type";
+import { CategoryColumnType } from "../type/table.type";
 import Link from "next/link";
 
 interface CategoryTableActionProps extends HTMLAttributes<HTMLDivElement> {
-  data: CategoryColumn;
+  data: CategoryColumnType;
   onCopy: () => void;
   hrefUpdate: string;
   onDeletePopup: () => void;

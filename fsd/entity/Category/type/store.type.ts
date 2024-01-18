@@ -1,4 +1,3 @@
-import { ICategory } from "../../Category";
 import { ICategoryWithRelations } from "./entity.type";
 
 export interface IStoreCategoryList {
@@ -13,14 +12,3 @@ export interface IStoreCategoryRemove {
   setId: (categoryId: string) => void;
   resetId: () => void;
 }
-
-// export interface IStoreCategoryUpdate {
-//   categoryId: string;
-//   category: ICategory | null;
-//   error: string | null;
-//   loading: boolean;
-//   setId: (categoryId: string) => void;
-//   resetId: () => void;
-//   resetCategory: () => void;
-//   getCategoryCurrent: () => void;
-// }

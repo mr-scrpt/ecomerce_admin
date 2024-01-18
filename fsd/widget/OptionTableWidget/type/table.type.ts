@@ -1,6 +1,6 @@
 import { OptionItem } from "@prisma/client";
 
-export type OptionColumn = {
+export type OptionColumnType = {
   id: string;
   name: string;
   slug: string;

@@ -1,4 +1,4 @@
-export type SizeColumn = {
+export type SizeColumnType = {
   id: string;
   name: string;
   slug: string;

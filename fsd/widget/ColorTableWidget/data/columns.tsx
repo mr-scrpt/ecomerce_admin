@@ -1,9 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ColorColumn } from "../type/table.type";
+import { ColorColumnType } from "../type/table.type";
 
-export const colorColumns: ColumnDef<ColorColumn>[] = [
+export const colorColumns: ColumnDef<ColorColumnType>[] = [
   {
     accessorKey: "name",
     header: "Name",

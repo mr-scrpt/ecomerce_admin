@@ -2,9 +2,11 @@
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
-import { authAction } from "@/fsd/shared/model/action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { cache } from "react";
@@ -62,7 +64,7 @@ export const createColor = cache(
       return buildResponse(color);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -94,7 +96,7 @@ export const getColorBySlug = cache(
       return buildResponse(color);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -112,7 +114,7 @@ export const getColor = cache(
       return buildResponse(color);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -124,7 +126,7 @@ export const getColorListByStoreId = cache(
       return buildResponse(colorList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -139,7 +141,7 @@ export const getColorListByStoreSlug = cache(
       return buildResponse(colorList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -151,7 +153,7 @@ export const getColorListByCategory = cache(
       return buildResponse(colorList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -211,7 +213,7 @@ export const updateColor = cache(
       return buildResponse(color);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -260,7 +262,7 @@ export const removeColor = cache(
       return buildResponse(colorRemover);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );

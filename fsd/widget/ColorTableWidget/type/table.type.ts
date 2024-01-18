@@ -1,4 +1,4 @@
-export type ColorColumn = {
+export type ColorColumnType = {
   id: string;
   name: string;
   slug: string;

@@ -9,11 +9,11 @@ import {
 } from "@/fsd/shared/ui/dropdown-menu";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { FC, HTMLAttributes } from "react";
-import { ColorColumn } from "../type/table.type";
+import { ColorColumnType } from "../type/table.type";
 import Link from "next/link";
 
 interface ColorTableActionProps extends HTMLAttributes<HTMLDivElement> {
-  data: ColorColumn;
+  data: ColorColumnType;
   onCopy: () => void;
   hrefUpdate: string;
   onDeletePopup: () => void;

@@ -1,5 +1,4 @@
 "use client";
-import { BillboardColumn } from "@/fsd/entity/Billboard";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   DropdownMenu,
@@ -11,9 +10,10 @@ import {
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import Link from "next/link";
 import { FC, HTMLAttributes, memo } from "react";
+import { BillboardColumnType } from "../type/table.type";
 
 interface BillboardTableListActionProps extends HTMLAttributes<HTMLDivElement> {
-  data: BillboardColumn;
+  data: BillboardColumnType;
   onCopy: () => void;
   hrefUpdate: string;
   onDeletePopup: () => void;

@@ -3,7 +3,10 @@ import { categoryAction } from "@/fsd/entity/Category";
 import { storeAction } from "@/fsd/entity/Store";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { HttpException } from "@/fsd/shared/lib/httpException";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
@@ -62,7 +65,7 @@ export const createBillboard = cache(
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -84,7 +87,7 @@ export const getBillboard = cache(
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -119,7 +122,7 @@ export const getBillboardBySlug = cache(
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -131,7 +134,7 @@ export const getBillboardListByStoreId = cache(
       return buildResponse(billboardList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -146,7 +149,7 @@ export const getBillboardListByStoreSlug = cache(
       return buildResponse(billboardList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -204,7 +207,7 @@ export const updateBillboard = cache(
       return buildResponse(billboard);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -265,7 +268,7 @@ export const removeBillboard = cache(
       return buildResponse(billboardRemover);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );

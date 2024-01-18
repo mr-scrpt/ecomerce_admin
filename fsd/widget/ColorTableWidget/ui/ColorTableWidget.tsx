@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
 import { colorColumns } from "../data/columns";
 import { buildColorRow } from "../lib/buildColorRow";
-import { ColorColumn } from "../type/table.type";
+import { ColorColumnType } from "../type/table.type";
 import { ColorTableAction } from "./ColorTableAction";
 
 interface ColorTableWidgetProps extends HTMLAttributes<HTMLDivElement> {
@@ -58,7 +58,7 @@ export const ColorTableWidget: FC<ColorTableWidgetProps> = (props) => {
     return `${RoutePathEnum.COLOR_EDIT}/${colorSlug}`;
   }, []);
 
-  const colorCollumnsWithAction: ColumnDef<ColorColumn>[] = [
+  const colorCollumnsWithAction: ColumnDef<ColorColumnType>[] = [
     ...colorColumns,
     {
       header: "Actions",

@@ -5,7 +5,10 @@ import { findDiffArray } from "@/fsd/shared/lib/diffArray";
 import { findInObject } from "@/fsd/shared/lib/findInObject";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import { isArrayUniqueFields } from "@/fsd/shared/lib/isArrayUniqueFields";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import {
+  buildErrorResponse,
+  buildResponse,
+} from "@/fsd/shared/lib/responseBuilder";
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model/action/auth.action";
 import { HTTPStatusEnum } from "@/fsd/shared/type/httpStatus.enum";
@@ -61,7 +64,7 @@ export const createOrGetOptionItem = cache(
       return buildResponse(optionItem);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -92,7 +95,7 @@ export const createOptionItemList = cache(
       return buildResponse(optionList);
     } catch (e) {
       const { error, status } = buildError(e);
-      return buildResponse(null, error, status);
+      return buildErrorResponse(status, error);
     }
   },
 );
@@ -105,7 +108,7 @@ export const getOptionItemByName = async (
     return buildResponse(res);
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 
@@ -133,7 +136,7 @@ export const getOptionItemListByList = async (
     return buildResponse(res);
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 
@@ -169,7 +172,7 @@ export const createOptionItemByList = async (
     return buildResponse(resultList);
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 
@@ -184,7 +187,7 @@ export const removeOptionItemByOption = async (
     return buildResponse(void 0);
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 
@@ -208,7 +211,7 @@ export const removeOptionItemByList = async (
     return buildResponse(null);
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 
@@ -244,7 +247,7 @@ export const updateOptionItemByList = async (
     return res;
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 
@@ -329,7 +332,7 @@ export const CURListOption = async (
     return buildResponse(resultList);
   } catch (e) {
     const { error, status } = buildError(e);
-    return buildResponse(null, error, status);
+    return buildErrorResponse(status, error);
   }
 };
 

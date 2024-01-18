@@ -16,8 +16,31 @@ export const useBillboardList = create<IStoreBillboardList>()(
       fetchBillboardList: async (storeId: string) => {
         try {
           set({ loading: true }, false, "set_billboard_loading");
-          // const { data, error } = await getBillboardListByStoreSlug(storeId);
           const { data, error } = await getBillboardListByStoreId(storeId);
+          if (error) {
+            set({ error, billboardList: [] }, false, "set_billboard_error");
+            return;
+          }
+          if (data) {
+            set(
+              { billboardList: data, error: null },
+              false,
+              "set_billboard_data",
+            );
+          }
+        } catch (e) {
+          set({
+            error: HTTPErrorMessage.SERVER_ERROR,
+            billboardList: [],
+          });
+        } finally {
+          set({ loading: false }, false, "set_category_loading");
+        }
+      },
+      fetchBillboardListByStoreSlug: async (storeSlug: string) => {
+        try {
+          set({ loading: true }, false, "set_billboard_loading");
+          const { data, error } = await getBillboardListByStoreSlug(storeSlug);
           if (error) {
             set({ error, billboardList: [] }, false, "set_billboard_error");
             return;

@@ -1,9 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { OptionColumn } from "../type/table.type";
+import { OptionColumnType } from "../type/table.type";
 
-export const optionColumns: ColumnDef<OptionColumn>[] = [
+export const optionColumns: ColumnDef<OptionColumnType>[] = [
   {
     accessorKey: "name",
     header: "Name",
