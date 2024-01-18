@@ -1,17 +1,19 @@
 "use server";
 
+import { buildError } from "@/fsd/shared/lib/buildError";
+import { checkAndCrearPath } from "@/fsd/shared/lib/checkAndClearFolder";
+import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
+import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
+import { join } from "node:path";
 import { cache } from "react";
 import { IUploadFileListPayload } from "../../type/action.type";
-import { buildResponse } from "@/fsd/shared/lib/responseBuilder";
-import { buildError } from "@/fsd/shared/lib/buildError";
 import {
   PATH_PUBLIC_GARBAGE,
   PATH_PUBLIC_TMP,
 } from "../../type/fileManagerPath.const";
-import { join } from "node:path";
-import slugify from "slugify";
+import { writeFile } from "node:fs/promises";
 
 export const uploadeFileList = cache(
   async (
@@ -23,8 +25,8 @@ export const uploadeFileList = cache(
 
       await checkAuthUser(checkAuth);
 
-      const folderName = name ? slugify(name) : null;
-      const folderEntity = entity ? slugify(entity) : null;
+      const folderName = name ? slugGenerator(name) : null;
+      const folderEntity = entity ? slugGenerator(entity) : null;
 
       const pathFolderDest = join(
         folderEntity && folderName
@@ -32,7 +34,19 @@ export const uploadeFileList = cache(
           : PATH_PUBLIC_GARBAGE,
       );
 
-      console.log("output_log: pathDest =>>>", pathFolderDest);
+      await checkAndCrearPath(pathFolderDest);
+      const pathListResponse: string[] = [];
+      for await (const [idx, file] of fileList.entries()) {
+        const fileExtension = file.name.split(".").pop();
+        const buffer = Buffer.from(await file.arrayBuffer());
+
+        const fileNameDest = slugGenerator(`${name}_${idx}.${fileExtension}`);
+        const pathComplitedDest = join(pathFolderDest, fileNameDest);
+
+        await writeFile(pathComplitedDest, buffer);
+
+        console.log("output_log:  =>>>", fileNameDest);
+      }
 
       return buildResponse(null);
     } catch (e) {
