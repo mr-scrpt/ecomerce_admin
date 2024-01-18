@@ -2,7 +2,6 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,31 +12,32 @@ import { FC, HTMLAttributes, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { PathUploadEnum } from "@/fsd/shared/data/pathUpload.enum";
+import { DropzoneInput } from "@/fsd/shared/ui/DropzoneInput/ui/DropzoneInput";
+import { ImgList } from "@/fsd/shared/ui/ImgList/ui/ImgList";
 import { Button } from "@/fsd/shared/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Accept } from "react-dropzone";
+import toast from "react-hot-toast";
 import {
   UploadFilelFormTypeSchema,
   uploadFileFormSchema,
-} from "../type/schema.type";
-import { Accept } from "react-dropzone";
-import toast from "react-hot-toast";
-import { ImgList } from "@/fsd/shared/ui/ImgList/ui/ImgList";
-import { DropzoneInput } from "@/fsd/shared/ui/DropzoneInput/ui/DropzoneInput";
+} from "../../type/schema.type";
+import { FileUploaderForm } from "./FileUploaderForm";
+import { FILE_IMG_UPLOAD } from "../../type/fileManagerExtension.const";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
   name: string;
   isMultiple?: boolean;
-  extension: Accept;
 }
 
 interface AxiosResponse<T> {
   response: T;
 }
 
-export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
-  const [loadedImgList, setLoadedImgList] = useState<string[]>([]);
+export const FileUploader: FC<UploaderFileFormProps> = (props) => {
+  const [imgListLoaded, setImgListLoaded] = useState<string[]>([]);
   const [fileList, setFileList] = useState<FileList>();
   const { entity, name, extension, isMultiple = false } = props;
 
@@ -82,37 +82,20 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
 
   const onAction = async (data: UploadFilelFormTypeSchema) => {
     try {
-      if (loadedImgList) {
+      if (imgListLoaded) {
         await axios.post("/api/move", { folder: name, entity });
       }
     } catch (e) {}
-    // try {
-    //   const { files } = data;
-    //   const formData = new FormData();
-    //   for (let i = 0; i < files!.length; i++) {
-    //     formData.append("fileList", files![i]);
-    //   }
-    //   formData.append("entity", entity);
-    //   formData.append("nameToFile", name);
-    //   //
-    //   const result = await axios.post(`/api/upload`, formData);
-    //   if (result.status === 200) {
-    //     form.resetField("files");
-    //     router.refresh();
-    //   }
-    // } catch (e) {
-    //   console.log("output_log:  =>>>", e);
-    // }
   };
 
   const onUpload = useCallback(async (files: FileList): Promise<void> => {
     setFileList(files);
     const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
     form.setValue("files", files);
-    setLoadedImgList(imgListPath);
+    setImgListLoaded(imgListPath);
   }, []);
 
-  const onDrop = useCallback(
+  const handleImgLoad = useCallback(
     async (files: FileList): Promise<void> => {
       setFileList(files);
 
@@ -120,12 +103,12 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
       console.log("output_log: imgListPath =>>>", imgListPath);
       // form.setValue("files", files);
 
-      setLoadedImgList(imgListPath);
+      setImgListLoaded(imgListPath);
     },
     [name, loadFileList],
   );
 
-  const onDeleteFile = useCallback(
+  const handleImgDelete = useCallback(
     async (item: string) => {
       try {
         const formData = new FormData();
@@ -133,52 +116,60 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
         const result = await axios.post(`/api/remove`, formData);
         console.log("output_log:  =>>>", result);
         const fileName = item.split("/").pop();
-        const updatedImgList = loadedImgList.filter((path) => path !== item);
-        setLoadedImgList(updatedImgList);
+        const updatedImgList = imgListLoaded.filter((path) => path !== item);
+        setImgListLoaded(updatedImgList);
         toast.success(`File ${fileName} removed from upload list`);
       } catch (e) {
         console.log("output_log:  error e =>>>", e);
       }
     },
-    [loadedImgList],
+    [imgListLoaded],
   );
 
   return (
     <div className="space-x-4 pt-2 pb-4">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onAction)}>
-          <FormField
-            control={form.control}
-            name="files"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Upload file</FormLabel>
-                <FormControl>
-                  <DropzoneInput
-                    isMultiple={isMultiple}
-                    extension={extension}
-                    onDrop={onDrop}
-                    fieldState={fieldState}
-                    onBlur={field.onBlur}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                {loadedImgList.length > 0 && (
-                  <ImgList
-                    loadedImgList={loadedImgList}
-                    onDelete={onDeleteFile}
-                    className="border"
-                  />
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-            <Button type="submit">send</Button>
-          </div>
-        </form>
-      </Form>
+      <FileUploaderForm
+        onAction={onAction}
+        handleImgDelete={handleImgDelete}
+        handleImgLoad={handleImgLoad}
+        maxFileCoung={3}
+        extension={FILE_IMG_UPLOAD}
+        imgListLoaded={imgListLoaded}
+      />
+      {/* <Form {...form}> */}
+      {/*   <form onSubmit={form.handleSubmit(onAction)}> */}
+      {/*     <FormField */}
+      {/*       control={form.control} */}
+      {/*       name="files" */}
+      {/*       render={({ field, fieldState }) => ( */}
+      {/*         <FormItem> */}
+      {/*           <FormLabel>Upload file</FormLabel> */}
+      {/*           <FormControl> */}
+      {/*             <DropzoneInput */}
+      {/*               isMultiple={isMultiple} */}
+      {/*               extension={extension} */}
+      {/*               handleFileLoad={handleFileLoad} */}
+      {/*               fieldState={fieldState} */}
+      {/*               onBlur={field.onBlur} */}
+      {/*               onChange={field.onChange} */}
+      {/*             /> */}
+      {/*           </FormControl> */}
+      {/*           {loadedImgList.length > 0 && ( */}
+      {/*             <ImgList */}
+      {/*               loadedImgList={loadedImgList} */}
+      {/*               onDelete={onDeleteFile} */}
+      {/*               className="border" */}
+      {/*             /> */}
+      {/*           )} */}
+      {/*           <FormMessage /> */}
+      {/*         </FormItem> */}
+      {/*       )} */}
+      {/*     /> */}
+      {/*     <div className="pt-6 space-x-2 flex items-center justify-end w-full"> */}
+      {/*       <Button type="submit">send</Button> */}
+      {/*     </div> */}
+      {/*   </form> */}
+      {/* </Form> */}
     </div>
   );
 };

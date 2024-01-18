@@ -7,7 +7,7 @@ import { cn } from "@/fsd/shared/lib/utils";
 interface ImgListProps extends HTMLAttributes<HTMLDivElement> {
   loadedImgList: string[];
   onClick?: () => void;
-  onDelete: (item: string) => void;
+  handleImgDelete: (item: string) => void;
   maxShow?: number;
   className?: string;
 }
@@ -19,7 +19,7 @@ export const ImgList: FC<ImgListProps> = (props) => {
     loadedImgList,
     maxShow = MAX_ITEM_SHOW_DEFAULT,
     className,
-    onDelete,
+    handleImgDelete,
   } = props;
   return (
     <div className={cn("text-sm flex flex-col p-2", className)}>
@@ -33,7 +33,7 @@ export const ImgList: FC<ImgListProps> = (props) => {
                 className="absolute top-0 right-0"
                 type="button"
                 size="xs"
-                onClick={onDelete.bind(null, item)}
+                onClick={handleImgDelete.bind(null, item)}
               >
                 <X className="w-3 h-3" />
               </Button>
