@@ -60,7 +60,7 @@ export const FileUploaderForm: FC<FileUploaderFormProps> = (props) => {
                   onChange={field.onChange}
                 />
               </FormControl>
-              {imgListLoaded.length > 0 && (
+              {imgListLoaded && imgListLoaded.length > 0 && (
                 <ImgList
                   loadedImgList={imgListLoaded}
                   handleImgDelete={handleImgDelete}

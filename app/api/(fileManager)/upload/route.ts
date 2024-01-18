@@ -1,28 +1,3 @@
-// export const POST = async (req: Request) => {
-//   try {
-//     console.log("output_log: on POST =>>>");
-//     const formData = await req.formData();
-//     const formDataEntryValues = Array.from(formData.values());
-//     console.log("output_log:  =>>>", formDataEntryValues);
-//     for (const formDataEntryValue of formDataEntryValues) {
-//       console.log("output_log:  =>>>", formDataEntryValue);
-//       if (
-//         typeof formDataEntryValue === "object" &&
-//         "arrayBuffer" in formDataEntryValue
-//       ) {
-//         console.log("output_log:  =>>> in file");
-//         const file = formDataEntryValue as unknown as Blob;
-//         console.log("output_log:  =>>>", file);
-//         const buffer = Buffer.from(await file.arrayBuffer());
-//         // fs.writeFileSync(`public/${file.name}`, buffer);
-//       }
-//     }
-//     // const fileList = formData.get("fileList");
-//     // console.log("output_log: FILE LIST__ =>>>", fileList);
-//   } catch (e) {
-//     console.log("output_log:  =>>>", e);
-//   }
-
 import { uploadeFileList } from "@/fsd/entity/FileManager/model/action/fileManager.action";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { checkFormDataIsBuffer } from "@/fsd/shared/lib/chechFormDataIsBuffer";
@@ -34,8 +9,6 @@ import {
 } from "@/fsd/shared/lib/responseBuilder";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { NextResponse } from "next/server";
-
-// };
 
 export async function POST(
   req: Request,
@@ -55,6 +28,7 @@ export async function POST(
         fileList.push(file);
       }
     }
+    console.log("output_log:  =>>>", fileList);
     const { data, error, status } = await uploadeFileList(
       { fileList, entity, name },
       true,
@@ -67,6 +41,7 @@ export async function POST(
 
     return NextResponse.json(response);
   } catch (e) {
+    console.log("output_log:  =>>>", e);
     const { error, status } = buildError(e);
     const errorResponse = buildErrorResponse(status, error);
     return NextResponse.json(errorResponse);

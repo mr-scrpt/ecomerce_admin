@@ -66,7 +66,7 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
           formData,
         );
 
-        const { response, error, status } = data;
+        const { data: response, error, status } = data;
 
         // if (status === 200) {
         //   form.resetField("files");
@@ -83,7 +83,7 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         return [];
       }
     },
-    [form, router],
+    [],
   );
 
   const onAction = async (data: UploadFilelFormTypeSchema) => {

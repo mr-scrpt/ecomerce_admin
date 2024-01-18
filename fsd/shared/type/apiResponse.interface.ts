@@ -1,5 +1,5 @@
 export interface IApiResponse<T> {
-  response: T;
+  data: T;
   error: string | null;
   status: number;
 }
