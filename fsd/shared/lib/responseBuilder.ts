@@ -21,13 +21,13 @@ import { ResponseDataAction } from "../type/response.type";
 // };
 export const buildResponse = <T>(
   data: T,
-  error: string | null = null,
   status?: number,
+  error: string | null = null,
 ): ResponseDataAction<T> => {
   return {
     data: error === null ? data : null,
-    error,
     status,
+    error,
   };
 };
 

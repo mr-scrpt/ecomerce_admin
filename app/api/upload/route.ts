@@ -83,10 +83,15 @@ export async function POST(req: Request) {
         // idx++;
       }
     }
-    const result = await uploadeFileList({ fileList, entity, name }, true);
-    console.log("output_log: result =>>>", result);
+    const { data, error, status } = await uploadeFileList(
+      { fileList, entity, name },
+      true,
+    );
+    if (error) {
+      return NextResponse.json({ error, success: false });
+    }
 
-    return NextResponse.json({ response: "ok", success: true });
+    return NextResponse.json({ data, success: true, status: 200 });
   } catch (e) {
     console.log("output_log:  =>>>", e);
     return NextResponse.json({

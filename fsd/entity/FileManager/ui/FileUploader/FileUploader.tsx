@@ -15,7 +15,7 @@ import { PathUploadEnum } from "@/fsd/shared/data/pathUpload.enum";
 import { DropzoneInput } from "@/fsd/shared/ui/DropzoneInput/ui/DropzoneInput";
 import { ImgList } from "@/fsd/shared/ui/ImgList/ui/ImgList";
 import { Button } from "@/fsd/shared/ui/button";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import { Accept } from "react-dropzone";
 import toast from "react-hot-toast";
@@ -25,6 +25,7 @@ import {
 } from "../../type/schema.type";
 import { FileUploaderForm } from "./FileUploaderForm";
 import { FILE_IMG_UPLOAD } from "../../type/fileManagerExtension.const";
+import { AxiosResponseType } from "@/fsd/shared/type/axiosResponse.interface";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
@@ -32,9 +33,9 @@ interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   isMultiple?: boolean;
 }
 
-interface AxiosResponse<T> {
-  response: T;
-}
+// interface AxiosResponse<T> {
+//   response: T;
+// }
 
 export const FileUploader: FC<UploaderFileFormProps> = (props) => {
   const [imgListLoaded, setImgListLoaded] = useState<string[]>([]);
@@ -59,19 +60,24 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         }
         formData.append("entity", entity);
         formData.append("nameToFile", name);
-        //
-        const { data, status } = await axios.post<AxiosResponse<string[]>>(
+
+        const { data }: AxiosResponseType<string[]> = await axios.post(
           `/api/upload`,
           formData,
         );
-        // console.log("output_log:  response =>>>", data.response);
 
-        if (status === 200) {
-          form.resetField("files");
-          router.refresh();
+        const { response, error, status } = data;
+
+        // if (status === 200) {
+        //   form.resetField("files");
+        //   router.refresh();
+        // }
+
+        if (error) {
+          toast.error(error);
         }
 
-        return data.response;
+        return response;
       } catch (e) {
         console.log("output_log:  =>>>", e);
         return [];
