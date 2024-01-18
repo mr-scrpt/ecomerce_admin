@@ -1,16 +1,15 @@
 import { FC } from "react";
 import Dropzone, { Accept } from "react-dropzone";
-import { Input } from "../input";
+import { Input } from "../../input";
 import {
   ControllerFieldState,
   ControllerRenderProps,
   FieldPath,
   FieldValues,
 } from "react-hook-form";
-import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { cn } from "../../../lib/utils";
+import { Button } from "../../button";
 import { TrashIcon, UploadCloudIcon, X } from "lucide-react";
-import Image from "next/image";
 
 export const DropzoneInput: FC<{
   isMultiple?: boolean;
@@ -19,17 +18,13 @@ export const DropzoneInput: FC<{
   fieldState: ControllerFieldState;
   onBlur: () => void;
   onChange: () => void;
-  onDelete: (item: string) => void;
-  loadedImgList: string[];
 }> = ({
   isMultiple,
   extension,
-  loadedImgList,
   onBlur,
   onChange,
   fieldState,
   onDrop,
-  onDelete,
   ...rest
 }) => {
   return (
@@ -91,35 +86,6 @@ export const DropzoneInput: FC<{
                   </ul>
                 </div>
               )} */}
-              {loadedImgList.length > 0 && (
-                <div className="text-sm">
-                  <ul className="flex gap-2 flex-wrap">
-                    {loadedImgList.slice(0, 3).map((item) => (
-                      <li
-                        className="p-2 relative max-w-[280px] truncate ..."
-                        key={item}
-                      >
-                        <Image
-                          src={item}
-                          alt="temp img"
-                          width={150}
-                          height={150}
-                        />
-                        <Button
-                          variant="destructive"
-                          className="absolute top-0 right-0"
-                          type="button"
-                          size="xs"
-                          onClick={onDelete.bind(null, item)}
-                        >
-                          <X className="w-3 h-3" />
-                        </Button>
-                      </li>
-                    ))}
-                    {acceptedFiles.length > 3 && <div>...</div>}
-                  </ul>
-                </div>
-              )}
               <div>
                 {fieldState.error && (
                   <span role="alert">{fieldState.error.message}</span>

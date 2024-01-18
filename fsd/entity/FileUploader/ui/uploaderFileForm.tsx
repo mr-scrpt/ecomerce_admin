@@ -20,9 +20,10 @@ import {
   UploadFilelFormTypeSchema,
   uploadFileFormSchema,
 } from "../type/schema.type";
-import { DropzoneInput } from "@/fsd/shared/ui/DropzoneInput/DropzoneInput";
 import { Accept } from "react-dropzone";
 import toast from "react-hot-toast";
+import { ImgList } from "@/fsd/shared/ui/ImgList/ui/ImgList";
+import { DropzoneInput } from "@/fsd/shared/ui/DropzoneInput/ui/DropzoneInput";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
@@ -118,6 +119,7 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
       const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
       console.log("output_log: imgListPath =>>>", imgListPath);
       // form.setValue("files", files);
+
       setLoadedImgList(imgListPath);
     },
     [name, loadFileList],
@@ -159,10 +161,15 @@ export const UploaderFileForm: FC<UploaderFileFormProps> = (props) => {
                     fieldState={fieldState}
                     onBlur={field.onBlur}
                     onChange={field.onChange}
-                    loadedImgList={loadedImgList}
-                    onDelete={onDeleteFile}
                   />
                 </FormControl>
+                {loadedImgList.length > 0 && (
+                  <ImgList
+                    loadedImgList={loadedImgList}
+                    onDelete={onDeleteFile}
+                    className="border"
+                  />
+                )}
                 <FormMessage />
               </FormItem>
             )}
