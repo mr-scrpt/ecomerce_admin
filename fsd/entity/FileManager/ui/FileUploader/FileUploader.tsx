@@ -99,7 +99,7 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     async (files: FileList): Promise<void> => {
       setFileList(files);
 
-      const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
+      const imgListPath = await loadFileList(files, entity, name);
       console.log("output_log: imgListPath =>>>", imgListPath);
       // form.setValue("files", files);
 

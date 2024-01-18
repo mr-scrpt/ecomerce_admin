@@ -23,6 +23,7 @@
 //     console.log("output_log:  =>>>", e);
 //   }
 
+import { uploadeFileList } from "@/fsd/entity/FileManager/model/action/fileManager.action";
 import { PathServerEnum } from "@/fsd/shared/data/pathServer.enum";
 import { checkFormDataIsBuffer } from "@/fsd/shared/lib/chechFormDataIsBuffer";
 import { checkAndCreatePath } from "@/fsd/shared/lib/checkAndCreatePath";
@@ -40,50 +41,52 @@ import { fileURLToPath } from "node:url";
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const entity = getFormDataValue(formData.get("entity"));
 
-    // const pathToFile = getFormDataValue(formData.get("pathToFile"));
-    const nameToFile = getFormDataValue(formData.get("nameToFile"));
+    const entity = getFormDataValue(formData.get("entity"));
+    const name = getFormDataValue(formData.get("nameToFile"));
 
     const formDataEntryValues = Array.from(formData.values());
 
-    const rootPath = process.cwd();
+    // const rootPath = process.cwd();
 
-    let uploadPath: string;
-    let serverPath: string;
+    // let uploadPath: string;
+    // let serverPath: string;
 
-    if (entity && nameToFile) {
-      const slug = slugGenerator(nameToFile);
-      uploadPath = join(rootPath, PathServerEnum.UPLOAD, entity, slug);
-      serverPath = join("/upload/", entity, slug);
-    } else {
-      uploadPath = join(rootPath, PathServerEnum.GARBAGE);
-      serverPath = join("/upload/", PathServerEnum.GARBAGE);
-    }
+    // if (entity && nameToFile) {
+    //   const slug = slugGenerator(nameToFile);
+    //   uploadPath = join(rootPath, PathServerEnum.UPLOAD, entity, slug);
+    //   serverPath = join("/upload/", entity, slug);
+    // } else {
+    //   uploadPath = join(rootPath, PathServerEnum.GARBAGE);
+    //   serverPath = join("/upload/", PathServerEnum.GARBAGE);
+    // }
+    //
+    // await checkAndCreatePath(uploadPath);
 
-    await checkAndCreatePath(uploadPath);
-
-    let idx = 1;
-    const loadedListPath = [];
+    // let idx = 1;
+    // const loadedListPath = [];
+    const fileList: File[] = [];
     for await (const value of formDataEntryValues) {
       if (checkFormDataIsBuffer(value)) {
         const file = value as unknown as File;
-        const fileExtension = file.name.split(".").pop();
-
-        const buffer = Buffer.from(await file.arrayBuffer());
-
-        const slug = slugGenerator(`${nameToFile}_${idx}.${fileExtension}`);
-        const filePath = join(uploadPath, slug);
-        const serverFilePath = join(serverPath, slug);
-        loadedListPath.push(serverFilePath);
-        await checkAndRemoveFile(filePath);
-        await writeFile(filePath, buffer);
-        idx++;
+        fileList.push(file);
+        // const fileExtension = file.name.split(".").pop();
+        //
+        // const buffer = Buffer.from(await file.arrayBuffer());
+        //
+        // const slug = slugGenerator(`${nameToFile}_${idx}.${fileExtension}`);
+        // const filePath = join(uploadPath, slug);
+        // const serverFilePath = join(serverPath, slug);
+        // loadedListPath.push(serverFilePath);
+        // await checkAndRemoveFile(filePath);
+        // await writeFile(filePath, buffer);
+        // idx++;
       }
     }
-    console.log("output_log:  =>>>", loadedListPath);
+    const result = await uploadeFileList({ fileList, entity, name }, true);
+    console.log("output_log: result =>>>", result);
 
-    return NextResponse.json({ response: loadedListPath, success: true });
+    return NextResponse.json({ response: "ok", success: true });
   } catch (e) {
     console.log("output_log:  =>>>", e);
     return NextResponse.json({
