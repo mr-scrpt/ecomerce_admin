@@ -8,3 +8,9 @@ export interface IUploadFileListPayload {
   name: string | null;
   entity: string | null;
 }
+
+export interface IUploadFilePayload {
+  file: File;
+  name: string;
+  pathToFolder: string;
+}

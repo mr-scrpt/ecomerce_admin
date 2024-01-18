@@ -13,12 +13,44 @@ import { ResponseDataAction } from "@/fsd/shared/type/response.type";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cache } from "react";
-import { IUploadFileListPayload } from "../../type/action.type";
+import {
+  IUploadFileListPayload,
+  IUploadFilePayload,
+} from "../../type/action.type";
 import {
   CATALOG_PUBLIC,
   PATH_PUBLIC_GARBAGE,
   PATH_PUBLIC_TMP,
 } from "../../type/fileManagerPath.const";
+import { HttpException } from "@/fsd/shared/lib/httpException";
+
+export const uploadeFile = cache(
+  async (
+    data: IUploadFilePayload,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<string | null>> => {
+    try {
+      const { file, name, pathToFolder } = data;
+
+      await checkAuthUser(checkAuth);
+
+      const pathComplitedDest = join(pathToFolder, name);
+
+      const buffer = Buffer.from(await file.arrayBuffer());
+
+      await writeFile(pathComplitedDest, buffer);
+
+      const pathComplitedRelative = makePathProjectRelative(
+        pathComplitedDest,
+        CATALOG_PUBLIC,
+      );
+      return buildResponse(pathComplitedRelative);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
 
 export const uploadeFileList = cache(
   async (
@@ -43,19 +75,19 @@ export const uploadeFileList = cache(
       const pathListResponse: string[] = [];
       for await (const [idx, file] of fileList.entries()) {
         const fileExtension = file.name.split(".").pop();
-        const buffer = Buffer.from(await file.arrayBuffer());
-
         const fileNameDest = slugGenerator(`${name}_${idx}.${fileExtension}`);
-        const pathComplitedDest = join(pathFolderDest, fileNameDest);
 
-        await writeFile(pathComplitedDest, buffer);
-
-        const pathComplitedRelative = makePathProjectRelative(
-          pathComplitedDest,
-          CATALOG_PUBLIC,
+        const { data, error, status } = await uploadeFile(
+          { pathToFolder: pathFolderDest, file, name: fileNameDest },
+          false,
         );
+        if (error) {
+          throw new HttpException(error, status);
+        }
 
-        pathListResponse.push(pathComplitedRelative);
+        if (data) {
+          pathListResponse.push(data);
+        }
       }
 
       return buildResponse(pathListResponse);

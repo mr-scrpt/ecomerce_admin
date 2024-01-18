@@ -179,12 +179,12 @@ export const createOptionItemByList = async (
 export const removeOptionItemByOption = async (
   optionId: string,
   checkAuth: boolean = true,
-): Promise<ResponseDataAction<void | null>> => {
+): Promise<ResponseDataAction<null>> => {
   try {
     await checkAuthUser(checkAuth);
 
     await optionItemRepo.removeOptionItemByOption(optionId);
-    return buildResponse(void 0);
+    return buildResponse(null);
   } catch (e) {
     const { error, status } = buildError(e);
     return buildErrorResponse(status, error);
