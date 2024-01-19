@@ -1,4 +1,5 @@
 export const FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT = 3;
+export const FILE_MANAGER_DEFAULT_ERROR_MESSAGE = "Something went wrong";
 
 export const FILE_IMG_UPLOAD = {
   "image/jpeg": [".jpg", ".jpeg"],

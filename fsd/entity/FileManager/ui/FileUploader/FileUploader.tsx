@@ -35,6 +35,7 @@ import {
   FILE_MANAGER_DEFAULT_ERROR_MESSAGE,
   FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT,
 } from "../../type/fileManager.const";
+import { removeFilePrepare } from "../../model/action/fileManager.action";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
@@ -84,7 +85,6 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         return apiData;
       } catch (e) {
         toast.error(FILE_MANAGER_DEFAULT_ERROR_MESSAGE);
-
         return [];
       }
     },
@@ -127,16 +127,24 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
   const handleImgDelete = useCallback(
     async (item: string) => {
       try {
-        const formData = new FormData();
-        formData.append("item", item);
-        const result = await axios.post(`/api/remove`, formData);
-        console.log("output_log:  =>>>", result);
+        // const formData = new FormData();
+        // formData.append("item", item);
+        // const result = await axios.post(`/api/remove`, formData);
+        // console.log("output_log:  =>>>", result);
+
         const fileName = item.split("/").pop();
         const updatedImgList = imgListLoaded.filter((path) => path !== item);
-        setImgListLoaded(updatedImgList);
+        const { error } = await removeFilePrepare(item, false);
+
+        if (error) {
+          toast.error(error);
+          return;
+        }
+
         toast.success(`File ${fileName} removed from upload list`);
+        setImgListLoaded(updatedImgList);
       } catch (e) {
-        console.log("output_log:  error e =>>>", e);
+        toast.error(FILE_MANAGER_DEFAULT_ERROR_MESSAGE);
       }
     },
     [imgListLoaded],

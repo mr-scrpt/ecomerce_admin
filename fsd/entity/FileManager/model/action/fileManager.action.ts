@@ -10,23 +10,27 @@ import {
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { writeFile } from "node:fs/promises";
+import { access, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { cache } from "react";
 import {
-  IUploadFileListPayload,
-  IUploadFilePayload,
+  IFileRemoveListPayload,
+  IFileRemovePayload,
+  IFileUploadPayload,
 } from "../../type/action.type";
 import {
   CATALOG_PUBLIC,
+  PATH_PUBLIC_FULL,
   PATH_PUBLIC_GARBAGE,
   PATH_PUBLIC_TMP,
 } from "../../type/fileManagerPath.const";
 import { HttpException } from "@/fsd/shared/lib/httpException";
+import { checkAndRename } from "@/fsd/shared/lib/checkAndRename";
+import { checkAndRemoveFile } from "@/fsd/shared/lib/checkAndRemoveFile";
 
 export const uploadeFile = cache(
   async (
-    data: IUploadFilePayload,
+    data: IFileUploadPayload,
     checkAuth: boolean = true,
   ): Promise<ResponseDataAction<string | null>> => {
     try {
@@ -54,7 +58,7 @@ export const uploadeFile = cache(
 
 export const uploadeFileList = cache(
   async (
-    data: IUploadFileListPayload,
+    data: IFileRemoveListPayload,
     checkAuth: boolean = true,
   ): Promise<ResponseDataAction<string[] | null>> => {
     try {
@@ -94,6 +98,41 @@ export const uploadeFileList = cache(
       }
 
       return buildResponse(pathListResponse);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
+
+export const removeFilePrepare = cache(
+  async (
+    pathToFile: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+
+      const pathToRemove = join(PATH_PUBLIC_FULL, pathToFile);
+      await removeFile(pathToRemove, true);
+      return buildResponse(null);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
+
+export const removeFile = cache(
+  async (
+    pathToRemove: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+      await checkAndRemoveFile(pathToRemove);
+
+      return buildResponse(null);
     } catch (e) {
       const { error, status } = buildError(e);
       return buildErrorResponse(status, error);
