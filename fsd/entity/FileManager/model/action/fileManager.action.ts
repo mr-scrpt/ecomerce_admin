@@ -58,16 +58,17 @@ export const uploadeFileList = cache(
     checkAuth: boolean = true,
   ): Promise<ResponseDataAction<string[] | null>> => {
     try {
-      const { fileList, name, entity } = data;
+      const { fileList, fileName, storeName, entity } = data;
 
       await checkAuthUser(checkAuth);
 
-      const folderName = name ? slugGenerator(name) : null;
+      const folderName = fileName ? slugGenerator(fileName) : null;
       const folderEntity = entity ? slugGenerator(entity) : null;
+      const folderStore = storeName ? slugGenerator(storeName) : null;
 
       const pathFolderDest = join(
-        folderEntity && folderName
-          ? join(PATH_PUBLIC_TMP, folderEntity, folderName)
+        folderEntity && folderName && folderStore
+          ? join(PATH_PUBLIC_TMP, folderStore, folderEntity, folderName)
           : PATH_PUBLIC_GARBAGE,
       );
 
@@ -75,7 +76,9 @@ export const uploadeFileList = cache(
       const pathListResponse: string[] = [];
       for await (const [idx, file] of fileList.entries()) {
         const fileExtension = file.name.split(".").pop();
-        const fileNameDest = slugGenerator(`${name}_${idx}.${fileExtension}`);
+        const fileNameDest = slugGenerator(
+          `${fileName}_${idx}.${fileExtension}`,
+        );
 
         const { data, error, status } = await uploadeFile(
           { pathToFolder: pathFolderDest, file, name: fileNameDest },

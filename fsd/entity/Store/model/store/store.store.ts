@@ -36,7 +36,7 @@ export const useStoreListData = create<IStoreListStore>()(
         }
       },
     }),
-    { name: "useStoreData" },
+    { name: "useStoreListData" },
   ),
 );
 

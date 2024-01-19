@@ -30,7 +30,7 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
       <BillboardTableWidget slug={storeSlug} />
       <FileUploader
         entity={PathUploadEnum.BILLBOARD}
-        name="new file test"
+        nameToFile="new file test"
         isMultiple={true}
       />
       {/* {billboardList.data && ( */}

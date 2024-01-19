@@ -1,3 +1,4 @@
+import { FormDataUploadEnum } from "@/fsd/entity/FileManager";
 import { uploadeFileList } from "@/fsd/entity/FileManager/model/action/fileManager.action";
 import { buildError } from "@/fsd/shared/lib/buildError";
 import { checkFormDataIsBuffer } from "@/fsd/shared/lib/chechFormDataIsBuffer";
@@ -16,8 +17,9 @@ export async function POST(
   try {
     const formData = await req.formData();
 
-    const entity = getFormDataValue(formData.get("entity"));
-    const name = getFormDataValue(formData.get("nameToFile"));
+    const entity = getFormDataValue(formData.get(FormDataUploadEnum.ENTITY));
+    const fileName = getFormDataValue(formData.get(FormDataUploadEnum.NAME));
+    const storeName = getFormDataValue(formData.get(FormDataUploadEnum.STORE));
 
     const formDataEntryValues = Array.from(formData.values());
 
@@ -28,9 +30,8 @@ export async function POST(
         fileList.push(file);
       }
     }
-    console.log("output_log:  =>>>", fileList);
     const { data, error, status } = await uploadeFileList(
-      { fileList, entity, name },
+      { fileList, entity, fileName, storeName },
       true,
     );
 
@@ -41,7 +42,6 @@ export async function POST(
 
     return NextResponse.json(response);
   } catch (e) {
-    console.log("output_log:  =>>>", e);
     const { error, status } = buildError(e);
     const errorResponse = buildErrorResponse(status, error);
     return NextResponse.json(errorResponse);

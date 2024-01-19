@@ -26,10 +26,15 @@ import {
 import { FileUploaderForm } from "./FileUploaderForm";
 import { FILE_IMG_UPLOAD } from "../../type/fileManagerExtension.const";
 import { AxiosResponseType } from "@/fsd/shared/type/axiosResponse.interface";
+import { API_UPLOAD_ENDPOINT } from "../../type/api.const";
+import { FormDataUploadEnum } from "../../type/formData.const";
+import { useStoreData } from "@/fsd/entity/Store";
+import { useShallow } from "zustand/react/shallow";
+import { ILoadFileList } from "../../type/ui.type";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
-  name: string;
+  nameToFile: string;
   isMultiple?: boolean;
 }
 
@@ -40,33 +45,40 @@ interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
 export const FileUploader: FC<UploaderFileFormProps> = (props) => {
   const [imgListLoaded, setImgListLoaded] = useState<string[]>([]);
   const [fileList, setFileList] = useState<FileList>();
-  const { entity, name, extension, isMultiple = false } = props;
+  const { entity, nameToFile, extension, isMultiple = false } = props;
 
   const router = useRouter();
+
   const form = useForm<UploadFilelFormTypeSchema>({
     resolver: zodResolver(uploadFileFormSchema),
   });
 
+  const { name: nameToStore } = useStoreData(
+    useShallow((state) => ({ name: state.storeCurrent?.name })),
+  );
+
   const loadFileList = useCallback(
-    async (
-      files: FileList,
-      entity: PathUploadEnum,
-      name: string,
-    ): Promise<string[]> => {
+    async (data: ILoadFileList): Promise<string[]> => {
       try {
+        const { files, entity, nameToFile, nameToStore } = data;
+        console.log("output_log: nameStore =>>>", nameToStore);
         const formData = new FormData();
+
         for (let i = 0; i < files!.length; i++) {
-          formData.append("fileList", files![i]);
+          formData.append(FormDataUploadEnum.LIST, files![i]);
         }
-        formData.append("entity", entity);
-        formData.append("nameToFile", name);
 
-        const { data }: AxiosResponseType<string[]> = await axios.post(
-          `/api/upload`,
-          formData,
-        );
+        formData.append(FormDataUploadEnum.ENTITY, entity);
+        formData.append(FormDataUploadEnum.NAME, nameToFile);
 
-        const { data: response, error, status } = data;
+        // if (nameToStore) {
+        formData.append(FormDataUploadEnum.STORE, nameToStore);
+        // }
+
+        const { data: response }: AxiosResponseType<string[]> =
+          await axios.post(API_UPLOAD_ENDPOINT, formData);
+
+        const { data: apiData, error, status } = response;
 
         // if (status === 200) {
         //   form.resetField("files");
@@ -77,7 +89,7 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
           toast.error(error);
         }
 
-        return response;
+        return apiData;
       } catch (e) {
         console.log("output_log:  =>>>", e);
         return [];
@@ -86,34 +98,39 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     [],
   );
 
+  // TODO: Возможно понадобиться как обвертка которая еще будет получать имя
   const onAction = async (data: UploadFilelFormTypeSchema) => {
     try {
-      if (imgListLoaded) {
-        await axios.post("/api/move", { folder: name, entity });
-      }
+      // if (imgListLoaded) {
+      //   await axios.post("/api/move", { folder: name, entity });
+      // }
     } catch (e) {}
   };
 
-  const onUpload = useCallback(async (files: FileList): Promise<void> => {
-    setFileList(files);
-    const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
-    form.setValue("files", files);
-    setImgListLoaded(imgListPath);
-  }, []);
+  // const onUpload = useCallback(async (files: FileList): Promise<void> => {
+  //   setFileList(files);
+  //   const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
+  //   form.setValue("files", files);
+  //   setImgListLoaded(imgListPath);
+  // }, []);
 
   const handleImgLoad = useCallback(
     async (files: FileList): Promise<void> => {
       setFileList(files);
 
-      const imgListPath = await loadFileList(files, entity, name);
-      console.log("output_log: imgListPath =>>>", imgListPath);
-      // form.setValue("files", files);
+      const imgListPath = await loadFileList({
+        files,
+        entity,
+        nameToFile,
+        nameToStore: nameToStore ?? "",
+      });
 
       setImgListLoaded(imgListPath);
     },
-    [name, loadFileList],
+    [nameToStore, nameToFile, loadFileList, entity],
   );
 
+  // TODO: сделать через сервеный экшен
   const handleImgDelete = useCallback(
     async (item: string) => {
       try {

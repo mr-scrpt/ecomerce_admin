@@ -5,7 +5,8 @@
 // }
 export interface IUploadFileListPayload {
   fileList: File[];
-  name: string | null;
+  fileName: string | null;
+  storeName: string | null;
   entity: string | null;
 }
 
