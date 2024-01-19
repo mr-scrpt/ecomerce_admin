@@ -35,7 +35,10 @@ import {
   FILE_MANAGER_DEFAULT_ERROR_MESSAGE,
   FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT,
 } from "../../type/fileManager.const";
-import { removeFilePrepare } from "../../model/action/fileManager.action";
+import {
+  getFileName,
+  removeFilePrepare,
+} from "../../model/action/fileManager.action";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
@@ -123,16 +126,10 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     [nameToStore, nameToFile, loadFileList, entity],
   );
 
-  // TODO: сделать через сервеный экшен
   const handleImgDelete = useCallback(
     async (item: string) => {
       try {
-        // const formData = new FormData();
-        // formData.append("item", item);
-        // const result = await axios.post(`/api/remove`, formData);
-        // console.log("output_log:  =>>>", result);
-
-        const fileName = item.split("/").pop();
+        const fileName = getFileName(item);
         const updatedImgList = imgListLoaded.filter((path) => path !== item);
         const { error } = await removeFilePrepare(item, false);
 

@@ -1,7 +1,8 @@
-import { FormDataUploadEnum } from "@/fsd/entity/FileManager";
-import { uploadeFileList } from "@/fsd/entity/FileManager/model/action/fileManager.action";
+import {
+  FormDataUploadEnum,
+  fileManagerAction,
+} from "@/fsd/entity/FileManager";
 import { buildError } from "@/fsd/shared/lib/buildError";
-import { checkFormDataIsBuffer } from "@/fsd/shared/lib/chechFormDataIsBuffer";
 import { getFormDataValue } from "@/fsd/shared/lib/getFormDataValue";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import {
@@ -25,12 +26,12 @@ export async function POST(
 
     const fileList: File[] = [];
     for await (const value of formDataEntryValues) {
-      if (checkFormDataIsBuffer(value)) {
+      if (fileManagerAction.checkFormDataIsBuffer(value)) {
         const file = value as unknown as File;
         fileList.push(file);
       }
     }
-    const { data, error, status } = await uploadeFileList(
+    const { data, error, status } = await fileManagerAction.uploadeFileList(
       { fileList, entity, fileName, storeName },
       true,
     );

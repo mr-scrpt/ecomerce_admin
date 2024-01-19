@@ -1,8 +1,7 @@
 "use server";
 
 import { buildError } from "@/fsd/shared/lib/buildError";
-import { checkAndCrearPath } from "@/fsd/shared/lib/checkAndClearFolder";
-import { makePathProjectRelative } from "@/fsd/shared/lib/makePathProjectRelative";
+import { HttpException } from "@/fsd/shared/lib/httpException";
 import {
   buildErrorResponse,
   buildResponse,
@@ -10,12 +9,11 @@ import {
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { access, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { access, mkdir, rename, rm, unlink, writeFile } from "node:fs/promises";
+import { join, relative } from "node:path";
 import { cache } from "react";
 import {
   IFileRemoveListPayload,
-  IFileRemovePayload,
   IFileUploadPayload,
 } from "../../type/action.type";
 import {
@@ -24,9 +22,6 @@ import {
   PATH_PUBLIC_GARBAGE,
   PATH_PUBLIC_TMP,
 } from "../../type/fileManagerPath.const";
-import { HttpException } from "@/fsd/shared/lib/httpException";
-import { checkAndRename } from "@/fsd/shared/lib/checkAndRename";
-import { checkAndRemoveFile } from "@/fsd/shared/lib/checkAndRemoveFile";
 
 export const uploadeFile = cache(
   async (
@@ -139,3 +134,81 @@ export const removeFile = cache(
     }
   },
 );
+
+export const checkFormDataIsBuffer = (value: FormDataEntryValue): Boolean =>
+  !!(typeof value === "object" && "arrayBuffer" in value);
+
+const checkAndCreatePath = async (pathToCreate: string): Promise<void> => {
+  try {
+    await access(pathToCreate);
+  } catch (error) {
+    await mkdir(pathToCreate, { recursive: true });
+  }
+};
+
+const checkAndCrearPath = async (pathToCreate: string): Promise<void> => {
+  try {
+    await access(pathToCreate);
+    await unlink(pathToCreate);
+    await mkdir(pathToCreate, { recursive: true });
+  } catch (error) {
+    await mkdir(pathToCreate, { recursive: true });
+  }
+};
+
+const checkAndRemoveDir = async (pathToRemove: string): Promise<void> => {
+  try {
+    await access(pathToRemove);
+    await rm(pathToRemove, { recursive: true });
+    console.log("output_log:  =>>> folder has been removed");
+  } catch (error) {
+    console.log("output_log:  =>>> folder not exist");
+  }
+};
+
+const checkAndRemoveFile = async (pathToCreate: string): Promise<void> => {
+  try {
+    await access(pathToCreate);
+    await unlink(pathToCreate);
+    console.log("output_log:  =>>> file has been removed");
+  } catch (error) {
+    console.log("output_log:  =>>> file not exist");
+  }
+};
+
+const checkAndRename = async (
+  pathFrom: string,
+  pathTo: string,
+): Promise<void> => {
+  try {
+    await access(pathFrom);
+    await access(pathTo);
+    await rename(pathFrom, pathTo);
+  } catch (error) {
+    console.log("output_log:  =>>> folder not been renamed");
+  }
+};
+
+const makePathProjectRelative = (
+  absolutePath: string,
+  substringToRemove: string,
+) => {
+  const currentDirectory = process.cwd();
+
+  const relativePath = relative(currentDirectory, absolutePath);
+
+  // Удаление подстроки из относительного пути
+  const substringIndex = relativePath.indexOf(substringToRemove);
+  const finalPath = `${substringIndex !== -1 ? relativePath.slice(substringIndex + substringToRemove.length) : relativePath}`;
+
+  return finalPath;
+};
+
+const getFormDataValue = (
+  str: FormDataEntryValue | null | undefined,
+): string | null => {
+  return typeof str === "string" && str.trim() !== "" ? str : null;
+};
+
+export const getFileName = (path: string): string =>
+  path.split("/").pop() || "";
