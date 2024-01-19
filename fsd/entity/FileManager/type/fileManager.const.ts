@@ -1,0 +1,1 @@
+export const FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT = 3;

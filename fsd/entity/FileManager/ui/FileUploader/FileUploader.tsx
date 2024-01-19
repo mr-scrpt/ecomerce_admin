@@ -31,6 +31,7 @@ import { FormDataUploadEnum } from "../../type/formData.const";
 import { useStoreData } from "@/fsd/entity/Store";
 import { useShallow } from "zustand/react/shallow";
 import { ILoadFileList } from "../../type/ui.type";
+import { FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT } from "../../type/fileManager.const";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
@@ -38,14 +39,10 @@ interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   isMultiple?: boolean;
 }
 
-// interface AxiosResponse<T> {
-//   response: T;
-// }
-
 export const FileUploader: FC<UploaderFileFormProps> = (props) => {
   const [imgListLoaded, setImgListLoaded] = useState<string[]>([]);
   const [fileList, setFileList] = useState<FileList>();
-  const { entity, nameToFile, extension, isMultiple = false } = props;
+  const { entity, nameToFile } = props;
 
   const router = useRouter();
 
@@ -61,7 +58,6 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     async (data: ILoadFileList): Promise<string[]> => {
       try {
         const { files, entity, nameToFile, nameToStore } = data;
-        console.log("output_log: nameStore =>>>", nameToStore);
         const formData = new FormData();
 
         for (let i = 0; i < files!.length; i++) {
@@ -71,19 +67,12 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         formData.append(FormDataUploadEnum.ENTITY, entity);
         formData.append(FormDataUploadEnum.NAME, nameToFile);
 
-        // if (nameToStore) {
         formData.append(FormDataUploadEnum.STORE, nameToStore);
-        // }
 
         const { data: response }: AxiosResponseType<string[]> =
           await axios.post(API_UPLOAD_ENDPOINT, formData);
 
         const { data: apiData, error, status } = response;
-
-        // if (status === 200) {
-        //   form.resetField("files");
-        //   router.refresh();
-        // }
 
         if (error) {
           toast.error(error);
@@ -155,44 +144,10 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         onAction={onAction}
         handleImgDelete={handleImgDelete}
         handleImgLoad={handleImgLoad}
-        maxFileCoung={3}
+        maxFileCoung={FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT}
         extension={FILE_IMG_UPLOAD}
         imgListLoaded={imgListLoaded}
       />
-      {/* <Form {...form}> */}
-      {/*   <form onSubmit={form.handleSubmit(onAction)}> */}
-      {/*     <FormField */}
-      {/*       control={form.control} */}
-      {/*       name="files" */}
-      {/*       render={({ field, fieldState }) => ( */}
-      {/*         <FormItem> */}
-      {/*           <FormLabel>Upload file</FormLabel> */}
-      {/*           <FormControl> */}
-      {/*             <DropzoneInput */}
-      {/*               isMultiple={isMultiple} */}
-      {/*               extension={extension} */}
-      {/*               handleFileLoad={handleFileLoad} */}
-      {/*               fieldState={fieldState} */}
-      {/*               onBlur={field.onBlur} */}
-      {/*               onChange={field.onChange} */}
-      {/*             /> */}
-      {/*           </FormControl> */}
-      {/*           {loadedImgList.length > 0 && ( */}
-      {/*             <ImgList */}
-      {/*               loadedImgList={loadedImgList} */}
-      {/*               onDelete={onDeleteFile} */}
-      {/*               className="border" */}
-      {/*             /> */}
-      {/*           )} */}
-      {/*           <FormMessage /> */}
-      {/*         </FormItem> */}
-      {/*       )} */}
-      {/*     /> */}
-      {/*     <div className="pt-6 space-x-2 flex items-center justify-end w-full"> */}
-      {/*       <Button type="submit">send</Button> */}
-      {/*     </div> */}
-      {/*   </form> */}
-      {/* </Form> */}
     </div>
   );
 };
