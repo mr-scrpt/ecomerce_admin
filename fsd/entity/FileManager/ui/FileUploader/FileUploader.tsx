@@ -24,14 +24,17 @@ import {
   uploadFileFormSchema,
 } from "../../type/schema.type";
 import { FileUploaderForm } from "./FileUploaderForm";
-import { FILE_IMG_UPLOAD } from "../../type/fileManagerExtension.const";
 import { AxiosResponseType } from "@/fsd/shared/type/axiosResponse.interface";
 import { API_UPLOAD_ENDPOINT } from "../../type/api.const";
 import { FormDataUploadEnum } from "../../type/formData.const";
 import { useStoreData } from "@/fsd/entity/Store";
 import { useShallow } from "zustand/react/shallow";
 import { ILoadFileList } from "../../type/ui.type";
-import { FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT } from "../../type/fileManager.const";
+import {
+  FILE_IMG_UPLOAD,
+  FILE_MANAGER_DEFAULT_ERROR_MESSAGE,
+  FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT,
+} from "../../type/fileManager.const";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
@@ -80,7 +83,8 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
 
         return apiData;
       } catch (e) {
-        console.log("output_log:  =>>>", e);
+        toast.error(FILE_MANAGER_DEFAULT_ERROR_MESSAGE);
+
         return [];
       }
     },
