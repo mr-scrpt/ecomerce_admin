@@ -36,7 +36,9 @@ import {
   FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT,
 } from "../../type/fileManager.const";
 import {
+  getFileListPublicRelative,
   getFileName,
+  moveFolderPrepare,
   removeFilePrepare,
 } from "../../model/action/fileManager.action";
 
@@ -57,14 +59,14 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     resolver: zodResolver(uploadFileFormSchema),
   });
 
-  const { name: nameToStore } = useStoreData(
-    useShallow((state) => ({ name: state.storeCurrent?.name })),
+  const { slug: slugToStore } = useStoreData(
+    useShallow((state) => ({ slug: state.storeCurrent?.slug })),
   );
 
   const loadFileList = useCallback(
     async (data: ILoadFileList): Promise<string[]> => {
       try {
-        const { files, entity, nameToFile, nameToStore } = data;
+        const { files, entity, nameToFile, slugToStore } = data;
         const formData = new FormData();
 
         for (let i = 0; i < files!.length; i++) {
@@ -74,7 +76,7 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         formData.append(FormDataUploadEnum.ENTITY, entity);
         formData.append(FormDataUploadEnum.NAME, nameToFile);
 
-        formData.append(FormDataUploadEnum.STORE, nameToStore);
+        formData.append(FormDataUploadEnum.STORE, slugToStore);
 
         const { data: response }: AxiosResponseType<string[]> =
           await axios.post(API_UPLOAD_ENDPOINT, formData);
@@ -97,6 +99,18 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
   // TODO: Возможно понадобиться как обвертка которая еще будет получать имя
   const onAction = async (data: UploadFilelFormTypeSchema) => {
     try {
+      console.log("output_log:  =>>> send");
+      const { data, error } = await moveFolderPrepare(
+        { folderName: nameToFile, entity, storeSlug: slugToStore ?? null },
+        false,
+      );
+      if (error) {
+        toast.error(error);
+        return;
+      }
+
+      const fileList = await getFileListPublicRelative(data!);
+      console.log("output_log: fileList relative =>>>", fileList);
       // if (imgListLoaded) {
       //   await axios.post("/api/move", { folder: name, entity });
       // }
@@ -118,12 +132,12 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
         files,
         entity,
         nameToFile,
-        nameToStore: nameToStore ?? "",
+        slugToStore: slugToStore ?? "",
       });
 
       setImgListLoaded(imgListPath);
     },
-    [nameToStore, nameToFile, loadFileList, entity],
+    [slugToStore, nameToFile, loadFileList, entity],
   );
 
   const handleImgDelete = useCallback(

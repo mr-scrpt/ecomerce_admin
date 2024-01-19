@@ -4,5 +4,5 @@ export interface ILoadFileList {
   files: FileList;
   entity: PathUploadEnum;
   nameToFile: string;
-  nameToStore: string;
+  slugToStore: string;
 }

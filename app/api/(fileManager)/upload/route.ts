@@ -3,7 +3,6 @@ import {
   fileManagerAction,
 } from "@/fsd/entity/FileManager";
 import { buildError } from "@/fsd/shared/lib/buildError";
-import { getFormDataValue } from "@/fsd/shared/lib/getFormDataValue";
 import { HttpException } from "@/fsd/shared/lib/httpException";
 import {
   buildErrorResponse,
@@ -18,9 +17,15 @@ export async function POST(
   try {
     const formData = await req.formData();
 
-    const entity = getFormDataValue(formData.get(FormDataUploadEnum.ENTITY));
-    const fileName = getFormDataValue(formData.get(FormDataUploadEnum.NAME));
-    const storeName = getFormDataValue(formData.get(FormDataUploadEnum.STORE));
+    const entity = fileManagerAction.getFormDataValue(
+      formData.get(FormDataUploadEnum.ENTITY),
+    );
+    const fileName = fileManagerAction.getFormDataValue(
+      formData.get(FormDataUploadEnum.NAME),
+    );
+    const storeSlug = fileManagerAction.getFormDataValue(
+      formData.get(FormDataUploadEnum.STORE),
+    );
 
     const formDataEntryValues = Array.from(formData.values());
 
@@ -32,7 +37,7 @@ export async function POST(
       }
     }
     const { data, error, status } = await fileManagerAction.uploadeFileList(
-      { fileList, entity, fileName, storeName },
+      { fileList, entity, fileName, storeSlug },
       true,
     );
 

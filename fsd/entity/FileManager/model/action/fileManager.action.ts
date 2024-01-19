@@ -9,10 +9,20 @@ import {
 import { slugGenerator } from "@/fsd/shared/lib/slugGenerator";
 import { checkAuthUser } from "@/fsd/shared/model";
 import { ResponseDataAction } from "@/fsd/shared/type/response.type";
-import { access, mkdir, rename, rm, unlink, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  readdir,
+  rename,
+  rm,
+  stat,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
 import { join, relative } from "node:path";
 import { cache } from "react";
 import {
+  IFileMovePayload,
   IFileRemoveListPayload,
   IFileUploadPayload,
 } from "../../type/action.type";
@@ -57,17 +67,22 @@ export const uploadeFileList = cache(
     checkAuth: boolean = true,
   ): Promise<ResponseDataAction<string[] | null>> => {
     try {
-      const { fileList, fileName, storeName, entity } = data;
+      const { fileList, fileName, storeSlug, entity } = data;
 
       await checkAuthUser(checkAuth);
 
-      const folderName = fileName ? slugGenerator(fileName) : null;
-      const folderEntity = entity ? slugGenerator(entity) : null;
-      const folderStore = storeName ? slugGenerator(storeName) : null;
+      const folderNameComplited = fileName ? slugGenerator(fileName) : null;
+      const folderEntityComplited = entity ? slugGenerator(entity) : null;
+      const folderStoreComplited = storeSlug;
 
       const pathFolderDest = join(
-        folderEntity && folderName && folderStore
-          ? join(PATH_PUBLIC_TMP, folderStore, folderEntity, folderName)
+        folderEntityComplited && folderNameComplited && folderStoreComplited
+          ? join(
+              PATH_PUBLIC_TMP,
+              folderStoreComplited,
+              folderEntityComplited,
+              folderNameComplited,
+            )
           : PATH_PUBLIC_GARBAGE,
       );
 
@@ -135,6 +150,131 @@ export const removeFile = cache(
   },
 );
 
+export const moveFolderPrepare = cache(
+  async (
+    data: IFileMovePayload,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<string | null>> => {
+    try {
+      const { folderName, entity, storeSlug } = data;
+      await checkAuthUser(checkAuth);
+
+      const folderNameComplited = folderName ? slugGenerator(folderName) : null;
+      const folderEntityComplited = entity ? slugGenerator(entity) : null;
+      const folderStoreComplited = storeSlug;
+
+      const pathFromFolder = join(
+        folderEntityComplited && folderNameComplited && folderStoreComplited
+          ? join(
+              PATH_PUBLIC_TMP,
+              folderStoreComplited,
+              folderEntityComplited,
+              folderNameComplited,
+            )
+          : PATH_PUBLIC_GARBAGE,
+      );
+
+      const pathToFolder = join(
+        folderEntityComplited && folderNameComplited && folderStoreComplited
+          ? join(
+              PATH_PUBLIC_FULL,
+              folderStoreComplited,
+              folderEntityComplited,
+              folderNameComplited,
+            )
+          : PATH_PUBLIC_GARBAGE,
+      );
+      console.log("output_log: pathFrom =>>>", pathFromFolder);
+      console.log("output_log: pathTo =>>>", pathToFolder);
+
+      // const pathToMove = join(PATH_PUBLIC_FULL, );
+      await moveFolder(pathToFolder, pathFromFolder);
+      return buildResponse(pathToFolder);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
+
+export const moveFolder = cache(
+  async (
+    pathToFolder: string,
+    pathFromFolder: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+      await checkAndRemoveFolder(pathToFolder);
+      await checkAndCreatePath(pathToFolder);
+      await checkAndRename(pathFromFolder, pathToFolder);
+
+      return buildResponse(null);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
+
+export const getFileListPublicRelative = cache(
+  async (
+    pathToFolder: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<string[] | null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+      const { data: fileList, error, status } = await getFileList(pathToFolder);
+      if (error) {
+        throw new HttpException(error, status);
+      }
+      const fileListRelative = fileList!.map((item) =>
+        makePathProjectRelative(item, CATALOG_PUBLIC),
+      );
+
+      return buildResponse(fileListRelative);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
+
+const getFileList = cache(
+  async (
+    pathToFolder: string,
+    checkAuth: boolean = true,
+  ): Promise<ResponseDataAction<string[] | null>> => {
+    try {
+      await checkAuthUser(checkAuth);
+      // Чтение файлов в директории
+      const files = await readdir(pathToFolder);
+      const filePathList: string[] = [];
+
+      // Фильтрация файлов (если нужно)
+      for await (const file of files) {
+        const filePath = join(pathToFolder, file);
+        const fileStat = await stat(filePath);
+
+        if (fileStat.isFile()) {
+          filePathList.push(filePath);
+        }
+      }
+      console.log("output_log: filePathList =>>>", filePathList);
+
+      // Получение полных путей ко всем файлам
+      // const filePaths = filteredFiles.map((file) =>
+      //   path.join(directoryPath, file),
+      // );
+
+      return buildResponse(filePathList);
+    } catch (e) {
+      const { error, status } = buildError(e);
+      return buildErrorResponse(status, error);
+    }
+  },
+);
+
 export const checkFormDataIsBuffer = (value: FormDataEntryValue): Boolean =>
   !!(typeof value === "object" && "arrayBuffer" in value);
 
@@ -156,7 +296,7 @@ const checkAndCrearPath = async (pathToCreate: string): Promise<void> => {
   }
 };
 
-const checkAndRemoveDir = async (pathToRemove: string): Promise<void> => {
+const checkAndRemoveFolder = async (pathToRemove: string): Promise<void> => {
   try {
     await access(pathToRemove);
     await rm(pathToRemove, { recursive: true });
@@ -193,9 +333,9 @@ const makePathProjectRelative = (
   absolutePath: string,
   substringToRemove: string,
 ) => {
-  const currentDirectory = process.cwd();
+  const currentFolder = process.cwd();
 
-  const relativePath = relative(currentDirectory, absolutePath);
+  const relativePath = relative(currentFolder, absolutePath);
 
   // Удаление подстроки из относительного пути
   const substringIndex = relativePath.indexOf(substringToRemove);
@@ -204,7 +344,7 @@ const makePathProjectRelative = (
   return finalPath;
 };
 
-const getFormDataValue = (
+export const getFormDataValue = (
   str: FormDataEntryValue | null | undefined,
 ): string | null => {
   return typeof str === "string" && str.trim() !== "" ? str : null;

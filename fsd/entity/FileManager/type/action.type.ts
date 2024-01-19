@@ -6,7 +6,7 @@
 export interface IFileRemoveListPayload {
   fileList: File[];
   fileName: string | null;
-  storeName: string | null;
+  storeSlug: string | null;
   entity: string | null;
 }
 
@@ -16,8 +16,8 @@ export interface IFileUploadPayload {
   pathToFolder: string;
 }
 
-export interface IFileRemovePayload {
-  filePath: File;
-  // name: string;
-  // pathToFolder: string;
+export interface IFileMovePayload {
+  folderName: string;
+  entity: string;
+  storeSlug: string | null;
 }
