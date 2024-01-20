@@ -7,7 +7,7 @@ import { cn } from "@/fsd/shared/lib/utils";
 interface ImgListProps extends HTMLAttributes<HTMLDivElement> {
   loadedImgList: string[];
   onClick?: () => void;
-  handleImgDelete: (item: string) => void;
+  handleImgDelete?: (item: string) => void;
   maxShow?: number;
   className?: string;
 }
@@ -28,15 +28,17 @@ export const ImgList: FC<ImgListProps> = (props) => {
           {loadedImgList.slice(0, maxShow).map((item) => (
             <li className="p-2 relative max-w-[280px] truncate ..." key={item}>
               <Image src={item} alt="temp img" width={150} height={150} />
-              <Button
-                variant="destructive"
-                className="absolute top-0 right-0"
-                type="button"
-                size="xs"
-                onClick={handleImgDelete.bind(null, item)}
-              >
-                <X className="w-3 h-3" />
-              </Button>
+              {handleImgDelete && (
+                <Button
+                  variant="destructive"
+                  className="absolute top-0 right-0"
+                  type="button"
+                  size="xs"
+                  onClick={handleImgDelete.bind(null, item)}
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              )}
             </li>
           ))}
           <div className="w-full text-center">

@@ -28,11 +28,11 @@ const BillboardPage: FC<BillboardPageProps> = async (props) => {
         <BillboardAdd />
       </div>
       <BillboardTableWidget slug={storeSlug} />
-      <FileUploader
-        entity={PathUploadEnum.BILLBOARD}
-        nameToFile="new file test"
-        isMultiple={true}
-      />
+      {/* <FileUploader */}
+      {/*   entity={PathUploadEnum.BILLBOARD} */}
+      {/*   nameToFile="new file test" */}
+      {/*   isMultiple={true} */}
+      {/* /> */}
       {/* {billboardList.data && ( */}
       {/*   <BillboardTableList billboardList={billboardList.data} /> */}
       {/* )} */}

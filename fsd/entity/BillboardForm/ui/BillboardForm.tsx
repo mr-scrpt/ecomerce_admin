@@ -3,17 +3,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, memo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { ImgUploader } from "@/fsd/shared/ui/ImgUploader/ui/ImgUploader";
+import { ImgList } from "@/fsd/shared/ui/ImgList/ui/ImgList";
 import { Button } from "@/fsd/shared/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/fsd/shared/ui/form";
 import { Input } from "@/fsd/shared/ui/input";
+import { Image as ImgIcon } from "lucide-react";
 import { BillboardFormProps } from "../type/props.type";
 import {
   BillboardFormTypeSchema,
@@ -21,7 +23,17 @@ import {
 } from "../type/schema.type";
 
 export const BillboardForm: FC<BillboardFormProps> = memo((props) => {
-  const { onAction, defaultValues, actionName, loading } = props;
+  const {
+    onAction,
+    handleOpenButton,
+    onChangeName,
+    defaultValues,
+    actionName,
+    loading,
+    imgListLoaded,
+    disabledUploadeMoadlButton,
+  } = props;
+  // const [imgListLoaded, setImgListLoaded] = useState<string[]>();
 
   const form = useForm<BillboardFormTypeSchema>({
     resolver: zodResolver(billboardFormSchema),
@@ -38,15 +50,19 @@ export const BillboardForm: FC<BillboardFormProps> = memo((props) => {
         <form onSubmit={form.handleSubmit(onAction)}>
           <FormField
             control={form.control}
-            name="imgUrl"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Billboard image</FormLabel>
+                <FormLabel>Billboard name</FormLabel>
                 <FormControl>
-                  <ImgUploader
-                    value={field.value ? [field.value] : []}
+                  <Input
+                    {...field}
                     disabled={loading}
-                    handler={field.onChange}
+                    placeholder="Enter billboard name..."
+                    onChange={(e) => {
+                      onChangeName(e.target.value);
+                      field.onChange(e);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -55,21 +71,57 @@ export const BillboardForm: FC<BillboardFormProps> = memo((props) => {
           />
           <FormField
             control={form.control}
-            name="name"
+            name="imgUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Store name</FormLabel>
+                <FormLabel>Billboard image</FormLabel>
+                {disabledUploadeMoadlButton && (
+                  <FormDescription className="text-red-500">
+                    Before load img, enter name
+                  </FormDescription>
+                )}
                 <FormControl>
-                  <Input
-                    disabled={loading}
-                    placeholder="Enter billboard name..."
-                    {...field}
-                  />
+                  <Button
+                    type="button"
+                    className="flex gap-1"
+                    disabled={disabledUploadeMoadlButton}
+                    onClick={handleOpenButton}
+                  >
+                    <ImgIcon />
+                    Upload img
+                  </Button>
+                  {/* <ImgUploader */}
+                  {/*   value={field.value ? [field.value] : []} */}
+                  {/*   disabled={loading} */}
+                  {/*   handler={field.onChange} */}
+                  {/* /> */}
                 </FormControl>
+
+                {imgListLoaded && imgListLoaded.length > 0 && (
+                  <ImgList loadedImgList={imgListLoaded} className="border" />
+                )}
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* <FormField */}
+          {/*   control={form.control} */}
+          {/*   name="imgUrl" */}
+          {/*   render={({ field }) => ( */}
+          {/*     <FormItem> */}
+          {/*       <FormLabel>Billboard image</FormLabel> */}
+          {/*       <FormControl> */}
+          {/*         <ImgUploader */}
+          {/*           value={field.value ? [field.value] : []} */}
+          {/*           disabled={loading} */}
+          {/*           handler={field.onChange} */}
+          {/*         /> */}
+          {/*       </FormControl> */}
+          {/*       <FormMessage /> */}
+          {/*     </FormItem> */}
+          {/*   )} */}
+          {/* /> */}
           <div className="pt-6 space-x-2 flex items-center justify-end w-full">
             <Button disabled={loading} type="submit">
               {actionName}
@@ -77,6 +129,16 @@ export const BillboardForm: FC<BillboardFormProps> = memo((props) => {
           </div>
         </form>
       </Form>
+      {/* <FileUploader */}
+      {/*   entity={PathUploadEnum.BILLBOARD} */}
+      {/*   nameToFile={form.getValues("name")} */}
+      {/*   onFileLoaded={(fileList) => { */}
+      {/*     console.log("output_log: field name =>>>", form.getValues("name")); */}
+      {/*     console.log("output_log: onLoadFileList =>>>", fileList); */}
+      {/*     form.setValue("imgUrl", fileList); */}
+      {/*     setImgListLoaded(fileList); */}
+      {/*   }} */}
+      {/* /> */}
     </div>
   );
 });

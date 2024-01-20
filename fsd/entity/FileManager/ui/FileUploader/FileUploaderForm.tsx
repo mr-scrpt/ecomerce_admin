@@ -72,7 +72,9 @@ export const FileUploaderForm: FC<FileUploaderFormProps> = (props) => {
           )}
         />
         <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-          <Button type="submit">send</Button>
+          <Button type="submit" disabled={!imgListLoaded.length}>
+            send
+          </Button>
         </div>
       </form>
     </Form>

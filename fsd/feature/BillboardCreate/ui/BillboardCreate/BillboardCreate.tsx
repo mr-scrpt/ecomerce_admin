@@ -8,6 +8,11 @@ import {
   BillboardFormTypeSchema,
 } from "@/fsd/entity/BillboardForm";
 import { billboardCreateValidate } from "../../model/validation/billboardCreate.validation";
+import {
+  BillboardCreateModal,
+  BillboardLoadImgModal,
+} from "./BillboardLoadImgModal";
+import { FILE_NAME_LENGTH_MIN } from "@/fsd/shared/type/global.const";
 
 interface BillboardCreateProps extends HTMLAttributes<HTMLDivElement> {
   onSuccess?: () => void;
@@ -17,6 +22,9 @@ interface BillboardCreateProps extends HTMLAttributes<HTMLDivElement> {
 export const BillboardCreate: FC<BillboardCreateProps> = memo((props) => {
   const { onSuccess, storeId } = props;
   const [loading, setLoading] = useState(false);
+  const [imgListLoaded, setImgListLoaded] = useState<string[]>([]);
+  const [fileName, setFileName] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const onSubmit = useCallback(
     async (form: BillboardFormTypeSchema) => {
@@ -55,14 +63,36 @@ export const BillboardCreate: FC<BillboardCreateProps> = memo((props) => {
     [storeId, onSuccess],
   );
 
-  const defaultValues = { name: "", imgUrl: "" };
+  const defaultValues = { name: fileName, imgUrl: imgListLoaded };
 
+  // const handleOpenButton = useCallback((name: string) => {
+  //   setFileName(name);
+  //   setIsModalOpen(true);
+  // }, []);
+  const onChangeName = useCallback((fileName: string) => {
+    setFileName(fileName);
+  }, []);
+
+  console.log("output_log:  list img =>>>", imgListLoaded);
   return (
-    <BillboardForm
-      onAction={onSubmit}
-      actionName="Create"
-      defaultValues={defaultValues}
-      loading={loading}
-    />
+    <>
+      <BillboardForm
+        onAction={onSubmit}
+        disabledUploadeMoadlButton={fileName.length < FILE_NAME_LENGTH_MIN}
+        actionName="Create"
+        defaultValues={defaultValues}
+        loading={loading}
+        imgListLoaded={imgListLoaded}
+        onChangeName={onChangeName}
+        handleOpenButton={setIsModalOpen.bind(null, true)}
+      />
+      {fileName}
+      <BillboardLoadImgModal
+        setImgListLoaded={setImgListLoaded}
+        fileName={fileName}
+        isModalOpen={isModalOpen}
+        setCloseModal={setIsModalOpen.bind(null, false)}
+      />
+    </>
   );
 });

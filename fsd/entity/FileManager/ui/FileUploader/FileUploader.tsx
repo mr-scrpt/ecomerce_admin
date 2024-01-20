@@ -1,57 +1,48 @@
 "use client";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/fsd/shared/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, HTMLAttributes, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { PathUploadEnum } from "@/fsd/shared/data/pathUpload.enum";
-import { DropzoneInput } from "@/fsd/shared/ui/DropzoneInput/ui/DropzoneInput";
-import { ImgList } from "@/fsd/shared/ui/ImgList/ui/ImgList";
-import { Button } from "@/fsd/shared/ui/button";
-import axios, { AxiosResponse } from "axios";
-import { useRouter } from "next/navigation";
-import { Accept } from "react-dropzone";
-import toast from "react-hot-toast";
-import {
-  UploadFilelFormTypeSchema,
-  uploadFileFormSchema,
-} from "../../type/schema.type";
-import { FileUploaderForm } from "./FileUploaderForm";
-import { AxiosResponseType } from "@/fsd/shared/type/axiosResponse.interface";
-import { API_UPLOAD_ENDPOINT } from "../../type/api.const";
-import { FormDataUploadEnum } from "../../type/formData.const";
 import { useStoreData } from "@/fsd/entity/Store";
+import { PathUploadEnum } from "@/fsd/shared/data/pathUpload.enum";
+import { AxiosResponseType } from "@/fsd/shared/type/axiosResponse.interface";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { useShallow } from "zustand/react/shallow";
-import { ILoadFileList } from "../../type/ui.type";
-import {
-  FILE_IMG_UPLOAD,
-  FILE_MANAGER_DEFAULT_ERROR_MESSAGE,
-  FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT,
-} from "../../type/fileManager.const";
 import {
   getFileListPublicRelative,
   getFileName,
   moveFolderPrepare,
   removeFilePrepare,
 } from "../../model/action/fileManager.action";
+import { API_UPLOAD_ENDPOINT } from "../../type/api.const";
+import {
+  FILE_IMG_UPLOAD,
+  FILE_MANAGER_DEFAULT_ERROR_MESSAGE,
+  FILE_MANAGER_DEFAULT_LOAD_FILE_COUNT,
+} from "../../type/fileManager.const";
+import { FormDataUploadEnum } from "../../type/formData.const";
+import {
+  UploadFilelFormTypeSchema,
+  uploadFileFormSchema,
+} from "../../type/schema.type";
+import { ILoadFileList } from "../../type/ui.type";
+import { FileUploaderForm } from "./FileUploaderForm";
 
 interface UploaderFileFormProps extends HTMLAttributes<HTMLDivElement> {
   entity: PathUploadEnum;
   nameToFile: string;
   isMultiple?: boolean;
+  setFileLoaded: (fileList: string[]) => void;
+  onClickSendButton: () => void;
 }
 
 export const FileUploader: FC<UploaderFileFormProps> = (props) => {
+  const { entity, nameToFile, setFileLoaded, onClickSendButton } = props;
+
   const [imgListLoaded, setImgListLoaded] = useState<string[]>([]);
   const [fileList, setFileList] = useState<FileList>();
-  const { entity, nameToFile } = props;
 
   const router = useRouter();
 
@@ -67,6 +58,7 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     async (data: ILoadFileList): Promise<string[]> => {
       try {
         const { files, entity, nameToFile, slugToStore } = data;
+        console.log("output_log:  =>>>", entity, nameToFile, slugToStore);
         const formData = new FormData();
 
         for (let i = 0; i < files!.length; i++) {
@@ -96,37 +88,9 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     [],
   );
 
-  // TODO: Возможно понадобиться как обвертка которая еще будет получать имя
-  const onAction = async (data: UploadFilelFormTypeSchema) => {
-    try {
-      console.log("output_log:  =>>> send");
-      const { data, error } = await moveFolderPrepare(
-        { folderName: nameToFile, entity, storeSlug: slugToStore ?? null },
-        false,
-      );
-      if (error) {
-        toast.error(error);
-        return;
-      }
-
-      const fileList = await getFileListPublicRelative(data!);
-      console.log("output_log: fileList relative =>>>", fileList);
-      // if (imgListLoaded) {
-      //   await axios.post("/api/move", { folder: name, entity });
-      // }
-    } catch (e) {}
-  };
-
-  // const onUpload = useCallback(async (files: FileList): Promise<void> => {
-  //   setFileList(files);
-  //   const imgListPath = await loadFileList(files, PathUploadEnum.TMP, name);
-  //   form.setValue("files", files);
-  //   setImgListLoaded(imgListPath);
-  // }, []);
-
   const handleImgLoad = useCallback(
     async (files: FileList): Promise<void> => {
-      setFileList(files);
+      // setFileList(files);
 
       const imgListPath = await loadFileList({
         files,
@@ -160,6 +124,31 @@ export const FileUploader: FC<UploaderFileFormProps> = (props) => {
     },
     [imgListLoaded],
   );
+
+  const onAction = async () => {
+    try {
+      const { data, error } = await moveFolderPrepare(
+        { folderName: nameToFile, entity, storeSlug: slugToStore ?? null },
+        false,
+      );
+      if (error) {
+        toast.error(error);
+        return;
+      }
+
+      const { data: fileList, error: fileListError } =
+        await getFileListPublicRelative(data!);
+
+      if (fileListError) {
+        toast.error(fileListError);
+        return;
+      }
+      setFileLoaded(fileList!);
+      setImgListLoaded([]);
+      console.log("output_log:  =>>> file list", fileList);
+      onClickSendButton();
+    } catch (e) {}
+  };
 
   return (
     <div className="space-x-4 pt-2 pb-4">
