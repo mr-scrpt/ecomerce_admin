@@ -42,7 +42,7 @@ export const ImgUploader: FC<ImgUploaderProps> = (props) => {
       </div>
       <CldUploadWidget
         onUpload={onUpload}
-        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_PESET}
+        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_PRESET}
       >
         {({ open }) => {
           return (
